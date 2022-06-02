@@ -1,20 +1,11 @@
 <template>
     <div class="wrapper">
-        <n-card size="small" class="top-card">
-            <div style="line-height:34px">
-                <label>账本：</label>
-                <n-select v-model:value="bookId" :options="bookList" @update:value="changeBook"
-                          @update:show="getBooks"></n-select>
-                <n-button type="primary" @click="addBook" style="margin:0 16px;">新增账本</n-button>
-                <!-- <label>时间：</label> -->
-            </div>
-        </n-card>
         <div class="home-wrap">
             <div class="left-wrap">
                 <n-grid :x-gap="16" :cols="3" class="info-wrap">
                     <n-grid-item>
                         <div class="info-item">
-                            <img class="item-left" src="./assets/zhichu.png"  alt="支出"/>
+                            <img class="item-left" src="./assets/zhichu.png" alt="支出" />
                             <div class="item-right">
                                 <div>月支出</div>
                                 <div>{{ payNum }}</div>
@@ -23,7 +14,7 @@
                     </n-grid-item>
                     <n-grid-item>
                         <div class="info-item second-item">
-                            <img class="item-left" src="./assets/shoru.png"  alt="收入"/>
+                            <img class="item-left" src="./assets/shoru.png" alt="收入" />
                             <div class="item-right">
                                 <div>月收入</div>
                                 <div>{{ incomeNum }}</div>
@@ -32,7 +23,7 @@
                     </n-grid-item>
                     <n-grid-item>
                         <div class="info-item third-item">
-                            <img class="item-left" src="./assets/jieyu.png"  alt="结余"/>
+                            <img class="item-left" src="./assets/jieyu.png" alt="结余" />
                             <div class="item-right">
                                 <div>月结余</div>
                                 <div>{{ balanceNum }}</div>
@@ -65,7 +56,6 @@
                 <n-card>
                     <n-calendar
                         v-model:value="calendarValue"
-                        #="{ year, month, date }"
                         @update:value="handleUpdateValue"
                         @panel-change="panelChange"
                     >
@@ -111,26 +101,22 @@
                 </div>
             </div>
         </div>
-        <!-- 新增账本 -->
-        <BookForm ref="bookFormRef" />
-        <!-- 新增账单 -->
-        <!-- <BillForm ref="billFormRef"/> -->
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { addDays } from "date-fns/esm";
 // api
 import { getAllBookApi, getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi } from "@/apis/book";
 import { getAllBillInBookApi, getBillInStatisticTimeApi } from "@/apis/bill";
 // 组件
-import { BookForm } from "./components";
-
 import * as echarts from "echarts";
 import { storage } from "@/utils";
+import { useStore } from "@/stores/store";
 
+const store = useStore();
 // 当前选中bookId
-const bookId = ref<any>(null);
+const bookId = ref<number>(0);
 // 账本数据
 const bookList = ref<any[]>([]);
 // 获取账本
@@ -153,44 +139,39 @@ const getBooks = () => {
 };
 getBooks();
 // 切换账本
+watch(() => store.bookId, (newVal: number) => {
+    bookId.value = newVal;
+    changeBook();
+});
 const changeBook = () => {
-    storage.set("bookId", bookId.value);
     getBalanceMonth();
     getIncomeMonth();
     getPayMonth();
     getAllBillInBook();
     getBillInStatisticTime();
 };
-// 新增账本
-const bookFormRef = ref();
-const addBook = () => {
-    bookFormRef.value.init();
-};
 
 // 获取账单结余
 const balanceNum = ref(0);
 const getBalanceMonth = () => {
-    const startTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
-    const endTime = new Date(activeYear.value, activeMonth.value, 1).toLocaleString().replaceAll("/", "-");
-    getBalanceMonthApi({ bookId: bookId.value, startTime: startTime, endTime: endTime }).then((res: any) => {
+    const endTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
+    getBalanceMonthApi({ bookId: bookId.value, month: endTime }).then((res: any) => {
         balanceNum.value = res.amount ?? 0;
     });
 };
 // 获取账单月收入
 const incomeNum = ref(0);
 const getIncomeMonth = () => {
-    const startTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
-    const endTime = new Date(activeYear.value, activeMonth.value, 1).toLocaleString().replaceAll("/", "-");
-    getIncomeMonthApi({ bookId: bookId.value, startTime: startTime, endTime: endTime }).then((res: any) => {
+    const endTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
+    getIncomeMonthApi({ bookId: bookId.value, month: endTime }).then((res: any) => {
         incomeNum.value = res.amount ?? 0;
     });
 };
 // 获取账单月支出
 const payNum = ref(0);
 const getPayMonth = () => {
-    const startTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
-    const endTime = new Date(activeYear.value, activeMonth.value, 1).toLocaleString().replaceAll("/", "-");
-    getPayMonthApi({ bookId: bookId.value, startTime: startTime, endTime: endTime }).then((res: any) => {
+    const endTime = new Date(activeYear.value, activeMonth.value - 1, 1).toLocaleString().replaceAll("/", "-");
+    getPayMonthApi({ bookId: bookId.value, month: endTime }).then((res: any) => {
         payNum.value = res.amount ?? 0;
     });
 };
@@ -331,27 +312,6 @@ const getBillInStatisticTime = () => {
 const pieChartRef = ref<HTMLElement>();
 const initPieChart = () => {
     const pieChart = echarts.init(pieChartRef.value as HTMLElement);
-    // const pieData=allCategoryList.value.reduce((pre,item)=>{
-    //   pre.push({value:0,name:item.billCategoryName})
-    //   return pre
-    // },[] as any[])
-    // const tempData=bookBillList.value.filter(item=>{
-    //   const year=parseInt(item.billTime.split(' ')[0].split('-')[0])
-    //   const month=parseInt(item.billTime.split(' ')[0].split('-')[1])
-    //   return year===activeYear.value&&month===activeMonth.value
-    // })
-    // tempData.forEach(item=>{
-    //   const temp=pieData.find((child:any)=>item.billCategory===child.name)
-    //   temp&&(temp.value+=item.amount)
-    // })
-    // pieData.sort((a:any,b:any)=>b.value-a.value)
-
-    // const legend:any[]=[]
-    // pieData.forEach((item:any,index:number)=>{
-    //   if(index<=4){
-    //     legend.push(item.name)
-    //   }
-    // })
     let tempData: any[];
     if (activeType.value === "收入") {
         tempData = statisticBills.value.incomeStatistic;
@@ -417,7 +377,7 @@ const initPieChart = () => {
 // 日历相关
 const calendarValue = ref(addDays(Date.now(), 0).valueOf());
 const handleUpdateValue = (_: number, { year, month, date }: { year: number; month: number; date: number }) => {
-
+    console.log(year, month, date);
 };
 
 </script>

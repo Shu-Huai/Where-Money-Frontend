@@ -29,7 +29,7 @@ export default defineConfig(configEnv => {
             },
             host: "::",
             port: 13140,
-            open: true
+            open: false
         },
         build: {
             brotliSize: false,
