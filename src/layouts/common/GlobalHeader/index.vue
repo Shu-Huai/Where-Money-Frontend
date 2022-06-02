@@ -17,7 +17,40 @@
         >
             <header-menu />
         </div>
-        <div class="flex items-center h-full">
+        <div class="w-1/10">
+            <n-select v-model:value="bookId" :options="bookList" @update:value="changeBook">
+                <template #action>
+                    <n-button v-on:click="addBook">
+                        <template #default>
+                            <Icon icon="material-symbols:add" />
+                            <span>添加账本</span>
+                        </template>
+                    </n-button>
+                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-1/2">
+                        <n-card id="drawer-target" class="w-full">
+                            <template #header>
+                                <div>新增账本</div>
+                            </template>
+                            <template #header-extra>
+                                <Icon icon="icon-park-outline:close" class="cursor-pointer h-4 w-4"
+                                      v-bind:class="{'text-primary':mouseOnClose}" v-on:mouseenter="mouseOnClose=true"
+                                      v-on:mouseleave="mouseOnClose=false"
+                                      v-on:click="showAdd=false" />
+                            </template>
+                            <template #default>
+                                <n-input v-model:value="model.title" @keydown.enter.prevent />
+                                <n-button class="w-full addButton" type="primary" v-on:click="addBook">
+                                    <template #default>
+                                        保存
+                                    </template>
+                                </n-button>
+                            </template>
+                        </n-card>
+                    </n-modal>
+                </template>
+            </n-select>
+        </div>
+        <div class="flex items-center h-full ml-1/40">
             <div class="flex items-center text-semobold mr-3 gap-2">
                 <div>
                     <Icon :icon="'ri:calendar-2-fill'" class="text-20px" />
@@ -49,19 +82,20 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, Ref, ref } from "vue";
+import { defineComponent, onMounted, Ref, ref } from "vue";
 import { Router } from "vue-router";
 import { ExitOutline } from "@vicons/ionicons5";
 import { DarkModeContainer, HoverContainer } from "@/components";
 import { useThemeStore } from "@/store";
 import { useRouterPush } from "@/composables";
 import { storage } from "@/utils";
-import type { GlobalHeaderProps } from "@/interface";
+import type { Book, BookGetAllBookResponse, GlobalHeaderProps } from "@/interface";
 import { useStore } from "@/stores/store";
 import GlobalLogo from "../GlobalLogo/index.vue";
 import { FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode } from "./components";
 import { Icon } from "@iconify/vue";
 import { dateToString, now } from "@/utils/dateComputer";
+import { getAllBookApi } from "@/apis";
 
 const { routerPush, routerBack } = useRouterPush();
 defineProps<{
@@ -85,11 +119,52 @@ function goPre(): void {
 
 function ExitLogin(): void {
     storage.remove("token");
+    storage.remove("bookId");
+    store.bookId = 0;
     routerPush({ name: "login" });
 }
 
 now();
 let nowDate: Ref<string> = ref(dateToString(now()).split(" ")[0]);
+let bookId: Ref<number> = ref(0);
+
+interface BookShow extends Book {
+    value: number;
+    label: string;
+}
+
+let bookList: Ref<Array<BookShow>> = ref([]);
+onMounted(() => {
+    bookId.value = storage.get("bookId") || 0;
+    getAllBookApi().then((res: BookGetAllBookResponse) => {
+        bookList.value = res.bookList.map((item: Book) => {
+            return {
+                ...item,
+                value: item.id,
+                label: item.title
+            };
+        });
+        if (bookId.value === 0) {
+            bookId.value = bookList.value[0].value;
+            storage.set("bookId", bookId.value);
+            store.bookId = bookId.value;
+        }
+    });
+});
+
+function changeBook(value: number): void {
+    bookId.value = value;
+    storage.set("bookId", value);
+    store.bookId = value;
+}
+
+let showAdd: Ref<boolean> = ref(false);
+let mouseOnClose: Ref<boolean> = ref(false);
+
+function addBook(): void {
+    showAdd.value = true;
+}
+
 defineExpose({ ExitLogin, goPre, showExitModal });
 </script>
 <style scoped>
