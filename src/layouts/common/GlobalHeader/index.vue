@@ -147,8 +147,8 @@ onMounted(() => {
         if (bookId.value === 0) {
             bookId.value = bookList.value[0].value;
             storage.set("bookId", bookId.value);
-            store.bookId = bookId.value;
         }
+        store.bookId = bookId.value;
     });
 });
 
