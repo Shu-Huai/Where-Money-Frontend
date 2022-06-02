@@ -161,7 +161,6 @@ import { intToString } from "@/utils/dateComputer";
 import { Icon } from "@iconify/vue";
 import { BillCategoryItem } from "./components";
 import { useStore } from "@/stores/store";
-import { storage } from "@/utils";
 
 let timePickerProps: TimePickerProps = { inputReadonly: true };
 let remark: Ref<string> = ref("");
@@ -177,7 +176,7 @@ let isLoading: Ref<boolean> = ref(false);
 let store = useStore();
 onMounted(() => {
     isLoading.value = true;
-    bookId.value = storage.get("bookId");
+    bookId.value = store.bookId;
     timestamp.value = Date.now();
     assetName.value = "收款账户";
     store.selectedBillCategoryId = 0;
