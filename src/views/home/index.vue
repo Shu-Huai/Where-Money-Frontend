@@ -57,6 +57,7 @@
                     <n-calendar
                         v-model:value="calendarValue"
                         @update:value="handleUpdateValue"
+                        #="{ year, month, date }"
                         @panel-change="panelChange"
                     >
                         <div style="line-height:14px;font-size:12px;text-align:center">
