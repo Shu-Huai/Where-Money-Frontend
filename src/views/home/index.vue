@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flex space-x-5">
-            <div class="w-1/3 space-y-5">
+            <div class="w-7/20 space-y-5">
                 <div class="flex space-x-3">
                     <div class="w-1/2">
                         <MonthStatistic v-bind:amount="balanceMonth" type="balance">
@@ -34,7 +34,7 @@
                     </n-card>
                 </div>
             </div>
-            <div class="w-1/3 space-y-5">
+            <div class="w-7/20 space-y-5">
                 <div>
                     <n-card class="rounded-xl h-140">
                         <template #default>
@@ -47,13 +47,13 @@
                     </n-card>
                 </div>
             </div>
-            <div class="w-1/3 space-y-5">
+            <div class="w-3/10 space-y-5">
                 <div>
-                    <n-card class="rounded-xl">
-                        <template #default>
-                            <n-scrollbar class="h-100"></n-scrollbar>
-                        </template>
-                    </n-card>
+                    <n-scrollbar class="h-180">
+                        <DayBillList v-for="item in billDayList" v-bind:day="item[0]" v-bind:bill-list="item[1]"
+                                     class="mb-3">
+                        </DayBillList>
+                    </n-scrollbar>
                 </div>
             </div>
         </div>
@@ -65,14 +65,16 @@ import { getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi } from "@/apis/bo
 import { useStore } from "@/stores/store";
 import { dateToString, now } from "@/utils/dateComputer";
 import {
+    BillAllBillTimeResponse,
+    BillBillResponse,
     BillDayStatisticTimeResponse,
     BookBalanceMonthResponse,
     BookIncomeMonthResponse,
     BookPayMonthResponse
 } from "@/interface";
-import { MonthStatistic } from "./components";
+import { DayBillList, MonthStatistic } from "./components";
 import * as echarts from "echarts";
-import { getDayStatisticTimeApi } from "@/apis";
+import { getAllBillTimeApi, getDayStatisticTimeApi } from "@/apis";
 
 function refresh(value: string): void {
     nextTick(() => {
@@ -95,6 +97,7 @@ onMounted(() => {
         getBalanceMonth();
         getIncomeMonth();
         getPayMonth();
+        getAllBillMonth();
         getDayStatisticTimeApi({
             bookId: bookId.value,
             startTime: startTime.value,
@@ -111,6 +114,7 @@ watch(() => store.bookId, (newValue: number) => {
     getBalanceMonth();
     getIncomeMonth();
     getPayMonth();
+    getAllBillMonth();
     getDayStatisticTimeApi({
         bookId: bookId.value,
         startTime: startTime.value,
@@ -200,7 +204,7 @@ function initLineChart(type: "支出" | "收入"): void {
             name: `最大一笔：${maxNum} 最小一笔：${minNum}`,
             nameGap: 20,
             nameTextStyle: {
-                padding: [0, 0, 0, 100]		//表示[上,右,下,左]的边距
+                padding: [0, 0, 0, 100]
             }
         },
         tooltip: {
@@ -223,14 +227,14 @@ function initLineChart(type: "支出" | "收入"): void {
 
 function calendarContent(year: number, month: number, day: number): string {
     let content: string = "";
-    content += `<div class="text-red-500">`;
+    content += `<div class="text-red-500 text-xs">`;
     dayStatisticTime.value.payStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
             content += `-${item.amount}`;
         }
     });
     content += `</div>`;
-    content += `<div class="text-green-500">`;
+    content += `<div class="text-green-500 text-xs">`;
     dayStatisticTime.value.incomeStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
             content += `+${item.amount}`;
@@ -251,6 +255,7 @@ function changeMonth(info: { year: number, month: number }): void {
     getBalanceMonth();
     getIncomeMonth();
     getPayMonth();
+    getAllBillMonth();
     getDayStatisticTimeApi({
         bookId: bookId.value,
         startTime: startTime.value,
@@ -263,6 +268,35 @@ function changeMonth(info: { year: number, month: number }): void {
     }).catch(() => {
     });
 }
+
+interface BillShow extends BillBillResponse {
+    refunded?: boolean;
+}
+
+let billList: Ref<Array<BillShow>> = ref([]);
+
+function getAllBillMonth(): void {
+    getAllBillTimeApi({
+        bookId: bookId.value,
+        startTime: startTime.value,
+        endTime: endTime.value
+    }).then((response: BillAllBillTimeResponse) => {
+        billList.value = response.billList;
+    });
+}
+
+let billDayList: ComputedRef<Map<string, Array<BillShow>>> = computed(() => {
+    let dayMap: Map<string, Array<BillShow>> = new Map();
+    billList.value.forEach((item: BillShow) => {
+        let day: string = item.billTime.substring(0, 10);
+        if (dayMap.has(day)) {
+            dayMap.get(day)?.push(item);
+        } else {
+            dayMap.set(day, [item]);
+        }
+    });
+    return dayMap;
+});
 </script>
-<style lang="scss" scoped>
+<style scoped>
 </style>
