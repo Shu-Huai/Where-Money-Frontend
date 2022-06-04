@@ -9,8 +9,12 @@ function getAllBillInBookApi(params: { bookId: number }): any {
     return http.get("/bill/all-bill", params);
 }
 
+function getAllBillTimeApi(params: { bookId: number, startTime: string, endTime: string }): any {
+    return http.get("/bill/all-bill-time", params);
+}
+
 // 分日统计指定账本所有账单
-function getBillForTimeApi(params: any): any {
+function getDayStatisticTimeApi(params: { bookId: number, startTime: string, endTime: string }): any {
     return http.get("/bill/day-statistic-time", params);
 }
 
@@ -24,4 +28,11 @@ function getBillInStatisticTimeApi(params: { bookId: Number, startTime: string, 
     return http.get("/bill/category-statistic-time", params);
 }
 
-export { addBillApi, getAllBillInBookApi, getBillForTimeApi, getBillCategoryApi, getBillInStatisticTimeApi };
+export {
+    addBillApi,
+    getAllBillInBookApi,
+    getAllBillTimeApi,
+    getDayStatisticTimeApi,
+    getBillCategoryApi,
+    getBillInStatisticTimeApi
+};

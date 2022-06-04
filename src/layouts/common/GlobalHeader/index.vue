@@ -124,7 +124,6 @@ function ExitLogin(): void {
     routerPush({ name: "login" });
 }
 
-now();
 let nowDate: Ref<string> = ref(dateToString(now()).split(" ")[0]);
 let bookId: Ref<number> = ref(0);
 

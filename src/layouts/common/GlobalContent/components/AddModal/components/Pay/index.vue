@@ -278,6 +278,7 @@ function addBill(): void {
     formData.append("amount", amount.value as any);
     formData.append("time", intToString(timestamp.value) as any);
     formData.append("remark", remark.value as any);
+    formData.append("refunded", false as any);
     formData.append("file", picture as File);
     addBillApi(formData).then((_res: any) => {
         window.$message.success("添加成功");
