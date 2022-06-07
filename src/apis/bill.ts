@@ -24,8 +24,16 @@ function getBillCategoryApi(params: { bookId: number }): any {
 }
 
 //分类统计指定账本指定日期内的账单
-function getBillInStatisticTimeApi(params: { bookId: Number, startTime: string, endTime: string }): any {
+function getCategoryStatisticTimeApi(params: { bookId: Number, startTime: string, endTime: string }): any {
     return http.get("/bill/category-statistic-time", params);
+}
+
+function getMaxMinPayTimeApi(params: { bookId: Number, startTime: string, endTime: string }): any {
+    return http.get("/bill/max-min-pay-time", params);
+}
+
+function getMaxMinIncomeTimeApi(params: { bookId: Number, startTime: string, endTime: string }): any {
+    return http.get("/bill/max-min-income-time", params);
 }
 
 export {
@@ -34,5 +42,7 @@ export {
     getAllBillTimeApi,
     getDayStatisticTimeApi,
     getBillCategoryApi,
-    getBillInStatisticTimeApi
+    getCategoryStatisticTimeApi,
+    getMaxMinPayTimeApi,
+    getMaxMinIncomeTimeApi
 };
