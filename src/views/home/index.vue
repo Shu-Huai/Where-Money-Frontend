@@ -212,11 +212,13 @@ onMounted(() => {
 });
 watch(() => store.bookId, (newValue: number) => {
     bookId.value = newValue;
-    getData();
-    getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
-        billCategory.value = res;
-    }).catch(() => {
-    });
+    if (bookId.value !== 0) {
+        getData();
+        getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
+            billCategory.value = res;
+        }).catch(() => {
+        });
+    }
 });
 let activeYear: Ref<number> = ref(now().getFullYear());
 let activeMonth: Ref<number> = ref(now().getMonth());

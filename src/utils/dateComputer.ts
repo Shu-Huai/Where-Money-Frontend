@@ -9,6 +9,10 @@ function intToString(timeStamp: number): string {
     return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
+function stringToInt(dateStr: string): number {
+    return new Date(dateStr).getTime();
+}
+
 function now(): Date {
     return new Date();
 }
@@ -28,4 +32,4 @@ function stringToDate(dateStr: string): Date {
     return new Date(dateStr);
 }
 
-export { intToString, now, dateToString, stringToDate };
+export { intToString, stringToInt, now, dateToString, stringToDate };

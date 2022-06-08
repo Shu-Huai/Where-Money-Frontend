@@ -36,6 +36,10 @@ function getMaxMinIncomeTimeApi(params: { bookId: Number, startTime: string, end
     return http.get("/bill/max-min-income-time", params);
 }
 
+function getBillImageApi(params: { billId: number, type: string }): any {
+    return http.get("/bill/bill-image", params);
+}
+
 export {
     addBillApi,
     getAllBillInBookApi,
@@ -44,5 +48,6 @@ export {
     getBillCategoryApi,
     getCategoryStatisticTimeApi,
     getMaxMinPayTimeApi,
-    getMaxMinIncomeTimeApi
+    getMaxMinIncomeTimeApi,
+    getBillImageApi
 };

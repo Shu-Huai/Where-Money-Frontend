@@ -5,6 +5,7 @@ export const useStore = defineStore("main", {
         return {
             selectedBillCategoryId: 0,
             bookId: Number(),
+            currentBill: Object()
         };
     },
     getters: {},
