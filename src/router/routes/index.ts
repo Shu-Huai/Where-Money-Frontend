@@ -11,6 +11,17 @@ export const sidebarRoutes: AuthRoute.Route[] = [
         }
     },
     {
+        name: "bill",
+        path: "/bill",
+        component: "self",
+        meta: {
+            title: "账单明细",
+            icon: "ic:baseline-list",
+            requiresAuth: true,
+            singleLayout: "basic"
+        }
+    },
+    {
         name: "asset",
         path: "/asset",
         component: "self",

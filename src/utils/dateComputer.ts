@@ -24,4 +24,8 @@ function dateToString(date: Date) {
         + `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:${second.toString().padStart(2, "0")}`;
 }
 
-export { intToString, now, dateToString };
+function stringToDate(dateStr: string): Date {
+    return new Date(dateStr);
+}
+
+export { intToString, now, dateToString, stringToDate };

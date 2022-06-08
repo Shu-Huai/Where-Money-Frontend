@@ -14,6 +14,17 @@
                         </MonthStatistic>
                     </div>
                 </div>
+                <n-card class="rounded-xl h-135">
+                    <template #default>
+                        <n-calendar @panel-change="changeMonth" class="h-115">
+                            <template #default="{ year, month, date }">
+                                <div v-html="calendarContent(year,month,date)"></div>
+                            </template>
+                        </n-calendar>
+                    </template>
+                </n-card>
+            </div>
+            <div class="w-7/20 space-y-5">
                 <div>
                     <n-card class="rounded-xl">
                         <template #header>
@@ -33,69 +44,87 @@
                         </template>
                     </n-card>
                 </div>
-                <div>
-                    <n-card class="rounded-xl">
-                        <template #header>
-                            <div>分类统计</div>
-                        </template>
-                        <template #default>
-                            <n-tabs type="line" animated="true" @update:value="refreshPie" v-model:value="pieSwitch">
-                                <n-tab-pane name="支出" tab="支出">
-                                    <div ref="payCateRef" class="h-80">
-                                    </div>
-                                </n-tab-pane>
-                                <n-tab-pane name="收入" tab="收入">
-                                    <div ref="incomeCateRef" class="h-80">
-                                    </div>
-                                </n-tab-pane>
-                            </n-tabs>
-                        </template>
-                    </n-card>
-                </div>
-            </div>
-            <div class="w-7/20 space-y-5">
-                <div>
-                    <n-card class="rounded-xl h-140">
-                        <template #default>
-                            <n-calendar @update:value="changeDay" @panel-change="changeMonth" class="h-120">
-                                <template #default="{ year, month, date }">
-                                    <div v-html="calendarContent(year,month,date)"></div>
+                <n-card class="rounded-xl w-full">
+                    <template #default>
+                        <div class="flex space-x-3">
+                            <n-statistic class="w-1/2">
+                                <template #label>
+                                    日均支出
                                 </template>
-                            </n-calendar>
-                        </template>
-                    </n-card>
-                </div>
-            </div>
-            <div class="w-3/10">
-                <div>
-                    <n-scrollbar class="h-298">
-                        <DayBillList v-for="item in billDayList" v-bind:day="item[0]" v-bind:bill-list="item[1]"
-                                     class="mb-3">
-                        </DayBillList>
+                                <template #prefix>
+                                    ￥
+                                </template>
+                                <template #default>
+                                    {{ dayPayAverage }}
+                                </template>
+                            </n-statistic>
+                            <n-statistic class="w-1/2">
+                                <template #label>
+                                    日均收入
+                                </template>
+                                <template #prefix>
+                                    ￥
+                                </template>
+                                <template #default>
+                                    {{ dayIncomeAverage }}
+                                </template>
+                            </n-statistic>
+                        </div>
+                    </template>
+                </n-card>
+                <n-card class="rounded-xl">
+                    <n-scrollbar class="max-h-120">
+                        <n-data-table :columns="dayColumns" :data="dayData">
+                        </n-data-table>
                     </n-scrollbar>
-                </div>
+                </n-card>
+            </div>
+            <div class="w-3/10 space-y-5">
+                <n-card class="rounded-xl">
+                    <template #header>
+                        <div>分类统计</div>
+                    </template>
+                    <template #default>
+                        <n-tabs type="line" animated="true" @update:value="refreshPie" v-model:value="pieSwitch">
+                            <n-tab-pane name="支出" tab="支出">
+                                <div ref="payCateRef" class="h-80">
+                                </div>
+                            </n-tab-pane>
+                            <n-tab-pane name="收入" tab="收入">
+                                <div ref="incomeCateRef" class="h-80">
+                                </div>
+                            </n-tab-pane>
+                        </n-tabs>
+                    </template>
+                </n-card>
+                <n-card class="rounded-xl">
+                    <n-scrollbar class="max-h-120">
+                        <n-data-table :columns="cateColumns" :data="cateData">
+                        </n-data-table>
+                    </n-scrollbar>
+                </n-card>
             </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, nextTick, onMounted, Ref, ref, watch } from "vue";
+import { computed, ComputedRef, h, nextTick, onMounted, Ref, ref, watch } from "vue";
 import { getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi } from "@/apis/book";
 import { useStore } from "@/stores/store";
 import { dateToString, now } from "@/utils/dateComputer";
+import { Icon } from "@iconify/vue";
 import {
-    BillAllBillTimeResponse,
-    BillBillResponse,
+    BillCategory,
     BillDayStatisticTimeResponse,
     BillMaxMinTimeResponse,
     BookBalanceMonthResponse,
     BookIncomeMonthResponse,
     BookPayMonthResponse
 } from "@/interface";
-import { DayBillList, MonthStatistic } from "./components";
+import { MonthStatistic } from "@/views/components";
 import * as echarts from "echarts";
 import {
-    getAllBillTimeApi,
+    getBillCategoryApi,
     getCategoryStatisticTimeApi,
     getDayStatisticTimeApi,
     getMaxMinIncomeTimeApi,
@@ -127,7 +156,6 @@ function getData() {
     getBalanceMonth();
     getIncomeMonth();
     getPayMonth();
-    getAllBillMonth();
     getDayStatisticTimeApi({
         bookId: bookId.value,
         startTime: startTime.value,
@@ -170,15 +198,25 @@ function getData() {
     });
 }
 
+let billCategory: Ref<Array<BillCategory>> = ref([]);
+
 onMounted(() => {
     bookId.value = store.bookId;
     if (bookId.value !== 0) {
         getData();
+        getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
+            billCategory.value = res;
+        }).catch(() => {
+        });
     }
 });
 watch(() => store.bookId, (newValue: number) => {
     bookId.value = newValue;
     getData();
+    getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
+        billCategory.value = res;
+    }).catch(() => {
+    });
 });
 let activeYear: Ref<number> = ref(now().getFullYear());
 let activeMonth: Ref<number> = ref(now().getMonth());
@@ -272,9 +310,7 @@ function initLineChart(type: "支出" | "收入"): void {
         ]
     };
     lineChart.setOption(option);
-    window.onresize = function() {
-        lineChart.resize();
-    };
+    charts.push(lineChart);
 }
 
 function refreshLine(value: string): void {
@@ -290,23 +326,18 @@ function calendarContent(year: number, month: number, day: number): string {
     content += `<div class="text-red-500 text-xs">`;
     dayStatisticTime.value.payStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `-${item.amount}`;
+            content += `-${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
         }
     });
     content += `</div>`;
     content += `<div class="text-green-500 text-xs">`;
     dayStatisticTime.value.incomeStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `+${item.amount}`;
+            content += `+${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
         }
     });
     content += `</div>`;
     return content;
-}
-
-function changeDay(timestamp: number, info: { year: number, month: number, date: number }): void {
-    console.log(timestamp);
-    console.log(info);
 }
 
 function changeMonth(info: { year: number, month: number }): void {
@@ -314,35 +345,6 @@ function changeMonth(info: { year: number, month: number }): void {
     activeMonth.value = info.month - 1;
     getData();
 }
-
-interface BillShow extends BillBillResponse {
-    refunded?: boolean;
-}
-
-let billList: Ref<Array<BillShow>> = ref([]);
-
-function getAllBillMonth(): void {
-    getAllBillTimeApi({
-        bookId: bookId.value,
-        startTime: startTime.value,
-        endTime: endTime.value
-    }).then((response: BillAllBillTimeResponse) => {
-        billList.value = response.billList;
-    });
-}
-
-let billDayList: ComputedRef<Map<string, Array<BillShow>>> = computed(() => {
-    let dayMap: Map<string, Array<BillShow>> = new Map();
-    billList.value.forEach((item: BillShow) => {
-        let day: string = item.billTime.substring(0, 10);
-        if (dayMap.has(day)) {
-            dayMap.get(day)?.push(item);
-        } else {
-            dayMap.set(day, [item]);
-        }
-    });
-    return dayMap;
-});
 
 let payCateRef: Ref<HTMLElement | undefined> = ref();
 let incomeCateRef: Ref<HTMLElement | undefined> = ref();
@@ -392,11 +394,12 @@ function initPieChart(type: "支出" | "收入"): void {
                 name: `${type}类型分布`,
                 type: "pie",
                 radius: ["40%", "80%"],
+                left: "-15%",
                 avoidLabelOverlap: false,
                 itemStyle: {
                     borderRadius: 10,
                     borderColor: themeStore.darkMode ? "rgb(24,24,28)" : "rgb(255,255,255)",
-                    borderWidth: 2
+                    borderWidth: 1
                 },
                 label: {
                     show: false,
@@ -417,10 +420,15 @@ function initPieChart(type: "支出" | "收入"): void {
         ]
     };
     pieChart.setOption(option);
-    window.onresize = function() {
-        pieChart.resize();
-    };
+    charts.push(pieChart);
 }
+
+let charts: Array<any> = [];
+window.onresize = function() {
+    for (let i = 0; i < charts.length; i++) {
+        charts[i].resize();
+    }
+};
 
 watch(() => themeStore.darkMode, () => {
     initPieChart(pieSwitch.value);
@@ -433,6 +441,184 @@ function refreshPie(value: string): void {
         });
     });
 }
+
+let dayPayAverage: ComputedRef<number> = computed(() => {
+    let nowDate: Date = now();
+    let count: number = nowDate.getMonth() == activeMonth.value ? nowDate.getDate() : days.value[activeMonth.value];
+    return Math.round(payMonth.value / count * 100) / 100;
+});
+let dayIncomeAverage: ComputedRef<number> = computed(() => {
+    let nowDate: Date = now();
+    let count: number = nowDate.getMonth() == activeMonth.value ? nowDate.getDate() : days.value[activeMonth.value];
+    return Math.round(incomeMonth.value / count * 100) / 100;
+});
+
+class dayItem {
+    title: string;
+    key: string;
+    fixed: string | null;
+    width: number | null;
+    align: string;
+    render: Function | null;
+    sorter: string;
+
+    constructor(title: string) {
+        this.title = title;
+        this.key = title;
+        this.fixed = null;
+        this.width = null;
+        this.align = "left";
+        switch (title) {
+            case "日期":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "p-0" },
+                        { default: () => row[this.key] }
+                    );
+                };
+                break;
+            case "支出":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "text-red-500 p-0" },
+                        { default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key] }
+                    );
+                };
+                break;
+            case "收入":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "text-green-500 p-0" },
+                        { default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key] }
+                    );
+                };
+                break;
+            default:
+                this.render = null;
+                break;
+        }
+        this.sorter = "default";
+    }
+}
+
+const dayColumns: Array<Object> = [
+    new dayItem("日期"),
+    new dayItem("支出"),
+    new dayItem("收入")
+];
+const dayData: ComputedRef = computed(() => {
+    if (dayStatisticTime.value.payStatistic.length === 0 && dayStatisticTime.value.incomeStatistic.length === 0) {
+        return [];
+    }
+    let data: Array<{ 日期: string, 支出: number, 收入: number }> = [];
+    let nowDate: Date = now();
+    let count: number = nowDate.getMonth() == activeMonth.value ? nowDate.getDate() : days.value[activeMonth.value];
+    for (let i = 0; i < (count < dayStatisticTime.value.payStatistic.length ? count : dayStatisticTime.value.payStatistic.length); i++) {
+        data.push({
+            日期: dayStatisticTime.value.payStatistic[i].day.split(" ")[0],
+            支出: dayStatisticTime.value.payStatistic[i].amount,
+            收入: dayStatisticTime.value.incomeStatistic[i]?.amount
+        });
+    }
+    return data;
+});
+
+class cateItem {
+    title: string;
+    key: string;
+    fixed: string | null;
+    width: number | null;
+    align: string;
+    render: Function | null;
+    sorter: string | Function;
+
+    constructor(title: string) {
+        this.title = title;
+        this.key = title;
+        this.fixed = null;
+        this.width = null;
+        this.align = "left";
+        switch (title) {
+            case "类别":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "p-0 flex space-x-2" },
+                        {
+                            default: () => [
+                                h(
+                                    Icon,
+                                    {
+                                        icon: row.svg,
+                                        class: "my-auto text-primary"
+                                    }
+                                ),
+                                h(
+                                    "p",
+                                    { class: "my-auto" },
+                                    { default: () => row[this.key] }
+                                )
+                            ]
+                        }
+                    );
+                };
+                this.sorter = "default";
+                break;
+            case "支出":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "text-red-500 p-0" },
+                        { default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount }
+                    );
+                };
+                this.sorter = (a: { amount: number; }, b: { amount: number; }) => {
+                    return b.amount - a.amount;
+                };
+                break;
+            case "收入":
+                this.render = (row: any) => {
+                    return h(
+                        "p",
+                        { class: "text-green-500 p-0" },
+                        { default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount }
+                    );
+                };
+                this.sorter = (a: { amount: number; }, b: { amount: number; }) => {
+                    return b.amount - a.amount;
+                };
+                break;
+            default:
+                this.render = null;
+                this.sorter = "default";
+                break;
+        }
+    }
+}
+
+const cateColumns: ComputedRef<Array<Object>> = computed(() => {
+    return [
+        new cateItem("类别"),
+        new cateItem(pieSwitch.value)
+    ];
+});
+const cateData: ComputedRef = computed(() => {
+    let data: Array<{ 类别: string, amount: number, svg: string }> = [];
+    let rawData: Array<{ category: string, amount: number, percent: string }>
+        = (pieSwitch.value === "支出" ? categoryStatisticTime.value.payStatistic : categoryStatisticTime.value.incomeStatistic);
+    for (let i = 0; i < rawData.length; i++) {
+        let svg: string | undefined = billCategory.value.find((item: BillCategory) => item.billCategoryName === rawData[i].category)?.svg;
+        data.push({
+            类别: rawData[i].category,
+            amount: rawData[i].amount,
+            svg: svg ? svg : ""
+        });
+    }
+    return data;
+});
 </script>
 <style scoped>
 </style>

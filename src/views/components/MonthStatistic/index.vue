@@ -12,7 +12,7 @@
                                 {{ title[type] }}
                             </template>
                             <template #default>
-                                ￥{{ amount }}
+                                ￥{{ amount > 10000 ? Math.round(amount / 100) / 100 + "万" : amount }}
                             </template>
                         </n-statistic>
                     </div>
