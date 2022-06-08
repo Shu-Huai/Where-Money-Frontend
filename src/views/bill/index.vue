@@ -36,55 +36,254 @@
                 </div>
             </div>
             <div class="w-7/20 space-y-5">
+                <n-card class="rounded-xl" v-if="currentBill.id!==undefined">
+                    <template #header>
+                        <div class="flex space-x-3">
+                            <div>
+                                账单详情
+                            </div>
+                            <Icon v-bind:icon="iconMap[currentBill.type]" class="h-5 w-5 my-auto"
+                                  v-bind:class="iconColorMap[currentBill.type]" />
+                        </div>
+                    </template>
+                    <template #header-extra>
+                        <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnEdit}"
+                             v-on:mouseenter="mouseOnEditChange(true)"
+                             v-on:mouseleave="mouseOnEditChange(false)" v-on:click="editingChange">
+                            <div class="text-base">
+                                {{ editing ? "完成" : "编辑" }}
+                            </div>
+                            <Icon class="my-auto h-5" icon="fluent:edit-48-regular">
+                            </Icon>
+                        </div>
+                    </template>
+                    <template #default>
+                        <n-scrollbar class="max-h-164">
+                            <div class="space-y-3">
+                                <div class="space-y-2">
+                                    <div class="text-lg my-auto">
+                                        金额
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-input-number v-model:value="currentBill.amount" v-if="editing">
+                                            <template #prefix>
+                                                ￥
+                                            </template>
+                                        </n-input-number>
+                                        <div v-if="!editing" class="text-15px">
+                                            ￥{{ currentBill.amount }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2" v-if="currentBill.type === '支出' || currentBill.type === '收入'">
+                                    <div class="text-lg my-auto">
+                                        类别
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.billCategory" v-if="editing"
+                                                  v-bind:options="billCategoryList"
+                                                  v-bind:render-label="cateSelectorRender" size="large" class="w-1/2">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="billCategoryList.find(item => item.billCategoryName === currentBill.billCategory)?.svg">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.billCategory }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2" v-if="currentBill.type==='支出'">
+                                    <div class="text-lg my-auto">
+                                        支出账户
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.payAsset" v-if="editing"
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.payAsset)?.svg">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.payAsset }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2" v-if="currentBill.type==='收入'">
+                                    <div class="text-lg my-auto">
+                                        收入账户
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.incomeAsset" v-if="editing"
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.incomeAsset)?.svg">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.incomeAsset }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-x-2 flex" v-if="currentBill.type==='转账'">
+                                    <div class="w-1/2 space-y-2">
+                                        <div class="text-lg my-auto">
+                                            转出账户
+                                        </div>
+                                        <div class="h-10 flex items-center">
+                                            <n-select v-model:value="currentBill.outAsset" v-if="editing"
+                                                      v-bind:options="assetList"
+                                                      v-bind:render-label="assetSelectorRender" size="large">
+                                            </n-select>
+                                            <div v-if="!editing" class="flex space-x-2 items-center">
+                                                <Icon class="h-5 w-5 text-primary"
+                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.outAsset)?.svg">
+                                                </Icon>
+                                                <div class="text-15px">
+                                                    {{ currentBill.outAsset }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-1/2 space-y-2">
+                                        <div class="text-lg my-auto">
+                                            转入账户
+                                        </div>
+                                        <div class="h-10 flex items-center">
+                                            <n-select v-model:value="currentBill.inAsset" v-if="editing"
+                                                      v-bind:options="assetList"
+                                                      v-bind:render-label="assetSelectorRender" size="large">
+                                            </n-select>
+                                            <div v-if="!editing" class="flex space-x-2 items-center">
+                                                <Icon class="h-5 w-5 text-primary"
+                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.inAsset)?.svg">
+                                                </Icon>
+                                                <div class="text-15px">
+                                                    {{ currentBill.inAsset }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-lg my-auto">
+                                        时间
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-date-picker v-if="editing" v-model:value="editTime" class="w-1/2"
+                                                       type="datetime" :input-readonly="true"
+                                                       :time-picker-props="timePickerProps"
+                                                       :update-value-on-close="true">
+                                        </n-date-picker>
+                                        <div v-if="!editing" class="text-15px">
+                                            {{ currentBill.billTime }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-lg my-auto">
+                                        备注
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-input v-if="editing" v-model:value="currentBill.remark" class="w-1/2"
+                                                 size="large">
+                                        </n-input>
+                                        <div v-if="!editing" class="text-15px">
+                                            {{ currentBill.remark }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-lg my-auto">
+                                        图片
+                                    </div>
+                                    <div>
+                                        <img v-if="imageSrc !== 'data:image;base64,null'" v-bind:src="imageSrc"
+                                             alt="图片" />
+                                        <n-empty v-if="imageSrc === 'data:image;base64,null'" class="w-1/2">
+                                            <template #default>
+                                                什么也没有
+                                            </template>
+                                        </n-empty>
+                                    </div>
+                                </div>
+                            </div>
+                        </n-scrollbar>
+                    </template>
+                </n-card>
             </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, nextTick, onMounted, Ref, ref, watch } from "vue";
-import { getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi } from "@/apis/book";
-import { useStore } from "@/stores/store";
-import { dateToString, now } from "@/utils/dateComputer";
+import { computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch } from "vue";
 import {
+    getAllAsset,
+    getAllBillTimeApi,
+    getBalanceMonthApi,
+    getBillCategoryApi,
+    getBillImageApi,
+    getDayStatisticTimeApi,
+    getIncomeMonthApi,
+    getPayMonthApi
+} from "@/apis";
+import { useStore } from "@/stores/store";
+import { dateToString, now, stringToInt } from "@/utils/dateComputer";
+import {
+    Asset,
     BillAllBillTimeResponse,
     BillBillResponse,
+    BillCategory,
     BillDayStatisticTimeResponse,
-    BillMaxMinTimeResponse,
     BookBalanceMonthResponse,
     BookIncomeMonthResponse,
     BookPayMonthResponse
 } from "@/interface";
 import { DayBillList } from "./components";
-import {MonthStatistic} from "@/views/components";
-import * as echarts from "echarts";
-import {
-    getAllBillTimeApi,
-    getCategoryStatisticTimeApi,
-    getDayStatisticTimeApi,
-    getMaxMinIncomeTimeApi,
-    getMaxMinPayTimeApi
-} from "@/apis";
-import { BillCategoryStatisticTimeResponse } from "@/interface/response/bill/BillCategoryStatisticTimeResponse";
-import { useThemeStore } from "@/store";
+import { MonthStatistic } from "@/views/components";
+import { Icon } from "@iconify/vue";
+import { TimePickerProps } from "naive-ui";
 
-const themeStore = useThemeStore();
+let timePickerProps: TimePickerProps = { inputReadonly: true };
 const store = useStore();
 let bookId = ref<number>(0);
 
 interface DayStatisticTime extends BillDayStatisticTimeResponse {
 }
 
-interface CategoryStatisticTime extends BillCategoryStatisticTimeResponse {
+let dayStatisticTime: Ref<DayStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
+
+interface BillCategoryShow extends BillCategory {
+    value: string;
+    label: string;
 }
 
-let dayStatisticTime: Ref<DayStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
-let categoryStatisticTime: Ref<CategoryStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
-let lineSwitch: Ref<"支出" | "收入"> = ref("支出");
-let pieSwitch: Ref<"支出" | "收入"> = ref("支出");
-let maxPay: Ref<number> = ref(0);
-let minPay: Ref<number> = ref(0);
-let maxIncome: Ref<number> = ref(0);
-let minIncome: Ref<number> = ref(0);
+interface AssetShow extends Asset {
+    value: string;
+    label: string;
+}
+
+let billCategoryList: Ref<Array<BillCategoryShow>> = ref([]);
+let assetList: Ref<Array<AssetShow>> = ref([]);
+const iconMap = {
+    "支出": "material-symbols:arrow-upward",
+    "收入": "material-symbols:arrow-downward",
+    "转账": "ph:arrows-clockwise",
+    "退款": "ph:arrows-down-up"
+};
+const iconColorMap = {
+    "支出": "text-red-500",
+    "收入": "text-green-500",
+    "转账": "text-blue-500",
+    "退款": "text-blue-500"
+};
 
 function getData() {
     getBalanceMonth();
@@ -97,40 +296,30 @@ function getData() {
         endTime: endTime.value
     }).then((response: BillDayStatisticTimeResponse) => {
         dayStatisticTime.value = response;
-        getMaxMinPayTimeApi({
-            bookId: bookId.value,
-            startTime: startTime.value,
-            endTime: endTime.value
-        }).then((response: BillMaxMinTimeResponse) => {
-            maxPay.value = response.max.amount;
-            minPay.value = response.min.amount;
-            getMaxMinIncomeTimeApi({
-                bookId: bookId.value,
-                startTime: startTime.value,
-                endTime: endTime.value
-            }).then((response: BillMaxMinTimeResponse) => {
-                maxIncome.value = response.max.amount;
-                minIncome.value = response.min.amount;
-                nextTick(() => {
-                    initLineChart(lineSwitch.value);
-                });
-            }).catch(() => {
-            });
-        }).catch(() => {
+    }).catch(() => {
+    });
+    getBillCategoryApi({
+        bookId: bookId.value
+    }).then((response: any) => {
+        billCategoryList.value = response;
+        billCategoryList.value.forEach((item: BillCategoryShow) => {
+            item.value = item.billCategoryName;
+            item.label = item.billCategoryName;
         });
     }).catch(() => {
     });
-    getCategoryStatisticTimeApi({
-        bookId: bookId.value,
-        startTime: startTime.value,
-        endTime: endTime.value
-    }).then((response: BillCategoryStatisticTimeResponse) => {
-        categoryStatisticTime.value = response;
-        nextTick(() => {
-            initPieChart(pieSwitch.value);
+    getAllAsset().then((response: any) => {
+        assetList.value = response.assetList;
+        assetList.value.forEach((item: AssetShow) => {
+            item.value = item.assetName;
+            item.label = item.assetName;
         });
     }).catch(() => {
     });
+    store.currentBill = Object();
+    imageSrc.value = "data:image;base64,null";
+    editing.value = false;
+    editTime.value = 0;
 }
 
 onMounted(() => {
@@ -141,7 +330,9 @@ onMounted(() => {
 });
 watch(() => store.bookId, (newValue: number) => {
     bookId.value = newValue;
-    getData();
+    if (bookId.value !== 0) {
+        getData();
+    }
 });
 let activeYear: Ref<number> = ref(now().getFullYear());
 let activeMonth: Ref<number> = ref(now().getMonth());
@@ -185,82 +376,19 @@ function getPayMonth(): void {
     });
 }
 
-let payDayRef: Ref<HTMLElement | undefined> = ref();
-let incomeDayRef: Ref<HTMLElement | undefined> = ref();
-
-function initLineChart(type: "支出" | "收入"): void {
-    if ((type === "支出" ? payDayRef.value : incomeDayRef.value) === undefined) {
-        return;
-    }
-    let lineChart = echarts.init((type === "支出" ? payDayRef.value : incomeDayRef.value) as HTMLElement);
-    let xData: Array<string> = [];
-    for (let i = 1; i <= days.value[activeMonth.value]; i++) {
-        xData.push(i.toString());
-    }
-    let lineData: Array<number> = [];
-    let maxNum = 0;
-    let minNum = 0;
-    (type === "支出" ? dayStatisticTime.value.payStatistic : dayStatisticTime.value.incomeStatistic).forEach((item: { day: string, amount: number }) => {
-        lineData.push(item.amount);
-        if (item.amount > maxNum) {
-            maxNum = item.amount;
-        }
-        if (item.amount < minNum) {
-            minNum = item.amount;
-        }
-    });
-    let option = {
-        xAxis: {
-            type: "category",
-            data: xData
-        },
-        yAxis: {
-            type: "value",
-            name: `最大一笔：${type === "支出" ? maxPay.value : maxIncome.value} 最小一笔：${type === "支出" ? minPay.value : minIncome.value}`,
-            nameGap: 20,
-            nameTextStyle: {
-                padding: [0, 0, 0, 100]
-            }
-        },
-        tooltip: {
-            show: true
-        },
-        series: [
-            {
-                data: lineData,
-                type: "bar",
-                barWidth: "12",
-                color: type === "支出" ? "red" : "green"
-            }
-        ]
-    };
-    lineChart.setOption(option);
-    window.onresize = function() {
-        lineChart.resize();
-    };
-}
-
-function refreshLine(value: string): void {
-    nextTick(() => {
-        nextTick(() => {
-            initLineChart(value === "支出" ? "支出" : "收入");
-        });
-    });
-}
-
 function calendarContent(year: number, month: number, day: number): string {
     let content: string = "";
     content += `<div class="text-red-500 text-xs">`;
     dayStatisticTime.value.payStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `-${item.amount >= 10000 ?  Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
+            content += `-${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
         }
     });
     content += `</div>`;
     content += `<div class="text-green-500 text-xs">`;
     dayStatisticTime.value.incomeStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `-${item.amount >= 10000 ?  Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
+            content += `-${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
         }
     });
     content += `</div>`;
@@ -306,96 +434,84 @@ let billDayList: ComputedRef<Map<string, Array<BillShow>>> = computed(() => {
     });
     return dayMap;
 });
-
-let payCateRef: Ref<HTMLElement | undefined> = ref();
-let incomeCateRef: Ref<HTMLElement | undefined> = ref();
-
-function initPieChart(type: "支出" | "收入"): void {
-    if ((type === "支出" ? payCateRef.value : incomeCateRef.value) === undefined) {
-        return;
+let currentBill: Ref<BillShow> = ref({} as BillShow);
+let imageSrc: Ref<string> = ref("data:image;base64,null");
+watch(() => store.currentBill, (newValue: BillShow) => {
+    currentBill.value = newValue;
+    editing.value = false;
+    editTime.value = stringToInt(newValue.billTime);
+    imageSrc.value = "data:image;base64,null";
+    if (!isNaN(currentBill.value.id)) {
+        getBillImageApi({ billId: currentBill.value.id, type: currentBill.value.type }).then((response: any) => {
+            imageSrc.value = "data:image;base64," + response;
+        });
     }
-    let pieChart = echarts.init((type === "支出" ? payCateRef.value : incomeCateRef.value) as HTMLElement);
-    let pieData: Array<{ name: string, value: number }> = [];
-    let legendData: Array<string> = [];
-    (type === "支出" ? categoryStatisticTime.value.payStatistic : categoryStatisticTime.value.incomeStatistic)
-        .forEach((item: { category: string, amount: number, percent: string }, index: number) => {
-            pieData.push({
-                name: item.category,
-                value: item.amount
-            });
-            if (index < 5) {
-                legendData.push(item.category);
-            }
-        });
-    const option = {
-        tooltip: {
-            trigger: "item"
-        },
-        title: {
-            text: `前${legendData.length}项`,
-            right: 40,
-            top: 30,
-            textStyle: {
-                color: "rgb(129,135,138)",
-                fontSize: 12
-            }
-        },
-        legend: {
-            type: "scroll",
-            orient: "vertical",
-            right: "0%",
-            top: "18%",
-            textStyle: {
-                color: themeStore.darkMode ? "rgb(213, 213, 214)" : "rgb(31, 34, 37)"
-            },
-            data: legendData
-        },
-        series: [
-            {
-                name: `${type}类型分布`,
-                type: "pie",
-                radius: ["40%", "80%"],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10,
-                    borderColor: themeStore.darkMode ? "rgb(24,24,28)" : "rgb(255,255,255)",
-                    borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: "center"
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: "28",
-                        fontWeight: "bold"
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: pieData
-            }
-        ]
-    };
-    pieChart.setOption(option);
-    window.onresize = function() {
-        pieChart.resize();
-    };
-}
-
-watch(() => themeStore.darkMode, () => {
-    initPieChart(pieSwitch.value);
 });
+let mouseOnEdit: Ref<boolean> = ref(false);
 
-function refreshPie(value: string): void {
-    nextTick(() => {
-        nextTick(() => {
-            initPieChart(value === "支出" ? "支出" : "收入");
-        });
-    });
+function mouseOnEditChange(value: boolean): void {
+    mouseOnEdit.value = value;
 }
+
+let editing: Ref<boolean> = ref(false);
+
+function editingChange(): void {
+    editing.value = !editing.value;
+}
+
+function cateSelectorRender(option: BillCategoryShow): VNodeChild {
+    return h(
+        "div",
+        {
+            class: "flex space-x-2"
+        },
+        {
+            default: () => [
+                h(
+                    Icon,
+                    {
+                        class: "h-5 w-5 text-primary",
+                        icon: option.svg
+                    }
+                ),
+                h(
+                    "div",
+                    {},
+                    {
+                        default: () => option.label
+                    }
+                )
+            ]
+        });
+}
+
+function assetSelectorRender(option: AssetShow): VNodeChild {
+    return h(
+        "div",
+        {
+            class: "flex space-x-2"
+        },
+        {
+            default: () => [
+                h(
+                    Icon,
+                    {
+                        class: "h-5 w-5 text-primary",
+                        icon: option.svg
+                    }
+                ),
+                h(
+                    "div",
+                    {},
+                    {
+                        default: () => option.label
+                    }
+                )
+            ]
+        });
+}
+
+let editTime: Ref<number> = ref(0);
 </script>
 <style scoped>
 </style>
