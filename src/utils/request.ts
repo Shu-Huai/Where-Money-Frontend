@@ -14,7 +14,7 @@ service.interceptors.request.use(
         if (token) {
             config.headers.authorization = `Bearer ${token}`;
         }
-        if (config.method === "post" && config.url !== "/bill/add-bill") {
+        if (config.method === "post" && config.url !== "/bill/add-bill" && config.url !== "/bill/change-bill") {
             config.data = qs.stringify(config.data);
         }
         return config;

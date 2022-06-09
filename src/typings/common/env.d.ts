@@ -17,6 +17,8 @@ interface ImportMetaEnv {
     readonly VITE_APP_DESC: string;
     /** 网路请求环境类型 */
     readonly VITE_HTTP_ENV: Service.HttpEnv;
+
+    readonly VITE_APP_INTERFACE_URL: string;
     /** 是否是部署vercel */
     readonly VITE_IS_VERCEL?: "1";
 }

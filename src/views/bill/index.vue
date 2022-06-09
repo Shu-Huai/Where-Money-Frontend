@@ -172,6 +172,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="space-y-2" v-if="currentBill.type==='退款'">
+                                    <div class="text-lg my-auto">
+                                        退款账户
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.refundAsset" v-if="editing"
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.refundAsset)?.svg">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.refundAsset }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-2" v-if="currentBill.type==='转账'">
+                                    <div class="text-lg my-auto">
+                                        手续费
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-input-number v-model:value="currentBill.transferFee" v-if="editing">
+                                            <template #prefix>
+                                                ￥
+                                            </template>
+                                        </n-input-number>
+                                        <div v-if="!editing" class="text-15px">
+                                            ￥{{ currentBill.transferFee }}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="space-y-2">
                                     <div class="text-lg my-auto">
                                         时间
@@ -205,9 +239,24 @@
                                         图片
                                     </div>
                                     <div>
-                                        <img v-if="imageSrc !== 'data:image;base64,null'" v-bind:src="imageSrc"
-                                             alt="图片" />
-                                        <n-empty v-if="imageSrc === 'data:image;base64,null'" class="w-1/2">
+                                        <div class="flex space-x-2" v-if="editing">
+                                            <n-upload :custom-request="customRequest" class="w-1/5"
+                                                      list-type="image-card" max="1" v-on:change="changePicture"
+                                                      v-on:before-upload="beforeUpload">
+                                                <template #default>
+                                                    <div>
+                                                        图片
+                                                    </div>
+                                                </template>
+                                            </n-upload>
+                                            <div class="my-auto">
+                                                {{ fileName }}
+                                            </div>
+                                        </div>
+                                        <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
+                                             v-bind:src="imageSrc"
+                                             alt="图片" class="rounded-xl" />
+                                        <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
                                             <template #default>
                                                 什么也没有
                                             </template>
@@ -225,6 +274,7 @@
 <script lang="ts" setup>
 import { computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch } from "vue";
 import {
+    changeBillApi,
     getAllAsset,
     getAllBillTimeApi,
     getBalanceMonthApi,
@@ -235,7 +285,7 @@ import {
     getPayMonthApi
 } from "@/apis";
 import { useStore } from "@/stores/store";
-import { dateToString, now, stringToInt } from "@/utils/dateComputer";
+import { dateToString, intToString, now, stringToInt } from "@/utils/dateComputer";
 import {
     Asset,
     BillAllBillTimeResponse,
@@ -249,7 +299,7 @@ import {
 import { DayBillList } from "./components";
 import { MonthStatistic } from "@/views/components";
 import { Icon } from "@iconify/vue";
-import { TimePickerProps } from "naive-ui";
+import { TimePickerProps, UploadCustomRequestOptions, UploadFileInfo } from "naive-ui";
 
 let timePickerProps: TimePickerProps = { inputReadonly: true };
 const store = useStore();
@@ -285,7 +335,7 @@ const iconColorMap = {
     "退款": "text-blue-500"
 };
 
-function getData() {
+function getData(refresh: boolean = true) {
     getBalanceMonth();
     getIncomeMonth();
     getPayMonth();
@@ -316,10 +366,12 @@ function getData() {
         });
     }).catch(() => {
     });
-    store.currentBill = Object();
-    imageSrc.value = "data:image;base64,null";
+    if (refresh) {
+        store.currentBill = Object();
+        imageSrc.value = "data:image;base64,null";
+        editTime.value = 0;
+    }
     editing.value = false;
-    editTime.value = 0;
 }
 
 onMounted(() => {
@@ -456,6 +508,139 @@ function mouseOnEditChange(value: boolean): void {
 let editing: Ref<boolean> = ref(false);
 
 function editingChange(): void {
+    if (editing.value) {
+        let changed: boolean = false;
+        let formData: FormData = new FormData();
+        formData.append("id", currentBill.value.id as any);
+        switch (currentBill.value.type) {
+            case "支出":
+                if (currentBill.value.payAsset !== store.currentBill.payAsset) {
+                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.payAsset)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.billCategory !== store.currentBill.billCategory) {
+                    formData.append("billCategoryId",
+                        billCategoryList.value.find((item: BillCategory) => item.billCategoryName === currentBill.value.billCategory)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.amount !== store.currentBill.amount) {
+                    formData.append("amount", currentBill.value.amount as any);
+                    changed = true;
+                }
+                if (intToString(editTime.value) !== store.currentBill.billTime) {
+                    formData.append("billTime", intToString(editTime.value) as any);
+                    changed = true;
+                }
+                if (currentBill.value.remark !== store.currentBill.remark) {
+                    formData.append("remark", currentBill.value.remark as any);
+                    changed = true;
+                }
+                if (picture !== undefined) {
+                    formData.append("file", picture as File);
+                    changed = true;
+                }
+                formData.append("type", "支出");
+                break;
+            case "收入":
+                if (currentBill.value.incomeAsset !== store.currentBill.incomeAsset) {
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.incomeAsset)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.billCategory !== store.currentBill.billCategory) {
+                    formData.append("billCategoryId",
+                        billCategoryList.value.find((item: BillCategory) => item.billCategoryName === currentBill.value.billCategory)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.amount !== store.currentBill.amount) {
+                    formData.append("amount", currentBill.value.amount as any);
+                    changed = true;
+                }
+                if (intToString(editTime.value) !== store.currentBill.billTime) {
+                    formData.append("billTime", intToString(editTime.value) as any);
+                    changed = true;
+                }
+                if (currentBill.value.remark !== store.currentBill.remark) {
+                    formData.append("remark", currentBill.value.remark as any);
+                }
+                if (picture !== undefined) {
+                    formData.append("file", picture as File);
+                    changed = true;
+                }
+                formData.append("type", "收入");
+                break;
+            case "转账":
+                if (currentBill.value.inAsset !== store.currentBill.incomeAsset) {
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.inAsset)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.outAsset !== store.currentBill.payAsset) {
+                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.outAsset)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.amount !== store.currentBill.amount) {
+                    formData.append("amount", currentBill.value.amount as any);
+                    changed = true;
+                }
+                if (currentBill.value.transferFee !== store.currentBill.transferFee) {
+                    formData.append("transferFee", currentBill.value.transferFee as any);
+                    changed = true;
+                }
+                if (intToString(editTime.value) !== store.currentBill.billTime) {
+                    formData.append("billTime", intToString(editTime.value) as any);
+                    changed = true;
+                }
+                if (currentBill.value.remark !== store.currentBill.remark) {
+                    formData.append("remark", currentBill.value.remark as any);
+                    changed = true;
+                }
+                if (picture !== undefined) {
+                    formData.append("file", picture as File);
+                    changed = true;
+                }
+                formData.append("type", "转账");
+                break;
+            case "退款":
+                if (currentBill.value.payBillId !== store.currentBill.payBillId) {
+                    formData.append("payBillId", currentBill.value.payBillId as any);
+                    changed = true;
+                }
+                if (currentBill.value.refundAsset !== store.currentBill.refundAsset) {
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.refundAsset)?.id as any);
+                    changed = true;
+                }
+                if (currentBill.value.amount !== store.currentBill.amount) {
+                    formData.append("amount", currentBill.value.amount as any);
+                    changed = true;
+                }
+                if (intToString(editTime.value) !== store.currentBill.billTime) {
+                    formData.append("billTime", intToString(editTime.value) as any);
+                    changed = true;
+                }
+                if (currentBill.value.remark !== store.currentBill.remark) {
+                    formData.append("remark", currentBill.value.remark as any);
+                    changed = true;
+                }
+                if (picture !== undefined) {
+                    formData.append("file", picture as File);
+                    changed = true;
+                }
+                formData.append("type", "退款");
+                break;
+        }
+        if (changed) {
+            changeBillApi(formData).then(() => {
+                window.$message.success("修改成功");
+                getData(false);
+                getBillImageApi({
+                    billId: currentBill.value.id,
+                    type: currentBill.value.type
+                }).then((response: any) => {
+                    imageSrc.value = "data:image;base64," + response;
+                });
+            }).catch(() => {
+            });
+        }
+    }
     editing.value = !editing.value;
 }
 
@@ -512,6 +697,26 @@ function assetSelectorRender(option: AssetShow): VNodeChild {
 }
 
 let editTime: Ref<number> = ref(0);
+let picture: File | undefined;
+let fileName: Ref<string> = ref("");
+const customRequest = ({ file }: UploadCustomRequestOptions) => {
+    picture = file.file as File;
+    fileName.value = file.name;
+};
+
+function changePicture() {
+    fileName.value = "";
+}
+
+declare const window: Window & { $message: any; URL: any };
+
+function beforeUpload(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }) {
+    if (!data.file.file?.type.startsWith("image")) {
+        window.$message.error("请上传图片");
+        return false;
+    }
+    return true;
+}
 </script>
 <style scoped>
 </style>
