@@ -8,6 +8,14 @@ function changeBillApi(params: any): any {
     return http.post("/bill/change-bill", params);
 }
 
+function deleteBillApi(params: { id: number, type: string }): any {
+    return http.post("/bill/delete-bill", params);
+}
+
+function deleteBillImageApi(params: { id: number, type: string }): any {
+    return http.post("/bill/delete-bill-image", params);
+}
+
 // 获取指定账本的所有账单
 function getAllBillInBookApi(params: { bookId: number }): any {
     return http.get("/bill/all-bill", params);
@@ -47,6 +55,8 @@ function getBillImageApi(params: { billId: number, type: string }): any {
 export {
     addBillApi,
     changeBillApi,
+    deleteBillApi,
+    deleteBillImageApi,
     getAllBillInBookApi,
     getAllBillTimeApi,
     getDayStatisticTimeApi,

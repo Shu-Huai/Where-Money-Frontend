@@ -47,14 +47,41 @@
                         </div>
                     </template>
                     <template #header-extra>
-                        <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnEdit}"
-                             v-on:mouseenter="mouseOnEditChange(true)"
-                             v-on:mouseleave="mouseOnEditChange(false)" v-on:click="editingChange">
-                            <div class="text-base">
-                                {{ editing ? "完成" : "编辑" }}
+                        <div class="flex space-x-2">
+                            <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnEdit}"
+                                 v-on:mouseenter="mouseOnEditChange(true)"
+                                 v-on:mouseleave="mouseOnEditChange(false)" v-on:click="editingChange">
+                                <div class="text-base">
+                                    {{ editing ? "完成" : "编辑" }}
+                                </div>
+                                <Icon class="my-auto h-5 w-5" icon="fluent:edit-48-regular">
+                                </Icon>
                             </div>
-                            <Icon class="my-auto h-5" icon="fluent:edit-48-regular">
-                            </Icon>
+                            <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnDelete}"
+                                 v-on:mouseenter="mouseOnDeleteChange(true)"
+                                 v-on:mouseleave="mouseOnDeleteChange(false)" v-on:click="deleteChange">
+                                <div class="text-base">
+                                    删除
+                                </div>
+                                <Icon class="my-auto h-5 w-5" icon="material-symbols:delete-forever">
+                                </Icon>
+                                <n-modal v-model:show="showDeleteModal" class="w-1/7">
+                                    <n-card>
+                                        <template #header>
+                                            <div class="s-title s-underline text-lg">提示</div>
+                                        </template>
+                                        <template #default>
+                                            <div class="text-center space-y-8">
+                                                <div class="mx-auto text-lg">确认删除？</div>
+                                                <div class="flex space-x-2 justify-end">
+                                                    <n-button v-on:click="deleteBill">确定</n-button>
+                                                    <n-button v-on:click="showDeleteModal=false">取消</n-button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </n-card>
+                                </n-modal>
+                            </div>
                         </div>
                     </template>
                     <template #default>
@@ -240,6 +267,15 @@
                                     </div>
                                     <div>
                                         <div class="flex space-x-2" v-if="editing">
+                                            <img v-if="imageSrc !== 'data:image;base64,null'"
+                                                 v-bind:src="imageSrc"
+                                                 alt="图片" class="rounded-xl h-24" />
+                                            <n-button class="my-auto" v-if="imageSrc !== 'data:image;base64,null'"
+                                                      v-on:click="deleteImage">
+                                                <template #default>
+                                                    删除图片
+                                                </template>
+                                            </n-button>
                                             <n-upload :custom-request="customRequest" class="w-1/5"
                                                       list-type="image-card" max="1" v-on:change="changePicture"
                                                       v-on:before-upload="beforeUpload">
@@ -275,6 +311,8 @@
 import { computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch } from "vue";
 import {
     changeBillApi,
+    deleteBillApi,
+    deleteBillImageApi,
     getAllAsset,
     getAllBillTimeApi,
     getBalanceMonthApi,
@@ -459,7 +497,6 @@ function changeMonth(info: { year: number, month: number }): void {
 }
 
 interface BillShow extends BillBillResponse {
-    refunded?: boolean;
 }
 
 let billList: Ref<Array<BillShow>> = ref([]);
@@ -489,7 +526,20 @@ let billDayList: ComputedRef<Map<string, Array<BillShow>>> = computed(() => {
 let currentBill: Ref<BillShow> = ref({} as BillShow);
 let imageSrc: Ref<string> = ref("data:image;base64,null");
 watch(() => store.currentBill, (newValue: BillShow) => {
-    currentBill.value = newValue;
+    currentBill.value.amount = newValue.amount;
+    currentBill.value.billTime = newValue.billTime;
+    currentBill.value.payAsset = newValue.payAsset;
+    currentBill.value.billCategory = newValue.billCategory;
+    currentBill.value.incomeAsset = newValue.incomeAsset;
+    currentBill.value.inAsset = newValue.inAsset;
+    currentBill.value.outAsset = newValue.outAsset;
+    currentBill.value.transferFee = newValue.transferFee;
+    currentBill.value.payBillId = newValue.payBillId;
+    currentBill.value.refundAsset = newValue.refundAsset;
+    currentBill.value.id = newValue.id;
+    currentBill.value.remark = newValue.remark;
+    currentBill.value.refunded = newValue.refunded;
+    currentBill.value.type = newValue.type;
     editing.value = false;
     editTime.value = stringToInt(newValue.billTime);
     imageSrc.value = "data:image;base64,null";
@@ -716,6 +766,41 @@ function beforeUpload(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }
         return false;
     }
     return true;
+}
+
+let mouseOnDelete: Ref<boolean> = ref(false);
+
+function mouseOnDeleteChange(value: boolean): void {
+    mouseOnDelete.value = value;
+}
+
+let showDeleteModal: Ref<boolean> = ref(false);
+
+function deleteChange() {
+    showDeleteModal.value = !showDeleteModal.value;
+}
+
+function deleteBill() {
+    deleteBillApi({
+        id: currentBill.value.id,
+        type: currentBill.value.type
+    }).then(() => {
+        window.$message.success("删除成功");
+        getData();
+        deleteChange();
+    }).catch(() => {
+    });
+}
+
+function deleteImage(): void {
+    deleteBillImageApi({
+        id: currentBill.value.id,
+        type: currentBill.value.type
+    }).then(() => {
+        window.$message.success("删除成功");
+        getData(false);
+    }).catch(() => {
+    });
 }
 </script>
 <style scoped>
