@@ -3,6 +3,7 @@ export interface BillBillResponse {
     billTime: string;
     payAsset?: string;
     billCategory?: string;
+    refunded?: boolean;
     incomeAsset?: string;
     inAsset?: string;
     outAsset?: string;
