@@ -565,7 +565,9 @@ function editingChange(): void {
         switch (currentBill.value.type) {
             case "支出":
                 if (currentBill.value.payAsset !== store.currentBill.payAsset) {
-                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.payAsset)?.id as any);
+                    console.log(currentBill.value.payAsset);
+                    console.log(assetList.value);
+                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.assetName === currentBill.value.payAsset)?.id as any);
                     changed = true;
                 }
                 if (currentBill.value.billCategory !== store.currentBill.billCategory) {
@@ -593,7 +595,7 @@ function editingChange(): void {
                 break;
             case "收入":
                 if (currentBill.value.incomeAsset !== store.currentBill.incomeAsset) {
-                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.incomeAsset)?.id as any);
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.assetName === currentBill.value.incomeAsset)?.id as any);
                     changed = true;
                 }
                 if (currentBill.value.billCategory !== store.currentBill.billCategory) {
@@ -620,11 +622,11 @@ function editingChange(): void {
                 break;
             case "转账":
                 if (currentBill.value.inAsset !== store.currentBill.incomeAsset) {
-                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.inAsset)?.id as any);
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.assetName === currentBill.value.inAsset)?.id as any);
                     changed = true;
                 }
                 if (currentBill.value.outAsset !== store.currentBill.payAsset) {
-                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.outAsset)?.id as any);
+                    formData.append("outAssetId", assetList.value.find((item: Asset) => item.assetName === currentBill.value.outAsset)?.id as any);
                     changed = true;
                 }
                 if (currentBill.value.amount !== store.currentBill.amount) {
@@ -655,7 +657,7 @@ function editingChange(): void {
                     changed = true;
                 }
                 if (currentBill.value.refundAsset !== store.currentBill.refundAsset) {
-                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.name === currentBill.value.refundAsset)?.id as any);
+                    formData.append("inAssetId", assetList.value.find((item: Asset) => item.assetName === currentBill.value.refundAsset)?.id as any);
                     changed = true;
                 }
                 if (currentBill.value.amount !== store.currentBill.amount) {
