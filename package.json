@@ -51,7 +51,7 @@
         "typescript": "^4.5.5",
         "ua-parser-js": "^1.0.2",
         "vfonts": "^0.1.0",
-        "vite": "2.9.9",
+        "vite": "4.0.4",
         "vue": "^3.2.31",
         "vue-router": "^4.0.13",
         "vuejs-avataaars": "^4.0.1"
@@ -82,7 +82,7 @@
         "eslint-plugin-vue": "^8.5.0",
         "lint-staged": "^12.3.4",
         "mockjs": "^1.1.0",
-        "naive-ui": "2.29.0",
+        "naive-ui": "2.34.3",
         "patch-package": "^6.4.7",
         "postinstall-postinstall": "^2.1.0",
         "prettier": "^2.5.1",

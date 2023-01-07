@@ -6,7 +6,6 @@
       <script value="serve" />
     </scripts>
     <node-interpreter value="project" />
-    <package-manager value="C:\Users\lvzhi\AppData\Roaming\npm\npm.cmd" />
     <envs />
     <method v="2" />
   </configuration>
