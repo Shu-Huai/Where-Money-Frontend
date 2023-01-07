@@ -18,6 +18,11 @@
                     <n-card class="rounded-xl h-125">
                         <template #default>
                             <n-calendar @update:value="changeDay" @panel-change="changeMonth" class="h-105">
+                                <template #header="{ year, month }">
+                                    <div v-on:click="getAllBillMonth()" class="cursor-pointer">
+                                        {{ year + " " + numberToCharMonth(month) }}
+                                    </div>
+                                </template>
                                 <template #default="{ year, month, date }">
                                     <div v-html="calendarContent(year,month,date)"></div>
                                 </template>
@@ -102,7 +107,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2" v-if="currentBill.type === '支出' || currentBill.type === '收入'">
+                                <div class="space-y-2"
+                                     v-if="currentBill.type === '支出' || currentBill.type === '收入'">
                                     <div class="text-lg my-auto">
                                         类别
                                     </div>
@@ -426,6 +432,7 @@ watch(() => store.bookId, (newValue: number) => {
 });
 let activeYear: Ref<number> = ref(now().getFullYear());
 let activeMonth: Ref<number> = ref(now().getMonth());
+let activeDay: Ref<number> = ref(1);
 let days: ComputedRef<Array<number>> = computed(() => {
     let days: Array<number> = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     if (activeYear.value % 4 === 0 && activeYear.value % 100 !== 0 || activeYear.value % 400 === 0) {
@@ -486,8 +493,15 @@ function calendarContent(year: number, month: number, day: number): string {
 }
 
 function changeDay(timestamp: number, info: { year: number, month: number, date: number }): void {
-    console.log(timestamp);
-    console.log(info);
+    let newStartTime = String(info.year) + "-" + String(info.month) + "-" + String(info.date) + " 00:00:00";
+    let newEndTime = String(info.year) + "-" + String(info.month) + "-" + String(info.date) + " 23:59:59";
+    getAllBillTimeApi({
+        bookId: bookId.value,
+        startTime: newStartTime,
+        endTime: newEndTime
+    }).then((response: BillAllBillTimeResponse) => {
+        billList.value = response.billList;
+    });
 }
 
 function changeMonth(info: { year: number, month: number }): void {
@@ -803,6 +817,12 @@ function deleteImage(): void {
         getData(false);
     }).catch(() => {
     });
+}
+
+function numberToCharMonth(numberMonth: number): string {
+    console.log(numberMonth);
+    let charList: Array<string> = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
+    return charList[numberMonth - 1] + "月";
 }
 </script>
 <style scoped>
