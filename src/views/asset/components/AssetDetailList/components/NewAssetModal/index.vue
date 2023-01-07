@@ -159,10 +159,8 @@ function validateAssetBalance(value: number) {
     if (assetInfo.value.type === "信用卡" && value > 0) {
         return false;
     }
-    if (assetInfo.value.type !== "信用卡" && value < 0) {
-        return false;
-    }
-    return true;
+    return !(assetInfo.value.type !== "信用卡" && value < 0);
+    
 }
 
 const emit = defineEmits(["update:showModal", "newAssetSubmitted"]);

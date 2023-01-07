@@ -6,14 +6,14 @@
                 <span class="font-bold text-xl">资产明细</span>
             </n-space>
         </template>
-
+        
         <template #header-extra>
             <n-button text @click="showNewAssetModal">
                 <Icon height="24px" icon="fluent:add-24-filled" />
                 <span class="text-base px-2">新增资产</span>
             </n-button>
         </template>
-
+        
         <template #default>
             <n-collapse :default-expanded-names="['信用卡', '充值', '投资理财', '资金']">
                 <n-collapse-item
@@ -25,7 +25,7 @@
                     <template #header>
                         <span class="text-base font-bold">{{ assetType }}账户</span>
                     </template>
-
+                    
                     <!-- 合计 -->
                     <template #header-extra>
                         <span
@@ -35,7 +35,7 @@
                             {{ formattedCurrencyNoSymbol(assetSumByType.get(assetType)!) }}
                         </span>
                     </template>
-
+                    
                     <!-- 内容 -->
                     <template #default>
                         <n-list class="m-1">
@@ -101,12 +101,12 @@
             </n-collapse>
         </template>
     </n-card>
-
+    
     <asset-info-modal
         v-model:show-modal="showInfoModal"
         :asset-id="showId"
         @change-submitted="postChange" />
-
+    
     <new-asset-modal
         v-model:show-modal="showAddModal"
         @new-asset-submitted="postAddAsset" />
@@ -118,6 +118,7 @@ import { computed, defineProps, PropType, ref } from "vue";
 // components
 import { Icon } from "@iconify/vue";
 import { AssetInfoModal, NewAssetModal } from "./components";
+import { useMessage } from "naive-ui";
 // ts
 import { Asset } from "@/interface";
 import { addAsset, updateAsset } from "@/apis";
@@ -201,6 +202,7 @@ function showNewAssetModal() {
 
 
 const emit = defineEmits(["assetListChanged"]);
+const message = useMessage();
 
 /**
  * @description 修改资产
@@ -214,13 +216,14 @@ function postChange(changed: Asset) {
             params[key] = changed[key];
         }
     });
-    updateAsset({ assetId: changed.id, ...params }).then((res: any) => {
+    updateAsset({ assetId: changed.id, ...params }).then(() => {
         // 发送请求成功后，更新资产列表
         emit("assetListChanged", null);
         // 关闭弹窗
+        message.success("修改成功！");
         showInfoModal.value = false;
     });
-
+    
 }
 
 /**
@@ -229,7 +232,7 @@ function postChange(changed: Asset) {
 function postAddAsset(asset: Asset) {
     // 发送请求
     console.log(asset);
-    addAsset(asset).then((res: any) => {
+    addAsset(asset).then(() => {
         // 发送请求成功后，更新资产列表
         emit("assetListChanged", null);
         // 关闭弹窗
@@ -243,24 +246,24 @@ function postAddAsset(asset: Asset) {
 .n-list {
     margin-block-start: 0;
     margin-block-end: 0;
-
+    
     .n-list-item {
         -webkit-transition-duration: 0.2s;
         transition-duration: 0.2s;
-
+        
         -webkit-transition-property: background-color;
         transition-property: background-color;
-
+        
         border-radius: 8px;
-
+        
         svg {
             -webkit-transition-duration: 0.2s;
             transition-duration: 0.2s;
-
+            
             -webkit-transition-property: color;
             transition-property: color;
         }
-
+        
         &:hover svg {
             color: var(--primary-color-hover);
         }
