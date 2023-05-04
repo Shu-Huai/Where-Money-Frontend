@@ -32,7 +32,7 @@ const themeColorList = [
 const defaultThemeSetting: ThemeSetting = {
     darkMode: false,
     layout: {
-        minWidth: 900,
+        minWidth: 0,
         mode: "vertical",
         modeList: [
             { value: "vertical", label: EnumThemeLayoutMode.vertical },
