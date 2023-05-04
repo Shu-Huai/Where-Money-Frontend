@@ -4,6 +4,10 @@ function addBillApi(params: any): any {
     return http.post("/bill/add-bill", params);
 }
 
+function getBillApi(params: any): any {
+    return http.get("/bill/bill", params);
+}
+
 function changeBillApi(params: any): any {
     return http.post("/bill/change-bill", params);
 }
@@ -54,6 +58,7 @@ function getBillImageApi(params: { billId: number, type: string }): any {
 
 export {
     addBillApi,
+    getBillApi,
     changeBillApi,
     deleteBillApi,
     deleteBillImageApi,
@@ -64,5 +69,5 @@ export {
     getCategoryStatisticTimeApi,
     getMaxMinPayTimeApi,
     getMaxMinIncomeTimeApi,
-    getBillImageApi
+    getBillImageApi,
 };

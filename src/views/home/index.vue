@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="flex space-x-5">
-            <div class="w-7/20 space-y-5">
+        <div class="xl:flex space-x-5">
+            <div class="xl:w-7/20 space-y-5">
                 <div class="flex space-x-3">
                     <div class="w-1/2">
                         <MonthStatistic v-bind:amount="balanceMonth" type="balance">
@@ -24,7 +24,7 @@
                     </template>
                 </n-card>
             </div>
-            <div class="w-7/20 space-y-5">
+            <div class="xl:w-7/20 space-y-5">
                 <div>
                     <n-card class="rounded-xl">
                         <template #header>
@@ -79,7 +79,7 @@
                     </n-scrollbar>
                 </n-card>
             </div>
-            <div class="w-3/10 space-y-5">
+            <div class="xl:w-3/10 space-y-5">
                 <n-card class="rounded-xl">
                     <template #header>
                         <div>分类统计</div>

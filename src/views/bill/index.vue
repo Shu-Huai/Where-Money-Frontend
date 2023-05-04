@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="w-7/20 space-y-5">
-                <n-card class="rounded-xl" v-if="currentBill.id!==undefined">
+                <n-card class="rounded-xl" v-if="currentBill.id != undefined">
                     <template #header>
                         <div class="flex space-x-3">
                             <div>
@@ -61,6 +61,32 @@
                                 </div>
                                 <Icon class="my-auto h-5 w-5" icon="fluent:edit-48-regular">
                                 </Icon>
+                            </div>
+                            <div class="flex space-x-2 cursor-pointer" v-if="currentBill.type==='支出'"
+                                 v-bind:class="{'text-primary':mouseOnRefund}"
+                                 v-on:mouseenter="mouseOnRefundChange(true)"
+                                 v-on:mouseleave="mouseOnRefundChange(false)" v-on:click="refundChange">
+                                <div class="text-base">
+                                    退款
+                                </div>
+                                <Icon class="my-auto h-5 w-5" icon="ph:arrows-down-up">
+                                </Icon>
+                                <n-modal v-model:show="showRefundModal" class="w-1/7">
+                                    <n-card>
+                                        <template #header>
+                                            <div class="s-title s-underline text-lg">提示</div>
+                                        </template>
+                                        <template #default>
+                                            <div class="text-center space-y-8">
+                                                <div class="mx-auto text-lg">确认退款？</div>
+                                                <div class="flex space-x-2 justify-end">
+                                                    <n-button v-on:click="refundBill">确定</n-button>
+                                                    <n-button v-on:click="showRefundModal=false">取消</n-button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </n-card>
+                                </n-modal>
                             </div>
                             <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnDelete}"
                                  v-on:mouseenter="mouseOnDeleteChange(true)"
@@ -113,9 +139,10 @@
                                         类别
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.billCategory" v-if="editing"
+                                        <n-select v-model:value="currentBill.billCategory as any" v-if="editing"
                                                   v-bind:options="billCategoryList"
-                                                  v-bind:render-label="cateSelectorRender" size="large" class="w-1/2">
+                                                  v-bind:render-label="cateSelectorRender as any" size="large"
+                                                  class="w-1/2">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -132,9 +159,10 @@
                                         支出账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.payAsset" v-if="editing"
+                                        <n-select v-model:value="currentBill.payAsset as any" v-if="editing"
                                                   v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                                  v-bind:render-label="assetSelectorRender as any" size="large"
+                                                  class="w-1/2">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -151,9 +179,10 @@
                                         收入账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.incomeAsset" v-if="editing"
+                                        <n-select v-model:value="currentBill.incomeAsset as any" v-if="editing"
                                                   v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                                  v-bind:render-label="assetSelectorRender as any" size="large"
+                                                  class="w-1/2">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -171,9 +200,9 @@
                                             转出账户
                                         </div>
                                         <div class="h-10 flex items-center">
-                                            <n-select v-model:value="currentBill.outAsset" v-if="editing"
+                                            <n-select v-model:value="currentBill.outAsset as any" v-if="editing"
                                                       v-bind:options="assetList"
-                                                      v-bind:render-label="assetSelectorRender" size="large">
+                                                      v-bind:render-label="assetSelectorRender as any" size="large">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -190,9 +219,9 @@
                                             转入账户
                                         </div>
                                         <div class="h-10 flex items-center">
-                                            <n-select v-model:value="currentBill.inAsset" v-if="editing"
+                                            <n-select v-model:value="currentBill.inAsset as any" v-if="editing"
                                                       v-bind:options="assetList"
-                                                      v-bind:render-label="assetSelectorRender" size="large">
+                                                      v-bind:render-label="assetSelectorRender as any" size="large">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -210,9 +239,10 @@
                                         退款账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.refundAsset" v-if="editing"
+                                        <n-select v-model:value="currentBill.refundAsset as any" v-if="editing"
                                                   v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender" size="large" class="w-1/2">
+                                                  v-bind:render-label="assetSelectorRender as any" size="large"
+                                                  class="w-1/2">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -229,7 +259,7 @@
                                         手续费
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-input-number v-model:value="currentBill.transferFee" v-if="editing">
+                                        <n-input-number v-model:value="currentBill.transferFee as any" v-if="editing">
                                             <template #prefix>
                                                 ￥
                                             </template>
@@ -316,13 +346,13 @@
 <script lang="ts" setup>
 import { computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch } from "vue";
 import {
+    addBillApi,
     changeBillApi,
     deleteBillApi,
     deleteBillImageApi,
     getAllAsset,
     getAllBillTimeApi,
-    getBalanceMonthApi,
-    getBillCategoryApi,
+    getBalanceMonthApi, getBillCategoryApi,
     getBillImageApi,
     getDayStatisticTimeApi,
     getIncomeMonthApi,
@@ -344,6 +374,7 @@ import { DayBillList } from "./components";
 import { MonthStatistic } from "@/views/components";
 import { Icon } from "@iconify/vue";
 import { TimePickerProps, UploadCustomRequestOptions, UploadFileInfo } from "naive-ui";
+import { AssetGetAllAssetResponse } from "@/interface";
 
 let timePickerProps: TimePickerProps = { inputReadonly: true };
 const store = useStore();
@@ -432,7 +463,6 @@ watch(() => store.bookId, (newValue: number) => {
 });
 let activeYear: Ref<number> = ref(now().getFullYear());
 let activeMonth: Ref<number> = ref(now().getMonth());
-let activeDay: Ref<number> = ref(1);
 let days: ComputedRef<Array<number>> = computed(() => {
     let days: Array<number> = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     if (activeYear.value % 4 === 0 && activeYear.value % 100 !== 0 || activeYear.value % 400 === 0) {
@@ -564,9 +594,60 @@ watch(() => store.currentBill, (newValue: BillShow) => {
     }
 });
 let mouseOnEdit: Ref<boolean> = ref(false);
+let mouseOnRefund: Ref<boolean> = ref(false);
 
 function mouseOnEditChange(value: boolean): void {
     mouseOnEdit.value = value;
+}
+
+function mouseOnRefundChange(value: boolean): void {
+    mouseOnRefund.value = value;
+}
+
+let showRefundModal: Ref<boolean> = ref(false);
+
+function refundChange() {
+    showRefundModal.value = !showRefundModal.value;
+}
+
+function refundBill() {
+    if (currentBill.value.type !== "支出") {
+        return;
+    }
+    getAllAsset().then((response: AssetGetAllAssetResponse) => {
+        let inAsset: number = 0;
+        response.assetList.forEach((item) => {
+            if (item.assetName === currentBill.value.payAsset) {
+                inAsset = item.id;
+            }
+        });
+        getBillCategoryApi({ bookId: bookId.value }).then((subResponse: any) => {
+            let billCategoryId: number = 0;
+            subResponse.forEach((item: { billCategoryName: string | undefined; id: number; }) => {
+                if (item.billCategoryName === currentBill.value.billCategory) {
+                    billCategoryId = item.id;
+                }
+            });
+            let formData: FormData = new FormData();
+            formData.append("bookId", bookId.value.toString());
+            formData.append("inAssetId", inAsset.toString());
+            formData.append("payBillId", currentBill.value.id.toString());
+            formData.append("type", "退款");
+            formData.append("amount", currentBill.value.amount.toString());
+            formData.append("time", dateToString(now()));
+            formData.append("remark", "退款");
+            formData.append("billCategoryId", billCategoryId.toString());
+            addBillApi(formData).then(() => {
+                window.$message.success("退款成功");
+                getData();
+                refundChange();
+            }).catch(() => {
+            });
+        }).catch(() => {
+        });
+    }).catch(() => {
+    });
+
 }
 
 let editing: Ref<boolean> = ref(false);
