@@ -1,18 +1,18 @@
 <template>
     <div>
         <div class="space-y-10">
-            <n-scrollbar class="h-70">
-                <n-spin v-if="isLoading" class="flex items-center h-70"></n-spin>
-                <div class="grid grid-cols-10 gap-4">
+            <n-scrollbar class="h-20 lg:h-70">
+                <n-spin v-if="isLoading" class="flex items-center h-20 lg:h-70"></n-spin>
+                <div class="grid grid-cols-5 lg:grid-cols-10 gap-4">
                     <BillCategoryItem v-for="item in billCategoryList" :billCategory="item"></BillCategoryItem>
                 </div>
             </n-scrollbar>
             <div class="space-y-2">
-                <div class="flex space-x-2">
-                    <div class="w-2/3">
+                <div class="lg:flex lg:space-x-2 space-y-2 lg:space-y-0">
+                    <div class="w-full lg:w-2/3">
                         <n-input v-model:value="remark" placeholder="点此输入备注" type="text" />
                     </div>
-                    <div class="w-1/3">
+                    <div class="w-full lg:w-1/3">
                         <n-input-number v-model:value="amount" step="0.01">
                             <template #prefix>
                                 ￥
@@ -20,8 +20,8 @@
                         </n-input-number>
                     </div>
                 </div>
-                <div class="flex space-x-2">
-                    <div class="w-1/3">
+                <div class="lg:flex lg:space-x-2 space-y-2 lg:space-y-0">
+                    <div class="lg:w-1/3">
                         <n-button class="w-full truncate" v-on:click="bookDrawerShower">
                             <template #default>
                                 <n-spin v-if="isLoading" class="items-center h-4 w-4"></n-spin>
@@ -31,7 +31,7 @@
                             </template>
                         </n-button>
                     </div>
-                    <div class="w-1/3">
+                    <div class="lg:w-1/3">
                         <n-button class="w-full truncate" v-on:click="assetDrawerShower">
                             <template #default>
                                 <div class="flex space-x-2">
@@ -48,7 +48,7 @@
                             </template>
                         </n-button>
                     </div>
-                    <div class="w-1/3">
+                    <div class="lg:w-1/3">
                         <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
                                        type="datetime" :update-value-on-close="true"
                                        :time-picker-props="timePickerProps" />

@@ -1,5 +1,5 @@
 <template>
-    <dark-mode-container class="global-header xl:flex-y-center h-full">
+    <dark-mode-container class="global-header flex-y-center h-full">
         <global-logo
             v-if="showLogo"
             :show-title="true"
