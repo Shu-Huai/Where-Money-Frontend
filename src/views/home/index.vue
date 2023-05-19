@@ -1,22 +1,22 @@
 <template>
     <div>
-        <div class="xl:flex space-x-5">
+        <div class="xl:flex xl:space-x-5 space-y-5 xl:space-y-0">
             <div class="xl:w-7/20 space-y-5">
-                <div class="flex space-x-3">
-                    <div class="w-1/2">
+                <div class="xl:flex xl:space-x-3 space-y-3 xl:space-y-0">
+                    <div class="xl:w-1/2">
                         <MonthStatistic v-bind:amount="balanceMonth" type="balance">
                         </MonthStatistic>
                     </div>
-                    <div class="w-1/2 space-y-3">
+                    <div class="xl:w-1/2 space-y-3">
                         <MonthStatistic v-bind:amount="payMonth" type="pay">
                         </MonthStatistic>
                         <MonthStatistic v-bind:amount="incomeMonth" type="income">
                         </MonthStatistic>
                     </div>
                 </div>
-                <n-card class="rounded-xl h-135">
+                <n-card class="rounded-xl h-165 xl:h-135">
                     <template #default>
-                        <n-calendar @panel-change="changeMonth" class="h-115">
+                        <n-calendar @panel-change="changeMonth" class="h-145 xl:h-115">
                             <template #default="{ year, month, date }">
                                 <div v-html="calendarContent(year,month,date)"></div>
                             </template>
@@ -31,7 +31,7 @@
                             <div>收支分布</div>
                         </template>
                         <template #default>
-                            <n-tabs type="line" animated="true" @update:value="refreshLine" v-model:value="lineSwitch">
+                            <n-tabs type="line" :animated="true" @update:value="refreshLine" v-model:value="lineSwitch">
                                 <n-tab-pane name="支出" tab="支出">
                                     <div ref="payDayRef" class="h-80">
                                     </div>
@@ -85,7 +85,7 @@
                         <div>分类统计</div>
                     </template>
                     <template #default>
-                        <n-tabs type="line" animated="true" @update:value="refreshPie" v-model:value="pieSwitch">
+                        <n-tabs type="line" :animated="true" @update:value="refreshPie" v-model:value="pieSwitch">
                             <n-tab-pane name="支出" tab="支出">
                                 <div ref="payCateRef" class="h-80">
                                 </div>
@@ -306,7 +306,6 @@ function initLineChart(type: "支出" | "收入"): void {
             {
                 data: lineData,
                 type: "bar",
-                barWidth: "12",
                 color: type === "支出" ? "red" : "green"
             }
         ]
