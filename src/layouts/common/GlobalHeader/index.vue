@@ -38,8 +38,15 @@
                                       v-on:click="showAdd=false" />
                             </template>
                             <template #default>
-                                <n-input v-model:value="model.title" @keydown.enter.prevent />
-                                <n-button class="w-full addButton" type="primary" v-on:click="addBook">
+                                <n-form ref="formRef" :model="model" :rules="rules">
+                                    <n-form-item path="title" label="账本名称：">
+                                        <n-input v-model:value="model.title" @keydown.enter.prevent />
+                                    </n-form-item>
+                                    <n-form-item path="beginDate" label="开始日期：">
+                                        <n-input v-model:value="model.beginDate" @keydown.enter.prevent />
+                                    </n-form-item>
+                                </n-form>
+                                <n-button class="w-full addButton" type="primary" v-on:click="submitBook">
                                     <template #default>
                                         保存
                                     </template>
@@ -82,7 +89,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, onMounted, Ref, ref } from "vue";
+import { defineComponent, onMounted, reactive, Ref, ref } from "vue";
 import { Router } from "vue-router";
 import { ExitOutline } from "@vicons/ionicons5";
 import { DarkModeContainer, HoverContainer } from "@/components";
@@ -95,7 +102,7 @@ import GlobalLogo from "../GlobalLogo/index.vue";
 import { FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode } from "./components";
 import { Icon } from "@iconify/vue";
 import { dateToString, now } from "@/utils/dateComputer";
-import { getAllBookApi } from "@/apis";
+import { addBookApi, getAllBookApi } from "@/apis";
 
 const { routerPush, routerBack } = useRouterPush();
 defineProps<{
@@ -111,7 +118,7 @@ defineComponent({
         ExitOutline
     }
 });
-declare const window: Window & { $router: Router };
+declare const window: Window & { $router: Router; $message: any; };
 
 function goPre(): void {
     routerBack();
@@ -162,6 +169,40 @@ let mouseOnClose: Ref<boolean> = ref(false);
 
 function addBook(): void {
     showAdd.value = true;
+}
+
+interface addData {
+    title: string;
+    beginDate: string;
+}
+
+const model = reactive<addData>({
+    title: "",
+    beginDate: "1"
+});
+const formRef = ref();
+const rules = {
+    title: {
+        required: true,
+        message: "请输入名称",
+        trigger: "blur"
+    },
+    beginDate: {
+        required: true,
+        message: "请选择账单起始日",
+        trigger: "blur"
+    }
+};
+
+function submitBook(): void {
+    formRef.value?.validate((errors: any) => {
+        if (!errors) {
+            addBookApi({ title: model.title, beginDate: parseInt(model.beginDate) }).then(() => {
+                window.$message.error("新增成功");
+                showAdd.value = false;
+            });
+        }
+    });
 }
 
 defineExpose({ ExitLogin, goPre, showExitModal });
