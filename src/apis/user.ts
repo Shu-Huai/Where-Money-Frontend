@@ -13,11 +13,11 @@ function getProtocolApi(): any {
 }
 
 function changeUserNameApi(params: any): any {
-    return http.post("/user/change-user-name", params);
+    return http.patch("/user/user-name", params);
 }
 
 function changePasswordApi(params: any): any {
-    return http.post("/user/change-password", params);
+    return http.patch("/user/password", params);
 }
 
 export { registerApi, loginApi, getProtocolApi, changeUserNameApi, changePasswordApi };

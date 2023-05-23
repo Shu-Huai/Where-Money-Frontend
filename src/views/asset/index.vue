@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 
 import { computed, onMounted, ref, Ref, watch } from "vue";
-import { getAllAsset, getDayStatisticTime } from "@/apis";
+import { getAllAsset, getDayStatistic } from "@/apis";
 import { Asset, AssetDayStatistic, AssetDayStatisticTimeResponse, AssetGetAllAssetResponse } from "@/interface";
 import { AssetDetailList, AssetHistoryChart, AssetSummarization } from "./components";
 import { useThemeStore } from "@/store";
@@ -85,7 +85,7 @@ function pullAssetDayStatistic() {
     const today = new Date();
     today.setHours(24, 0, 0, 0);
     const past30Day = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-    getDayStatisticTime({
+    getDayStatistic({
         startTime: past30Day.toLocaleString().replaceAll("/", "-"),
         endTime: today.toLocaleString().replaceAll("/", "-")
     }).then((res: AssetDayStatisticTimeResponse) => {
