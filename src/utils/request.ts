@@ -1,7 +1,7 @@
-import { LoadingBarApi } from "naive-ui";
+import {LoadingBarApi} from "naive-ui";
 import axios from "axios";
 import router from "@/router";
-import { storage } from "../utils";
+import {storage} from "../utils";
 import qs from "qs";
 
 const service = (axios as any).create({
@@ -15,6 +15,9 @@ service.interceptors.request.use(
             config.headers.authorization = `Bearer ${token}`;
         }
         if (config.method === "post" && config.url !== "/bill/add-bill" && config.url !== "/bill/change-bill") {
+            config.data = qs.stringify(config.data);
+        }
+        if (config.method === "patch") {
             config.data = qs.stringify(config.data);
         }
         return config;
@@ -51,7 +54,7 @@ service.interceptors.response.use(
                             case "token无效":
                             case "token过期":
                                 window.$message.error("未授权或授权失效，请重新登录");
-                                router.push({ name: "login" }).then(_r => {
+                                router.push({name: "login"}).then(_r => {
                                 });
                                 break;
                         }
