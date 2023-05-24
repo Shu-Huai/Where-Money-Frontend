@@ -34,7 +34,7 @@ export interface ThemeSetting {
 }
 
 /** 布局样式 */
-interface ThemeLayout {
+export interface ThemeLayout {
     /** 最小宽度 */
     minWidth: number;
     /** 布局模式 */
@@ -43,7 +43,7 @@ interface ThemeLayout {
     modeList: ThemeLayoutModeList[];
 }
 
-interface ThemeLayoutModeList {
+export interface ThemeLayoutModeList {
     value: ThemeLayoutMode;
     label: EnumThemeLayoutMode;
 }

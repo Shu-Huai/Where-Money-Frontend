@@ -2,6 +2,7 @@ import type { NavigationGuardNext, RouteLocationNormalized, Router } from "vue-r
 import { routeName } from "@/router";
 import { exeStrategyActions, storage } from "@/utils";
 import { useRouteStore } from "@/store";
+import {EnumStorageKey} from "@/enum";
 
 async function createDynamicRouteGuard(
     to: RouteLocationNormalized,
@@ -27,7 +28,7 @@ export async function createPermissionGuard(
         next({ path: from.fullPath, replace: true, query: from.query });
         return;
     }
-    const token = storage.get("token");
+    const token = storage.get(EnumStorageKey["token"]);
     const needLogin = Boolean(to.meta?.requiresAuth);
     const actions: Common.StrategyAction[] = [
         [

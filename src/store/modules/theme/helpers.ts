@@ -1,14 +1,26 @@
-import type { GlobalThemeOverrides } from "naive-ui";
-import { cloneDeep, kebabCase } from "lodash-es";
-import { themeSetting } from "@/settings";
-import { addColorAlpha, getColorPalette, getThemeColor } from "@/utils";
+import type {GlobalThemeOverrides} from "naive-ui";
+import {cloneDeep, kebabCase} from "lodash-es";
+import {themeSetting} from "@/settings";
+import {addColorAlpha, getColorPalette, getLayout, getThemeColor} from "@/utils";
+import {ThemeLayout, ThemeLayoutMode} from "@/interface";
 
 /** 获取主题配置 */
 export function getThemeSettings() {
     const themeColor = getThemeColor() || themeSetting.themeColor;
     const info = themeSetting.isCustomizeInfoColor ? themeSetting.otherColor.info : getColorPalette(themeColor, 7);
-    const otherColor = { ...themeSetting.otherColor, info };
-    return cloneDeep({ ...themeSetting, themeColor, otherColor });
+    const otherColor = {...themeSetting.otherColor, info};
+    const layout: ThemeLayout = new class implements ThemeLayout {
+        minWidth: any;
+        mode: ThemeLayoutMode;
+        modeList: any;
+
+        constructor(minWidth: any, mode: ThemeLayoutMode, modeList: any) {
+            this.minWidth = minWidth;
+            this.mode = mode;
+            this.modeList = modeList;
+        }
+    }(themeSetting.layout.minWidth, getLayout() || themeSetting.layout.mode, themeSetting.layout.modeList)
+    return cloneDeep({...themeSetting, themeColor, otherColor, layout});
 }
 
 type ColorType = "primary" | "info" | "success" | "warning" | "error";
@@ -26,11 +38,11 @@ interface ColorAction {
 /** 获取主题颜色的各种场景对应的颜色 */
 function getThemeColors(colors: [ColorType, string][]) {
     const colorActions: ColorAction[] = [
-        { scene: "", handler: color => color },
-        { scene: "Suppl", handler: color => color },
-        { scene: "Hover", handler: color => getColorPalette(color, 5) },
-        { scene: "Pressed", handler: color => getColorPalette(color, 7) },
-        { scene: "Active", handler: color => addColorAlpha(color, 0.1) }
+        {scene: "", handler: color => color},
+        {scene: "Suppl", handler: color => color},
+        {scene: "Hover", handler: color => getColorPalette(color, 5)},
+        {scene: "Pressed", handler: color => getColorPalette(color, 7)},
+        {scene: "Active", handler: color => addColorAlpha(color, 0.1)}
     ];
 
     const themeColor: ThemeColor = {};
@@ -48,7 +60,7 @@ function getThemeColors(colors: [ColorType, string][]) {
 
 /** 获取naive的主题颜色 */
 export function getNaiveThemeOverrides(colors: Record<ColorType, string>): GlobalThemeOverrides {
-    const { primary, success, warning, error } = colors;
+    const {primary, success, warning, error} = colors;
 
     const info = themeSetting.isCustomizeInfoColor ? colors.info : getColorPalette(primary, 7);
 
@@ -84,22 +96,4 @@ export function addThemeCssVarsToHtml(themeVars: ThemeVars) {
     });
     const styleStr = style.join(";");
     document.documentElement.style.cssText += styleStr;
-}
-
-/** windicss 暗黑模式 */
-export function handleWindicssDarkMode() {
-    const DARK_CLASS = "dark";
-
-    function addDarkClass() {
-        document.documentElement.classList.add(DARK_CLASS);
-    }
-
-    function removeDarkClass() {
-        document.documentElement.classList.remove(DARK_CLASS);
-    }
-
-    return {
-        addDarkClass,
-        removeDarkClass
-    };
 }

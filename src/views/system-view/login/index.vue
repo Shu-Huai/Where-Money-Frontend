@@ -6,13 +6,13 @@
             @update:dark="theme.setDarkMode"
         />
         <div class="relative s-card p-14 z-4">
-            <icon-ic:baseline-account-balance-wallet class="absolute z-4 w-13 h-13 text-primary top-5 left-5" />
+            <Icon icon="ic:baseline-account-balance-wallet" class="absolute z-4 w-13 h-13 text-primary top-5 left-5"/>
             <div class="text-6xl font-bold italic text-primary mb-13 mt-5 text-center">
                 <span class="underline decoration-teal-500 decoration-6">Where</span> Money
             </div>
             <n-form id="form" ref="formRef" :model="formValue" :rules="rules" :show-label="false">
                 <n-form-item label="用户名" path="userName">
-                    <n-input v-model:value="formValue.userName" :round="true" class="p-2" placeholder="账号" />
+                    <n-input v-model:value="formValue.userName" :round="true" class="p-2" placeholder="账号"/>
                 </n-form-item>
                 <n-form-item label="密码" path="password">
                     <n-input
@@ -45,22 +45,24 @@
                 <a id="registerLink" href="../register">点我注册</a>
             </div>
         </div>
-        <login-bg :theme-color="bgThemeColor" />
+        <login-bg :theme-color="bgThemeColor"/>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, Ref, ref } from "vue";
-import { Router } from "vue-router";
-import { useRouterPush } from "@/composables";
-import { getColorPalette, mixColor, storage } from "@/utils";
-import { loginApi } from "@/apis/user";
-import { useThemeStore } from "@/store";
-import { LoginBg } from "./components";
-import { DarkModeSwitch } from "@/components";
-import { UserLoginResponse } from "@/interface";
+import {computed, onMounted, Ref, ref} from "vue";
+import {Router} from "vue-router";
+import {useRouterPush} from "@/composables";
+import {getColorPalette, mixColor, storage} from "@/utils";
+import {loginApi} from "@/apis/user";
+import {useThemeStore} from "@/store";
+import {LoginBg} from "./components";
+import {DarkModeSwitch} from "@/components";
+import {UserLoginResponse} from "@/interface";
+import {Icon} from "@iconify/vue";
+import {EnumStorageKey} from "@/enum";
 
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 const theme = useThemeStore();
 const bgThemeColor = computed(() => (theme.darkMode ? getColorPalette(theme.themeColor, 7) : theme.themeColor));
 const bgColor = computed(() => {
@@ -68,7 +70,7 @@ const bgColor = computed(() => {
     const ratio = theme.darkMode ? 0.5 : 0.2;
     return mixColor(COLOR_WHITE, theme.themeColor, ratio);
 });
-const formValue: Ref<{ userName: string; password: string }> = ref({ userName: "", password: "" });
+const formValue: Ref<{ userName: string; password: string }> = ref({userName: "", password: ""});
 declare const window: Window & { $message: any; $router: Router };
 const rules: object = {
     userName: {
@@ -93,7 +95,7 @@ const rules: object = {
 const GetCookie = (): void => {
     if (document.cookie.length > 0) {
         const cookie: string[] = document.cookie.split("; ");
-        cookie.forEach(function(element): void {
+        cookie.forEach(function (element): void {
             const result: string[] = element.split("=");
             if (result[0] === "userName") {
                 formValue.value.userName = result[1];
@@ -104,7 +106,7 @@ const GetCookie = (): void => {
     }
 };
 onMounted(() => {
-    storage.remove("token");
+    storage.remove(EnumStorageKey["token"]);
     GetCookie();
 });
 const formRef: Ref = ref(null);
@@ -119,15 +121,15 @@ const PostLogin = (): void => {
     SetCookie("", "", -1);
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
-            loginApi({ userName: formValue.value.userName, password: formValue.value.password })
+            loginApi({userName: formValue.value.userName, password: formValue.value.password})
                 .then((response: UserLoginResponse) => {
                     window.$message.success("登录成功");
                     const token: string = response.token;
-                    storage.set("token", token);
+                    storage.set(EnumStorageKey["token"], token);
                     if (needSave.value) {
                         SetCookie(formValue.value.userName, formValue.value.password, 7);
                     }
-                    routerPush({ name: "home" });
+                    routerPush({name: "home"});
                 })
                 .catch((_error: {}) => {
                 });
@@ -136,7 +138,7 @@ const PostLogin = (): void => {
         }
     });
 };
-defineExpose({ formRef, formValue, rules, needSave, PostLogin });
+defineExpose({formRef, formValue, rules, needSave, PostLogin});
 </script>
 <style scoped>
 label {

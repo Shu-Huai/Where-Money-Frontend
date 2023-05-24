@@ -2,14 +2,14 @@
     <n-card :bordered="false" class="rounded-16px shadow-sm h-250px">
         <template #header>
             <n-space align="center">
-                <Icon height="24px" icon="carbon:chart-line" width="24px" />
+                <Icon height="24px" icon="carbon:chart-line" width="24px"/>
                 <span class="font-bold text-xl">资产历史</span>
             </n-space>
         </template>
 
         <template #default>
             <div ref="lineChartAreaRef" class="h-[100%] flex content-center items-center justify-center">
-                <n-spin v-if="statisticList.length === 0" size="large" />
+                <n-spin v-if="statisticList.length === 0" size="large"/>
             </div>
         </template>
     </n-card>
@@ -17,14 +17,14 @@
 
 <script lang="ts" setup>
 // vue
-import { defineProps, PropType, ref, watch } from "vue";
+import {defineProps, PropType, ref, watch} from "vue";
 // components
-import { Icon } from "@iconify/vue";
-import { Line } from "@antv/g2plot";
+import {Icon} from "@iconify/vue";
+import {Line} from "@antv/g2plot";
 // .ts
-import { AssetDayStatistic } from "@/interface";
-import { formattedCurrencyNoSymbol, getThemeColor } from "@/utils";
-import { useThemeStore } from "@/store";
+import {AssetDayStatistic} from "@/interface";
+import {formattedCurrencyNoSymbol, getThemeColor} from "@/utils";
+import {useThemeStore} from "@/store";
 
 
 const props = defineProps({
@@ -47,12 +47,12 @@ watch(
         lineChart.value?.destroy();
         initAndPlotLineChart();
     },
-    { immediate: true }
+    {immediate: true}
 );
 
 function initAndPlotLineChart() {
     if (lineChartAreaRef.value === undefined) return;
-    lineChart.value = new Line(lineChartAreaRef.value, {
+    lineChart.value = new Line(lineChartAreaRef.value as any, {
         color: color ? color : "#2092C6",
         data: props.statisticList,
         xField: "time",
@@ -62,7 +62,7 @@ function initAndPlotLineChart() {
             label: {
                 rotate: -Math.PI / 8,
                 offset: 20,
-                style: { fontSize: 14 }
+                style: {fontSize: 14}
             }
         },
         yAxis: {
@@ -71,7 +71,7 @@ function initAndPlotLineChart() {
             max: null,
             tickCount: 4,
             label: {
-                style: { fontSize: 14 },
+                style: {fontSize: 14},
                 formatter: (text: string) => (new Intl.NumberFormat("zh-CN", {
                     style: "decimal",
                     minimumFractionDigits: 0,
@@ -107,25 +107,25 @@ function initAndPlotLineChart() {
         },
         tooltip: {
             showCrosshairs: true,
-            crosshairs: { type: "xy" },
-            formatter: (datum) => ({ name: "净资产", value: formattedCurrencyNoSymbol(datum.total) }),
+            crosshairs: {type: "xy"},
+            formatter: (datum) => ({name: "净资产", value: formattedCurrencyNoSymbol(datum.total)}),
             domStyles: {
-                "g2-tooltip": { fontSize: "16px" }
+                "g2-tooltip": {fontSize: "16px"}
             }
         }
-    });
-    lineChart.value.render();
+    } as any);
+    lineChart.value?.render();
 }
 
 watch(() => props.statisticList,
     (newVal) => {
         if (!!lineChart.value) {
-            lineChart.value.changeData(newVal);
+            lineChart.value?.changeData(newVal as any);
         } else {
             initAndPlotLineChart();
         }
     },
-    { deep: true }
+    {deep: true}
 );
 </script>
 

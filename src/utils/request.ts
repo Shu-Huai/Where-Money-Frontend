@@ -3,6 +3,7 @@ import axios from "axios";
 import router from "@/router";
 import {storage} from "../utils";
 import qs from "qs";
+import {EnumStorageKey} from "@/enum";
 
 const service = (axios as any).create({
     baseURL: import.meta.env.VITE_APP_INTERFACE_URL,
@@ -10,7 +11,7 @@ const service = (axios as any).create({
 });
 service.interceptors.request.use(
     (config: any) => {
-        const token = storage.get("token");
+        const token = storage.get(EnumStorageKey["token"]);
         if (token) {
             config.headers.authorization = `Bearer ${token}`;
         }
@@ -46,7 +47,7 @@ service.interceptors.response.use(
                         window.$message.error(res.message);
                         break;
                     case 401:
-                        storage.remove("token");
+                        storage.remove(EnumStorageKey["token"]);
                         switch (res.message) {
                             case "账户或密码错误":
                                 window.$message.error("账户或密码错误");
