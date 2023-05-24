@@ -4,13 +4,13 @@ import { getLocal, setLocal } from "../storages";
 
 /** 缓存多页签数据 */
 export function setTabRoutes(data: GlobalTabRoute[]) {
-    setLocal(EnumStorageKey["tab-routes"], data);
+    setLocal(EnumStorageKey["tabRoutes"], data);
 }
 
 /** 获取缓存的多页签数据 */
 export function getTabRoutes() {
     const routes: GlobalTabRoute[] = [];
-    const data = getLocal<GlobalTabRoute[]>(EnumStorageKey["tab-routes"]);
+    const data = getLocal<GlobalTabRoute[]>(EnumStorageKey["tabRoutes"]);
     if (data) {
         const defaultTabRoutes = data.map((item: any) => ({
             ...item,

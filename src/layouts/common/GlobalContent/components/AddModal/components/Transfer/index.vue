@@ -7,7 +7,7 @@
                         <template #default>
                             <div class="flex space-x-2">
                                 <div v-if="outAssetName!=='转出账户'">
-                                    <Icon :icon="outAssetSvg" class="text-primary w-8 h-8" />
+                                    <Icon :icon="outAssetSvg" class="text-primary w-8 h-8"/>
                                 </div>
                                 <div class="m-auto">
                                     {{ outAssetName }}
@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <div>
-                        <Icon class="m-auto text-primary w-7 h-7" icon="ic:baseline-arrow-downward" />
+                        <Icon class="m-auto text-primary w-7 h-7" icon="ic:baseline-arrow-downward"/>
                     </div>
                 </div>
                 <div>
@@ -29,7 +29,7 @@
                         <template #default>
                             <div class="flex space-x-2">
                                 <div v-if="inAssetName!=='转入账户'">
-                                    <Icon :icon="inAssetSvg" class="text-primary w-8 h-8" />
+                                    <Icon :icon="inAssetSvg" class="text-primary w-8 h-8"/>
                                 </div>
                                 <div class="m-auto">
                                     {{ inAssetName }}
@@ -45,7 +45,7 @@
             <div class="space-y-2">
                 <div class="flex space-x-2">
                     <div class="w-2/3">
-                        <n-input v-model:value="remark" placeholder="点此输入备注" type="text" />
+                        <n-input v-model:value="remark" placeholder="点此输入备注" type="text"/>
                     </div>
                     <div class="w-1/3">
                         <n-input-number v-model:value="amount" step="0.01">
@@ -69,12 +69,12 @@
                     <div class="w-1/3">
                         <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
                                        type="datetime" :update-value-on-close="true"
-                                       :time-picker-props="timePickerProps" />
+                                       :time-picker-props="timePickerProps"/>
                     </div>
                     <div class="w-1/3">
                         <n-popover trigger="hover">
                             <template #trigger>
-                                <n-button class="w-full" v-bind:type="fee === 0 ? '' : 'primary'"
+                                <n-button class="w-full" v-bind:type="fee === 0 ? 'default' : 'primary'"
                                           v-on:click="feeDrawerShower">
                                     <template #default>
                                         手续费
@@ -126,7 +126,7 @@
                                     <n-radio v-bind:key="item.id" v-bind:value="item.assetName">
                                         <div class="flex space-x-2 align-middle">
                                             <div>
-                                                <Icon :icon="item.svg" class="text-primary w-8 h-8" />
+                                                <Icon :icon="item.svg" class="text-primary w-8 h-8"/>
                                             </div>
                                             <div class="w-100 m-auto">
                                                 {{ item.assetName }}
@@ -159,7 +159,7 @@
                                     <n-radio v-bind:key="item.id" v-bind:value="item.assetName">
                                         <div class="flex space-x-2">
                                             <div>
-                                                <Icon :icon="item.svg" class="text-primary w-8 h-8" />
+                                                <Icon :icon="item.svg" class="text-primary w-8 h-8"/>
                                             </div>
                                             <div class="w-100 m-auto">
                                                 {{ item.assetName }}
@@ -227,8 +227,8 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, Ref, watch } from "vue";
-import { addBillApi, getAllAsset, getAllBookApi, getAssetApi, getBookApi } from "@/apis";
+import {onMounted, ref, Ref, watch} from "vue";
+import {addBillApi, getAllAsset, getAllBookApi, getAssetApi, getBookApi} from "@/apis";
 import {
     Asset,
     AssetGetAllAssetResponse,
@@ -237,12 +237,12 @@ import {
     BookGetAllBookResponse,
     BookGetBookResponse
 } from "@/interface";
-import { TimePickerProps, UploadCustomRequestOptions, UploadFileInfo } from "naive-ui";
-import { intToString } from "@/utils/dateComputer";
-import { Icon } from "@iconify/vue";
-import { useStore } from "@/stores/store";
+import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
+import {intToString} from "@/utils/dateComputer";
+import {Icon} from "@iconify/vue";
+import {useStore} from "@/stores/store";
 
-let timePickerProps: TimePickerProps = { inputReadonly: true };
+let timePickerProps: TimePickerProps = {inputReadonly: true};
 let remark: Ref<string> = ref("");
 let amount: Ref<number> = ref(0);
 let bookName: Ref<string> = ref("");
@@ -260,9 +260,10 @@ onMounted(() => {
     isLoading.value = true;
     bookId.value = store.bookId;
     timestamp.value = Date.now();
+    timestamp.value -= timestamp.value % (60 * 1000)
     outAssetName.value = "转出账户";
     inAssetName.value = "转入账户";
-    getBookApi({ id: bookId.value }).then((response: BookGetBookResponse) => {
+    getBookApi({id: bookId.value}).then((response: BookGetBookResponse) => {
         bookName.value = response.book.title;
         isLoading.value = false;
     }).catch(() => {
@@ -357,9 +358,9 @@ function feeDrawerShower() {
 
 let picture: File;
 let fileName: Ref<string> = ref("");
-const customRequest = ({ file }: UploadCustomRequestOptions) => {
-    picture = file.file as File;
-    fileName.value = file.name;
+const customRequest = (file: UploadCustomRequestOptions) => {
+    picture = file.file.file as File;
+    fileName.value = file.file.name;
 };
 
 function changePicture() {
@@ -396,9 +397,9 @@ function addBill(): void {
     formData.append("remark", remark.value as any);
     formData.append("file", picture as File);
     addBillApi(formData).then(() => {
-        getAssetApi({ id: inAssetId.value }).then((response: AssetGetAssetResponse) => {
+        getAssetApi({id: inAssetId.value}).then((response: AssetGetAssetResponse) => {
             inAssetBalance.value = response.asset.balance;
-            getAssetApi({ id: outAssetId.value }).then((response: AssetGetAssetResponse) => {
+            getAssetApi({id: outAssetId.value}).then((response: AssetGetAssetResponse) => {
                 outAssetBalance.value = response.asset.balance;
                 window.$message.success("添加成功");
             }).catch(() => {

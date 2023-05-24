@@ -10,7 +10,7 @@
             <div class="space-y-2">
                 <div class="lg:flex lg:space-x-2 space-y-2 lg:space-y-0">
                     <div class="w-full lg:w-2/3">
-                        <n-input v-model:value="remark" placeholder="点此输入备注" type="text" />
+                        <n-input v-model:value="remark" placeholder="点此输入备注" type="text"/>
                     </div>
                     <div class="w-full lg:w-1/3">
                         <n-input-number v-model:value="amount" step="0.01">
@@ -36,7 +36,7 @@
                             <template #default>
                                 <div class="flex space-x-2">
                                     <div v-if="assetName!=='支付账户'">
-                                        <Icon :icon="assetSvg" class="text-primary w-4 h-4" />
+                                        <Icon :icon="assetSvg" class="text-primary w-4 h-4"/>
                                     </div>
                                     <div class="m-auto">
                                         {{ assetName }}
@@ -51,7 +51,7 @@
                     <div class="lg:w-1/3">
                         <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
                                        type="datetime" :update-value-on-close="true"
-                                       :time-picker-props="timePickerProps" />
+                                       :time-picker-props="timePickerProps"/>
                     </div>
                 </div>
                 <div class="flex space-x-2">
@@ -93,7 +93,7 @@
                                     <n-radio v-bind:key="item.id" v-bind:value="item.assetName">
                                         <div class="flex space-x-2 align-middle">
                                             <div>
-                                                <Icon :icon="item.svg" class="text-primary w-8 h-8" />
+                                                <Icon :icon="item.svg" class="text-primary w-8 h-8"/>
                                             </div>
                                             <div class="w-100 m-auto">
                                                 {{ item.assetName }}
@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts" setup>
-import { addBillApi, getAllAsset, getAllBillCategoryApi, getAllBookApi, getAssetApi, getBookApi } from "@/apis";
+import {addBillApi, getAllAsset, getAllBillCategoryApi, getAllBookApi, getAssetApi, getBookApi} from "@/apis";
 import {
     Asset,
     AssetGetAllAssetResponse,
@@ -155,14 +155,14 @@ import {
     BookGetAllBookResponse,
     BookGetBookResponse
 } from "@/interface";
-import { onMounted, ref, Ref, watch } from "vue";
-import { TimePickerProps, UploadCustomRequestOptions, UploadFileInfo } from "naive-ui";
-import { intToString } from "@/utils/dateComputer";
-import { Icon } from "@iconify/vue";
-import { BillCategoryItem } from "./components";
-import { useStore } from "@/stores/store";
+import {onMounted, ref, Ref, watch} from "vue";
+import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
+import {intToString} from "@/utils/dateComputer";
+import {Icon} from "@iconify/vue";
+import {BillCategoryItem} from "./components";
+import {useStore} from "@/stores/store";
 
-let timePickerProps: TimePickerProps = { inputReadonly: true };
+let timePickerProps: TimePickerProps = {inputReadonly: true};
 let remark: Ref<string> = ref("");
 let amount: Ref<number> = ref(0);
 let bookName: Ref<string> = ref("");
@@ -178,11 +178,12 @@ onMounted(() => {
     isLoading.value = true;
     bookId.value = store.bookId;
     timestamp.value = Date.now();
+    timestamp.value -= timestamp.value % (60 * 1000)
     assetName.value = "支付账户";
     store.selectedBillCategoryId = 0;
-    getAllBillCategoryApi({ bookId: bookId.value, type: "支出" }).then((res: BookAllBillCategoryResponse) => {
+    getAllBillCategoryApi({bookId: bookId.value, type: "支出"}).then((res: BookAllBillCategoryResponse) => {
         billCategoryList.value = res.billCategoryList;
-        getBookApi({ id: bookId.value }).then((response: BookGetBookResponse) => {
+        getBookApi({id: bookId.value}).then((response: BookGetBookResponse) => {
             bookName.value = response.book.title;
             isLoading.value = false;
         }).catch(() => {
@@ -246,9 +247,9 @@ watch(bookSelector, (value: string) => {
 });
 let picture: File;
 let fileName: Ref<string> = ref("");
-const customRequest = ({ file }: UploadCustomRequestOptions) => {
-    picture = file.file as File;
-    fileName.value = file.name;
+const customRequest = (file: UploadCustomRequestOptions) => {
+    picture = file.file.file as File;
+    fileName.value = file.file.name;
 };
 
 function changePicture() {
@@ -282,7 +283,7 @@ function addBill(): void {
     formData.append("file", picture as File);
     addBillApi(formData).then((_res: any) => {
         window.$message.success("添加成功");
-        getAssetApi({ id: assetId.value }).then((response: AssetGetAssetResponse) => {
+        getAssetApi({id: assetId.value}).then((response: AssetGetAssetResponse) => {
             assetBalance.value = response.asset.balance;
         }).catch(() => {
         });

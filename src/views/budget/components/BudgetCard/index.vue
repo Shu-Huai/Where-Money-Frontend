@@ -4,7 +4,7 @@
             <div class="flex-y-center justify-between">
                 <span class="text-xl font-bold">{{ book.title }}</span>
                 <n-button text @click="showAddModal = true; store.selectedBillCategoryId = -1;">
-                    <icon height="24px" icon="fluent:add-24-filled" />
+                    <icon height="24px" icon="fluent:add-24-filled"/>
                     <span class="text-base ml-2">新增预算</span>
                 </n-button>
             </div>
@@ -31,7 +31,8 @@
                                     <n-input-group>
                                         <n-input-group-label size="small">总额</n-input-group-label>
                                         <n-input-number v-model:value="bookTotalBudget" :min="bookBudgetTotalMin"
-                                                        :show-button="false" :style="{ width: '100px', textAlign: 'center' }"
+                                                        :show-button="false"
+                                                        :style="{ width: '100px', textAlign: 'center' }"
                                                         size="small">
                                             <template #prefix>￥</template>
                                         </n-input-number>
@@ -42,7 +43,8 @@
                                     <n-input-group>
                                         <n-input-group-label size="small">已用</n-input-group-label>
                                         <n-input-number v-model:value="bookUsedBudget" :min="bookBudgetUsedMin"
-                                                        :show-button="false" :style="{ width: '100px', textAlign: 'center' }"
+                                                        :show-button="false"
+                                                        :style="{ width: '100px', textAlign: 'center' }"
                                                         size="small">
                                             <template #prefix>￥</template>
                                         </n-input-number>
@@ -63,7 +65,8 @@
                                                 :status="book.usedBudget > book.totalBudget ? 'error' : 'success'"
                                                 type="circle">
                                         <div class="text-center">
-                                            <p class="text-xs">{{ book.totalBudget >= book.usedBudget ? "可用" : "超支"
+                                            <p class="text-xs">{{
+                                                    book.totalBudget >= book.usedBudget ? "可用" : "超支"
                                                 }}</p>
                                             <p class="text-xs">
                                                 {{ compactFormatter.format(book.totalBudget - book.usedBudget) }}
@@ -85,21 +88,23 @@
                                     <!-- 左侧 icon和名字、额度信息 -->
                                     <div class="flex-y-center">
                                         <icon :height="iconWidth"
-                                              :icon="mapBudgetToCategory.get(budget.id)?.svg" :width="iconWidth"
-                                              class="text-primary hover:text-primary-hover mr-3" />
+                                              :icon="mapBudgetToCategory.get(budget.id)?.svg as any" :width="iconWidth"
+                                              class="text-primary hover:text-primary-hover mr-3"/>
 
                                         <div class="flex flex-col">
                                             <span class="text-base">
                                                 {{ mapBudgetToCategory.get(budget.id)?.billCategoryName }}
                                             </span>
                                             <span class="text-xs">
-                                                总额: {{ formattedCurrencyNoSymbol(budget.limit)
+                                                总额: {{
+                                                    formattedCurrencyNoSymbol(budget.limit)
                                                 }} | {{ budget.times.toFixed(0) }} 笔支出
                                             </span>
                                         </div>
                                     </div>
                                     <!-- 右侧进度条 -->
-                                    <n-progress :gap-offset-degree="180" :percentage="budgetRemainList![idx] < 0 ? 100 : (1 - budget.used / budget.limit) * 100"
+                                    <n-progress :gap-offset-degree="180"
+                                                :percentage="budgetRemainList![idx] < 0 ? 100 : (1 - budget.used / budget.limit) * 100"
                                                 :status="budget.used > budget.limit ? 'error' : 'success'"
                                                 type="circle">
                                         <div class="text-center">
@@ -118,26 +123,26 @@
                 </n-card>
             </template>
 
-            <add-budget-modal v-model:book="book" v-model:show-modal="showAddModal" :disabled-categories="categoryInUse"
-                              @manual-update-book="emit('manualUpdateBook')" />
+            <add-budget-modal v-bind:book="book" v-model:show-modal="showAddModal" :disabled-categories="categoryInUse"
+                              @manual-update-book="emit('manualUpdateBook')"/>
 
-            <budget-info-modal v-model:budget="budgetTemp" v-model:show-modal="showInfoModal"
-                               :category="categoryTemp" @manual-update-book="emit('manualUpdateBook')" />
+            <budget-info-modal v-model:budget="budgetTemp as any" v-model:show-modal="showInfoModal"
+                               :category="categoryTemp" @manual-update-book="emit('manualUpdateBook')"/>
         </template>
     </n-card>
 </template>
 
 <script lang="ts" setup>
 
-import { computed, defineEmits, defineProps, onMounted, PropType, ref, watch } from "vue";
-import { useMessage } from "naive-ui";
-import { BillCategory, Book, BookAllBillCategoryResponse, Budget, BudgetGetBudgetByBookResponse } from "@/interface";
-import { getAllBillCategoryApi, getBudgetsByBook, setBookBudget } from "@/apis";
-import { formattedCurrencyNoSymbol } from "@/utils";
-import { useStore } from "@/stores/store";
+import {computed, defineEmits, defineProps, onMounted, PropType, ref, watch} from "vue";
+import {useMessage} from "naive-ui";
+import {BillCategory, Book, BookAllBillCategoryResponse, Budget, BudgetGetBudgetByBookResponse} from "@/interface";
+import {getAllBillCategoryApi, getBudgetsByBook, setBookBudget} from "@/apis";
+import {formattedCurrencyNoSymbol} from "@/utils";
+import {useStore} from "@/stores/store";
 
-import { Icon } from "@iconify/vue";
-import { AddBudgetModal, BudgetInfoModal } from "./components";
+import {Icon} from "@iconify/vue";
+import {AddBudgetModal, BudgetInfoModal} from "./components";
 
 const props = defineProps({
     book: {
@@ -155,9 +160,9 @@ const mapBudgetToCategory = ref(new Map<Number, BillCategory>());
 const categoryInUse = ref(new Set<Number>());
 
 function getBudgetList(id: number) {
-    getBudgetsByBook({ bookId: id }).then((res: BudgetGetBudgetByBookResponse) => {
+    getBudgetsByBook({bookId: id}).then((res: BudgetGetBudgetByBookResponse) => {
         budgetList.value = res.budgetList;
-        getAllBillCategoryApi({ bookId: id, type: "支出" }).then((res: BookAllBillCategoryResponse) => {
+        getAllBillCategoryApi({bookId: id, type: "支出"}).then((res: BookAllBillCategoryResponse) => {
             billCategoryList.value = res.billCategoryList;
             budgetList.value?.forEach((budget) => {
                 const billCategory = billCategoryList.value.find((billCategory) => billCategory.id === budget.billCategoryId);
@@ -177,23 +182,35 @@ const budgetRemainList = computed(() => (
 ));
 
 onMounted(() => {
-    getBudgetList(props.book.id);
+    getBudgetList(props.book?.id as any);
 });
 
 watch(() => props.book,
-    (newBook) => getBudgetList(newBook.id),
-    { deep: true, immediate: true }
+    (newBook) => getBudgetList(newBook?.id as any),
+    {deep: true, immediate: true}
 );
 
 const bookTotalBudget = ref(0);
 const bookUsedBudget = ref(0);
-const bookBudgetTotalMin = computed(() => budgetList.value?.reduce((acc, cur) => acc + cur.limit, 0));
-const bookBudgetUsedMin = computed(() => budgetList.value?.reduce((acc, cur) => acc + cur.used, 0));
+const bookBudgetTotalMin = computed(() => {
+    let sum: number | undefined = 0;
+    for (let index = 0; index < budgetList.value?.length; index++) {
+        sum += budgetList.value?.[index].limit;
+    }
+    return sum;
+});
+const bookBudgetUsedMin = computed(() => {
+    let sum: number | undefined = 0;
+    for (let index = 0; index < budgetList.value?.length; index++) {
+        sum += budgetList.value?.[index].used;
+    }
+    return sum;
+});
 const bookBudgetEdit = ref(false);
 
 function showBookBudgetInput() {
-    bookTotalBudget.value = props.book.totalBudget;
-    bookUsedBudget.value = props.book.usedBudget;
+    bookTotalBudget.value = props.book?.totalBudget as any;
+    bookUsedBudget.value = props.book?.usedBudget as any;
     bookBudgetEdit.value = true;
 }
 
@@ -205,14 +222,14 @@ const message = useMessage();
 
 function submitBookBudgetChange() {
     const params = {
-        bookId: props.book.id,
+        bookId: props.book?.id as any,
         totalBudget: bookTotalBudget.value,
         usedBudget: bookUsedBudget.value
     };
     setBookBudget(params).then(() => {
         bookBudgetEdit.value = false;
         emit("manualUpdateBook");
-        getBudgetList(props.book.id);
+        getBudgetList(props.book?.id as any);
         message.success("修改成功！");
     }).catch((err: Error) => {
         console.log(err);

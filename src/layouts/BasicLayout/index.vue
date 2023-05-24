@@ -1,5 +1,5 @@
 <template>
-    <soybean-admin-layout
+    <admin-layout
         :fixed-footer="theme.footer.fixed"
         :fixed-header-and-tab="theme.fixedHeaderAndTab"
         :header-height="theme.header.height"
@@ -25,13 +25,13 @@
         <template #footer>
             <global-footer />
         </template>
-    </soybean-admin-layout>
+    </admin-layout>
     <setting-drawer />
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import SoybeanAdminLayout from "soybean-admin-layout";
+import AdminLayout from '@soybeanjs/vue-admin-layout';
 import { useAppStore, useThemeStore } from "@/store";
 import { useBasicLayout } from "@/composables";
 import { useStore } from "@/stores/store";

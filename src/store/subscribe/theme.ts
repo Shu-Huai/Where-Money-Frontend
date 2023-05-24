@@ -1,7 +1,7 @@
 import {onUnmounted, watch} from 'vue';
 import {useOsTheme} from 'naive-ui';
 import {useElementSize} from '@vueuse/core';
-import {setThemeColor} from '@/utils';
+import {setLayout, setThemeColor} from '@/utils';
 import {useThemeStore} from "@/store";
 
 /** 订阅theme store */
@@ -15,6 +15,13 @@ export default function subscribeThemeStore() {
         () => theme.themeColor,
         newValue => {
             setThemeColor(newValue);
+        },
+        {immediate: true}
+    );
+    const stopLayout = watch(
+        () => theme.layout.mode,
+        newValue => {
+            setLayout(newValue);
         },
         {immediate: true}
     );
@@ -52,6 +59,7 @@ export default function subscribeThemeStore() {
 
     onUnmounted(() => {
         stopThemeColor();
+        stopLayout();
         stopDarkMode();
         stopOsTheme();
         stopWidth();

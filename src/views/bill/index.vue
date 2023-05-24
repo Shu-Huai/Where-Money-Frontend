@@ -48,7 +48,7 @@
                                 账单详情
                             </div>
                             <Icon v-bind:icon="iconMap[currentBill.type]" class="h-5 w-5 my-auto"
-                                  v-bind:class="iconColorMap[currentBill.type]" />
+                                  v-bind:class="iconColorMap[currentBill.type]"/>
                         </div>
                     </template>
                     <template #header-extra>
@@ -146,7 +146,7 @@
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
-                                                  v-bind:icon="billCategoryList.find(item => item.billCategoryName === currentBill.billCategory)?.svg">
+                                                  v-bind:icon="billCategoryList.find(item => item.billCategoryName === currentBill.billCategory)?.svg as any">
                                             </Icon>
                                             <div class="text-15px">
                                                 {{ currentBill.billCategory }}
@@ -166,7 +166,7 @@
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
-                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.payAsset)?.svg">
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.payAsset)?.svg as any">
                                             </Icon>
                                             <div class="text-15px">
                                                 {{ currentBill.payAsset }}
@@ -186,7 +186,7 @@
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
-                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.incomeAsset)?.svg">
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.incomeAsset)?.svg as any">
                                             </Icon>
                                             <div class="text-15px">
                                                 {{ currentBill.incomeAsset }}
@@ -206,7 +206,7 @@
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
-                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.outAsset)?.svg">
+                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.outAsset)?.svg as any">
                                                 </Icon>
                                                 <div class="text-15px">
                                                     {{ currentBill.outAsset }}
@@ -225,7 +225,7 @@
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
-                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.inAsset)?.svg">
+                                                      v-bind:icon="assetList.find(item => item.assetName === currentBill.inAsset)?.svg as any">
                                                 </Icon>
                                                 <div class="text-15px">
                                                     {{ currentBill.inAsset }}
@@ -246,7 +246,7 @@
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
-                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.refundAsset)?.svg">
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.refundAsset)?.svg as any">
                                             </Icon>
                                             <div class="text-15px">
                                                 {{ currentBill.refundAsset }}
@@ -305,7 +305,7 @@
                                         <div class="flex space-x-2" v-if="editing">
                                             <img v-if="imageSrc !== 'data:image;base64,null'"
                                                  v-bind:src="imageSrc"
-                                                 alt="图片" class="rounded-xl h-24" />
+                                                 alt="图片" class="rounded-xl h-24"/>
                                             <n-button class="my-auto" v-if="imageSrc !== 'data:image;base64,null'"
                                                       v-on:click="deleteImage">
                                                 <template #default>
@@ -327,7 +327,7 @@
                                         </div>
                                         <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
                                              v-bind:src="imageSrc"
-                                             alt="图片" class="rounded-xl" />
+                                             alt="图片" class="rounded-xl"/>
                                         <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
                                             <template #default>
                                                 什么也没有
@@ -344,7 +344,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch } from "vue";
+import {computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch} from "vue";
 import {
     addBillApi,
     changeBillApi,
@@ -358,8 +358,8 @@ import {
     getIncomeMonthApi,
     getPayMonthApi
 } from "@/apis";
-import { useStore } from "@/stores/store";
-import { dateToString, intToString, now, stringToInt } from "@/utils/dateComputer";
+import {useStore} from "@/stores/store";
+import {dateToString, intToString, now, stringToInt} from "@/utils/dateComputer";
 import {
     Asset,
     BillAllBillTimeResponse,
@@ -370,20 +370,20 @@ import {
     BookIncomeMonthResponse,
     BookPayMonthResponse
 } from "@/interface";
-import { DayBillList } from "./components";
-import { MonthStatistic } from "@/views/components";
-import { Icon } from "@iconify/vue";
-import { TimePickerProps, UploadCustomRequestOptions, UploadFileInfo } from "naive-ui";
-import { AssetGetAllAssetResponse } from "@/interface";
+import {DayBillList} from "./components";
+import {MonthStatistic} from "@/views/components";
+import {Icon} from "@iconify/vue";
+import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
+import {AssetGetAllAssetResponse} from "@/interface";
 
-let timePickerProps: TimePickerProps = { inputReadonly: true };
+let timePickerProps: TimePickerProps = {inputReadonly: true};
 const store = useStore();
 let bookId = ref<number>(0);
 
 interface DayStatisticTime extends BillDayStatisticTimeResponse {
 }
 
-let dayStatisticTime: Ref<DayStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
+let dayStatisticTime: Ref<DayStatisticTime> = ref({payStatistic: [], incomeStatistic: []});
 
 interface BillCategoryShow extends BillCategory {
     value: string;
@@ -490,7 +490,7 @@ function getBalanceMonth(): void {
 let incomeMonth: Ref<number> = ref(0);
 
 function getIncomeMonth(): void {
-    getIncomeMonthApi({ bookId: bookId.value, month: startTime.value }).then((response: BookIncomeMonthResponse) => {
+    getIncomeMonthApi({bookId: bookId.value, month: startTime.value}).then((response: BookIncomeMonthResponse) => {
         incomeMonth.value = response.amount;
     });
 }
@@ -498,7 +498,7 @@ function getIncomeMonth(): void {
 let payMonth: Ref<number> = ref(0);
 
 function getPayMonth(): void {
-    getPayMonthApi({ bookId: bookId.value, month: startTime.value }).then((response: BookPayMonthResponse) => {
+    getPayMonthApi({bookId: bookId.value, month: startTime.value}).then((response: BookPayMonthResponse) => {
         payMonth.value = response.amount;
     });
 }
@@ -588,7 +588,7 @@ watch(() => store.currentBill, (newValue: BillShow) => {
     editTime.value = stringToInt(newValue.billTime);
     imageSrc.value = "data:image;base64,null";
     if (!isNaN(currentBill.value.id)) {
-        getBillImageApi({ billId: currentBill.value.id, type: currentBill.value.type }).then((response: any) => {
+        getBillImageApi({billId: currentBill.value.id, type: currentBill.value.type}).then((response: any) => {
             imageSrc.value = "data:image;base64," + response;
         });
     }
@@ -621,7 +621,7 @@ function refundBill() {
                 inAsset = item.id;
             }
         });
-        getBillCategoryApi({ bookId: bookId.value }).then((subResponse: any) => {
+        getBillCategoryApi({bookId: bookId.value}).then((subResponse: any) => {
             let billCategoryId: number = 0;
             subResponse.forEach((item: { billCategoryName: string | undefined; id: number; }) => {
                 if (item.billCategoryName === currentBill.value.billCategory) {
@@ -846,9 +846,9 @@ function assetSelectorRender(option: AssetShow): VNodeChild {
 let editTime: Ref<number> = ref(0);
 let picture: File | undefined;
 let fileName: Ref<string> = ref("");
-const customRequest = ({ file }: UploadCustomRequestOptions) => {
-    picture = file.file as File;
-    fileName.value = file.name;
+const customRequest = (file: UploadCustomRequestOptions) => {
+    picture = file.file.file as File;
+    fileName.value = file.file.name;
 };
 
 function changePicture() {
@@ -901,7 +901,6 @@ function deleteImage(): void {
 }
 
 function numberToCharMonth(numberMonth: number): string {
-    console.log(numberMonth);
     let charList: Array<string> = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
     return charList[numberMonth - 1] + "月";
 }
