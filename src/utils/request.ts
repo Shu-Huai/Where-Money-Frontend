@@ -15,10 +15,10 @@ service.interceptors.request.use(
         if (token) {
             config.headers.authorization = `Bearer ${token}`;
         }
-        if (config.method === "post" && config.url !== "/bill/add-bill" && config.url !== "/bill/change-bill") {
+        if (config.method === "post" && config.url !== "/bill/bill") {
             config.data = qs.stringify(config.data);
         }
-        if (config.method === "patch") {
+        if (config.method === "patch" && config.url !== "/bill/bill") {
             config.data = qs.stringify(config.data);
         }
         return config;
