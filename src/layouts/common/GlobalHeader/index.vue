@@ -18,7 +18,7 @@
             <header-menu/>
         </div>
         <div class="w-1/10">
-            <n-select v-model:value="bookId" :options="bookList" @update:value="changeBook">
+            <n-select v-model:value="bookId" :options="bookList as any" @update:value="changeBook">
                 <template #action>
                     <n-button v-on:click="addBook">
                         <template #default>
@@ -67,7 +67,7 @@
             <github-site/>
             <full-screen/>
             <theme-mode/>
-            <hover-container class="w-40px h-full" tooltip-content="退出">
+            <hover-container class="w-1/8 h-full" tooltip-content="退出">
                 <n-button :bordered="false" class="w-48px h-full" @click="showExitModal = true">
                     <Icon :icon="'ri:logout-box-r-line'" class="text-20px"/>
                 </n-button>
