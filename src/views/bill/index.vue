@@ -515,7 +515,7 @@ function calendarContent(year: number, month: number, day: number): string {
     content += `<div class="text-green-500 text-xs">`;
     dayStatisticTime.value.incomeStatistic.forEach((item: { day: string, amount: number }) => {
         if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `-${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
+            content += `+${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
         }
     });
     content += `</div>`;
