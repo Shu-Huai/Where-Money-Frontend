@@ -1,9 +1,12 @@
 <template>
-    <div v-bind:class="{'bg-primary-active':chosen,'border-opacity-100':mouseOver,'border-opacity-0':!mouseOver}"
-         v-on:mouseenter="handleMouseEnter(true)"
-         v-on:mouseleave="handleMouseEnter(false)" v-on:click="handleClick"
-         class="rounded-xl px-2 border-1 border-gray-200">
-        <div v-if="type==='支出'" class="flex justify-between h-18 cursor-pointer">
+    <div
+        v-bind:class="{ 'bg-primary-active': chosen, 'border-opacity-100': mouseOver, 'border-opacity-0': !mouseOver }"
+        v-on:mouseenter="handleMouseEnter(true)"
+        v-on:mouseleave="handleMouseEnter(false)"
+        v-on:click="handleClick"
+        class="rounded-xl px-2 border-1 border-gray-200"
+    >
+        <div v-if="type === '支出'" class="flex justify-between h-18 cursor-pointer">
             <div class="flex space-x-2">
                 <Icon icon="material-symbols:arrow-upward" class="text-red-500 h-5 w-5 my-auto" />
                 <div class="my-auto">
@@ -17,7 +20,7 @@
                 <div class="text-sm flex justify-end">{{ bill.billTime }}</div>
             </div>
         </div>
-        <div v-else-if="type==='收入'" class="flex justify-between h-18 cursor-pointer">
+        <div v-else-if="type === '收入'" class="flex justify-between h-18 cursor-pointer">
             <div class="flex space-x-2">
                 <Icon icon="material-symbols:arrow-downward" class="text-green-500 h-5 w-5 my-auto" />
                 <div class="my-auto">
@@ -31,7 +34,7 @@
                 <div class="text-sm flex justify-end">{{ bill.billTime }}</div>
             </div>
         </div>
-        <div v-else-if="type==='转账'" class="flex justify-between h-18 cursor-pointer">
+        <div v-else-if="type === '转账'" class="flex justify-between h-18 cursor-pointer">
             <div class="flex space-x-2">
                 <Icon icon="ph:arrows-clockwise" class="text-blue-500 h-5 w-5 my-auto" />
                 <div class="my-auto">
@@ -45,7 +48,7 @@
                 <div class="text-sm flex justify-end">{{ bill.billTime }}</div>
             </div>
         </div>
-        <div v-else-if="type==='退款'" class="flex justify-between h-18 cursor-pointer">
+        <div v-else-if="type === '退款'" class="flex justify-between h-18 cursor-pointer">
             <div class="flex space-x-2">
                 <Icon icon="ph:arrows-down-up" class="text-blue-500 h-5 w-5 my-auto" />
                 <div class="my-auto">
@@ -70,12 +73,12 @@ const store = useStore();
 const props = defineProps({
     type: {
         type: String,
-        default: ""
+        default: "",
     },
     bill: {
         type: Object,
-        default: {}
-    }
+        default: {},
+    },
 });
 let mouseOver: Ref<boolean> = ref(false);
 
@@ -88,13 +91,17 @@ function handleClick() {
         store.currentBill = Object();
     } else {
         store.currentBill = props.bill;
+        store.currentBillType = props.type;
     }
 }
 
 let chosen: Ref<boolean> = ref(false);
-watch(() => store.currentBill.id, (newValue: any) => {
-    chosen.value = newValue === props.bill.id;
-});
+watch(
+    () => store.currentBill.id,
+    (newValue: any) => {
+        chosen.value = (newValue === props.bill.id && store.currentBillType === props.type);
+    }
+);
 </script>
 <style scoped>
 </style>
