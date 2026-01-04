@@ -3,9 +3,9 @@
         <div class="space-y-2 text-center cursor-pointer py-2 rounded" v-bind:class="{'bg-primary-active':chosen}"
              v-on:click="setChosen">
             <div>
-                <Icon :icon="billCategory.svg" class="text-primary w-8 h-8 m-auto" />
+                <Icon :icon="billCategory.svg" class="text-primary lg:w-8 lg:h-8 m-auto h-5 w-5" />
             </div>
-            <div>
+            <div class="text-xs lg:text-base">
                 {{ billCategory.billCategoryName }}
             </div>
         </div>

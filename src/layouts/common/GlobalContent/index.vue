@@ -12,7 +12,7 @@
             <div class="but">
                 <Icon class="text-primary w-16 h-16" icon="ic:baseline-add-circle" v-on:click="showAdd=true" />
             </div>
-            <n-modal v-model:show="showAdd" :mask-closable="false" class="w-4/5 lg:w-1/2">
+            <n-modal v-model:show="showAdd" :mask-closable="false" class="w-19/20 lg:w-1/2">
                 <AddModal @close="closeAdd"></AddModal>
             </n-modal>
         </router-view>
