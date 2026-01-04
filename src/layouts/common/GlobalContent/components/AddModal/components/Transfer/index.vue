@@ -43,11 +43,11 @@
                 </div>
             </div>
             <div class="space-y-2">
-                <div class="flex space-x-2">
-                    <div class="w-2/3">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+                    <div class="col-span-1 lg:col-span-2">
                         <n-input v-model:value="remark" placeholder="点此输入备注" type="text"/>
                     </div>
-                    <div class="w-1/3">
+                    <div class="col-span-1">
                         <n-input-number v-model:value="amount" step="0.01">
                             <template #prefix>
                                 ￥
@@ -55,8 +55,8 @@
                         </n-input-number>
                     </div>
                 </div>
-                <div class="flex space-x-2">
-                    <div class="w-1/3">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+                    <div class="col-span-1">
                         <n-button class="w-full truncate" v-on:click="bookDrawerShower">
                             <template #default>
                                 <n-spin v-if="isLoading" class="items-center h-4 w-4"></n-spin>
@@ -66,12 +66,7 @@
                             </template>
                         </n-button>
                     </div>
-                    <div class="w-1/3">
-                        <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
-                                       type="datetime" :update-value-on-close="true"
-                                       :time-picker-props="timePickerProps"/>
-                    </div>
-                    <div class="w-1/3">
+                    <div class="col-span-1">
                         <n-popover trigger="hover">
                             <template #trigger>
                                 <n-button class="w-full" v-bind:type="fee === 0 ? 'default' : 'primary'"
@@ -86,9 +81,14 @@
                             </template>
                         </n-popover>
                     </div>
+                    <div class="col-span-2 lg:col-span-1">
+                        <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
+                                       type="datetime" :update-value-on-close="true"
+                                       :time-picker-props="timePickerProps"/>
+                    </div>
                 </div>
                 <div class="flex space-x-2">
-                    <n-upload :custom-request="customRequest" class="w-1/5"
+                    <n-upload :custom-request="customRequest" class="w-1/5 upload-mini-on-mobile"
                               list-type="image-card" max="1" v-on:change="changePicture"
                               v-on:before-upload="beforeUpload">
                         <template #default>
@@ -412,4 +412,25 @@ function addBill(): void {
 </script>
 
 <style scoped>
+/* <style scoped> */
+@media (max-width: 1023px) { /* Tailwind 的 lg 是 1024px 起 */
+  .upload-mini-on-mobile :deep(.n-upload-file--image-card),
+  .upload-mini-on-mobile :deep(.n-upload-trigger--image-card) {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* 有些版本内部还会单独控制图片/图标容器，顺便限制一下 */
+  .upload-mini-on-mobile :deep(.n-upload-file--image-card .n-upload-file__preview),
+  .upload-mini-on-mobile :deep(.n-upload-trigger--image-card .n-upload-trigger__content) {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* 让“图片”两个字别把卡片撑高/撑松 */
+  .upload-mini-on-mobile :deep(.n-upload-trigger__text) {
+    font-size: 12px;
+    line-height: 1;
+  }
+}
 </style>
