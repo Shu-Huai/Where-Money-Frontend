@@ -2,14 +2,18 @@ import {onUnmounted, watch} from 'vue';
 import {useOsTheme} from 'naive-ui';
 import {useElementSize} from '@vueuse/core';
 import {setLayout, setThemeColor} from '@/utils';
-import {useThemeStore} from "@/store";
+import {useAppStore, useThemeStore} from "@/store";
 
 /** 订阅theme store */
 export default function subscribeThemeStore() {
+    const app = useAppStore();
     const theme = useThemeStore();
     const osTheme = useOsTheme();
     const {width} = useElementSize(document.documentElement);
     const {addDarkClass, removeDarkClass} = handleWindicssDarkMode();
+    const isDesktop = typeof window === "undefined" || !window.matchMedia
+        ? true
+        : window.matchMedia("(min-width: 1280px)").matches;
 
     const stopThemeColor = watch(
         () => theme.themeColor,
@@ -22,6 +26,9 @@ export default function subscribeThemeStore() {
         () => theme.layout.mode,
         newValue => {
             setLayout(newValue);
+            if (!isDesktop && newValue === "vertical-mix") {
+                app.setSiderCollapse(true);
+            }
         },
         {immediate: true}
     );

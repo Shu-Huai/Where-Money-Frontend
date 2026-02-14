@@ -65,7 +65,7 @@ function initAndPlotLineChart() {
     const compactFmt = new Intl.NumberFormat("zh-CN", {
         notation: "compact",          // 关键：紧凑表示
         compactDisplay: "short",      // zh-CN 下会是 万/亿
-        maximumFractionDigits: 2
+        maximumFractionDigits: 0
     });
     lineChart.value = new Line(lineChartAreaRef.value as any, {
         color: color ? color : "#2092C6",

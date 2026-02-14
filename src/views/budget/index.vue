@@ -1,18 +1,15 @@
 <template>
     <div :style="{ minHeight: `calc(100vh - ${minHeight}px` }">
-        <n-grid
-            :item-responsive="true"
-            :x-gap="16"
-            :y-gap="16"
-        >
-            <n-grid-item
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+            <div
                 v-for="(book, index) in bookList"
                 :key="book.id"
-                span="0:24 1000:12 1500:8"
             >
-                <budget-card :book="book" @manual-update-book="getBooks"></budget-card>
-            </n-grid-item>
-        </n-grid>
+                <div class="w-full xl:w-full mx-auto">
+                    <budget-card :book="book" @manual-update-book="getBooks"></budget-card>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

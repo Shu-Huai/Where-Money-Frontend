@@ -5,7 +5,7 @@
             v-show="!showTitle"
             class="text-2xl font-bold italic text-primary transition duration-300 ease-in-out"
         >
-            <span class="underline decoration-teal-500 decoration-4">T</span>
+            <span class="underline decoration-teal-500 decoration-4">W</span>
         </div>
         <!-- {{ title }} -->
         <div

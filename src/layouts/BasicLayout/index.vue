@@ -22,9 +22,9 @@
             <global-sider/>
         </template>
         <global-content/>
-        <template #footer>
-            <global-footer/>
-        </template>
+<!--        <template #footer>-->
+<!--            <global-footer/>-->
+<!--        </template>-->
     </AdminLayout>
     <setting-drawer/>
 </template>

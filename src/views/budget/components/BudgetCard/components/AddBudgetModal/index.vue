@@ -2,7 +2,7 @@
     <n-modal
         :auto-focus="false"
         :show="showModal"
-        class="w-992px"
+        class="w-9/10 xl:w-992px"
         display-directive="show"
         preset="card"
         @close="closeModal"
@@ -12,33 +12,42 @@
         </template>
 
         <template #default>
-            <n-grid :cols="10" :x-gap="16" :y-gap="8">
-                <n-grid-item v-for="(category, index) in billCategoryList" :key="category.id"
-                             :class="{ 'bg-primary-active': store.selectedBillCategoryId == category.id }"
-                             class="rounded-lg p-2">
-                    <n-button :disabled="disabledCategories.has(category.id)" text @click="selectCategory(category.id)">
-                        <div class="flex flex-col items-center w-[64px]">
-                            <Icon :icon="category.svg" class="text-primary" height="32" width="32"></Icon>
-                            <span class="text-sm mt-2">{{ category.billCategoryName }}</span>
+            <n-scrollbar class="h-50 xl:h-auto">
+                <div class="grid grid-cols-6 gap-1 xl:grid-cols-10 xl:gap-4">
+                    <div v-for="(category, index) in billCategoryList"
+                         :key="category.id"
+                         @click="selectCategory(category.id)"
+                         :class="[
+                             store.selectedBillCategoryId == category.id ? 'bg-primary-active' : '',
+                             disabledCategories.has(category.id)
+                                 ? 'opacity-40 cursor-not-allowed pointer-events-none'
+                                 : 'cursor-pointer'
+                         ]"
+                         class="space-y-2 text-center py-2 rounded xl:rounded-lg xl:p-2">
+                        <div>
+                            <Icon :icon="category.svg" class="text-primary h-5 w-5 xl:h-8 xl:w-8 m-auto"></Icon>
                         </div>
-                    </n-button>
-                </n-grid-item>
-            </n-grid>
+                        <div class="text-xs xl:text-sm">
+                            {{ category.billCategoryName }}
+                        </div>
+                    </div>
+                </div>
+            </n-scrollbar>
 
             <n-hr />
 
-            <div class="flex-y-center justify-between px-2">
-                <div class="flex-y-center">
-                    <span class="text-base">预算总额</span>
+            <div class="flex-y-center justify-between">
+                <div class="flex-y-center xl:w-full">
+                    <span class="text-base xl:w-1/2">预算总额</span>
                     <n-input-number v-model:value="limitInput"
                                     :show-button="false"
-                                    class="ml-4"
+                                    class="ml-2 xl:w-1/2 w-2/3"
                                     placeholder="请输入预算"
                     >
                         <template #prefix>￥</template>
                     </n-input-number>
                 </div>
-                <n-button class="w-30" size="medium" type="primary" @click="submitNewBudget">确定</n-button>
+                <n-button class="w-14 xl:w-1/4 ml-2" size="medium" type="primary" @click="submitNewBudget">确定</n-button>
 
             </div>
 
