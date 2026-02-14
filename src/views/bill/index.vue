@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="flex space-x-5">
-            <div class="w-7/20 space-y-5">
-                <div class="flex space-x-3">
-                    <div class="w-1/2">
+        <div class="flex flex-col space-y-5 xl:flex-row xl:space-y-0 xl:space-x-5">
+            <div class="w-full space-y-5 xl:w-7/20">
+                <div class="flex flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
+                    <div class="w-full xl:w-1/2">
                         <MonthStatistic v-bind:amount="balanceMonth" type="balance">
                         </MonthStatistic>
                     </div>
-                    <div class="w-1/2 space-y-3">
+                    <div class="w-full space-y-3 xl:w-1/2">
                         <MonthStatistic v-bind:amount="payMonth" type="pay">
                         </MonthStatistic>
                         <MonthStatistic v-bind:amount="incomeMonth" type="income">
@@ -15,32 +15,91 @@
                     </div>
                 </div>
                 <div>
-                    <n-card class="rounded-xl h-125">
+                    <n-card class="rounded-xl xl:h-125">
                         <template #default>
-                            <n-calendar @update:value="changeDay" @panel-change="changeMonth" class="h-105">
-                                <template #header="{ year, month }">
-                                    <div v-on:click="getAllBillMonth()" class="cursor-pointer">
-                                        {{ year + " " + numberToCharMonth(month) }}
-                                    </div>
-                                </template>
-                                <template #default="{ year, month, date }">
-                                    <div v-html="calendarContent(year,month,date)"></div>
-                                </template>
-                            </n-calendar>
+                            <n-config-provider :date-locale="dateZhCNSingleWeekday">
+                                <n-calendar @update:value="changeDay" @panel-change="changeMonth" class="xl:h-105 h-85">
+                                    <template #header="{ year, month }">
+                                        <div v-on:click="getAllBillMonth()" class="cursor-pointer">
+                                            {{ year + " " + numberToCharMonth(month) }}
+                                        </div>
+                                    </template>
+                                    <template #default="{ year, month, date }">
+                                        <n-popover
+                                            trigger="manual"
+                                            placement="bottom"
+                                            :show-arrow="false"
+                                            :show="activePopoverKey === getCellStat(year, month, date).key"
+                                            :disabled="getCellStat(year, month, date).pay === 0 && getCellStat(year, month, date).income === 0"
+                                            :on-clickoutside="closeDayPopover"
+                                        >
+                                            <template #trigger>
+                                                <div class="w-full pt-1" v-on:click="openDayPopover(year, month, date)">
+                                                    <!-- 手机：只显示点 -->
+                                                    <div class="flex items-center gap-1 xl:hidden">
+          <span
+              v-if="getCellStat(year, month, date).pay > 0"
+              class="h-1.5 w-1.5 rounded-full bg-red-500"
+          />
+                                                        <span
+                                                            v-if="getCellStat(year, month, date).income > 0"
+                                                            class="h-1.5 w-1.5 rounded-full bg-green-500"
+                                                        />
+                                                    </div>
+
+                                                    <!-- 电脑：显示金额 -->
+                                                    <div class="hidden xl:block space-y-0.5">
+                                                        <div
+                                                            v-if="getCellStat(year, month, date).pay > 0"
+                                                            class="text-red-500 text-xs whitespace-nowrap"
+                                                        >
+                                                            -{{ fmtDesktop(getCellStat(year, month, date).pay) }}
+                                                        </div>
+                                                        <div
+                                                            v-if="getCellStat(year, month, date).income > 0"
+                                                            class="text-green-500 text-xs whitespace-nowrap"
+                                                        >
+                                                            +{{ fmtDesktop(getCellStat(year, month, date).income) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            <!-- 弹出内容：你要更丰富也在这里加 -->
+                                            <div class="text-sm leading-6">
+                                                <div class="text-xs text-gray-500">
+                                                    {{ getCellStat(year, month, date).key }}
+                                                </div>
+                                                <div class="text-red-500">
+                                                    支出：-{{ fmtDesktop(getCellStat(year, month, date).pay) }}
+                                                </div>
+                                                <div class="text-green-600">
+                                                    收入：+{{ fmtDesktop(getCellStat(year, month, date).income) }}
+                                                </div>
+                                                <div>
+                                                    净额：{{
+                                                        fmtDesktop(getCellStat(year, month, date).income - getCellStat(year, month, date).pay)
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </n-popover>
+                                    </template>
+                                </n-calendar>
+                            </n-config-provider>
                         </template>
                     </n-card>
                 </div>
             </div>
-            <div class="w-3/10">
+            <div class="w-full xl:w-3/10">
                 <div>
-                    <n-scrollbar class="h-185">
+                    <n-scrollbar class="xl:h-185">
                         <DayBillList v-for="item in billDayList" v-bind:day="item[0]" v-bind:bill-list="item[1]"
                                      class="mb-3">
                         </DayBillList>
                     </n-scrollbar>
                 </div>
             </div>
-            <div class="w-7/20 space-y-5">
+            <div class="hidden xl:block xl:w-7/20 space-y-5">
                 <n-card class="rounded-xl" v-if="currentBill.id != undefined">
                     <template #header>
                         <div class="flex space-x-3">
@@ -116,7 +175,7 @@
                         </div>
                     </template>
                     <template #default>
-                        <n-scrollbar class="max-h-164">
+                        <n-scrollbar class="xl:max-h-164">
                             <div class="space-y-3">
                                 <div class="space-y-2">
                                     <div class="text-lg my-auto">
@@ -341,10 +400,348 @@
                 </n-card>
             </div>
         </div>
+        <!-- 手机端：账单详情弹窗 -->
+        <n-modal
+            v-model:show="showBillDetailModal"
+            class="xl:hidden"
+            :mask-closable="true"
+        >
+            <n-card
+                class="w-[92vw] max-w-[92vw] rounded-xl"
+                :bordered="false"
+                v-if="currentBill.id != undefined"
+            >
+                <template #header>
+                    <div class="flex space-x-3">
+                        <div>账单详情</div>
+                        <Icon
+                            v-bind:icon="iconMap[currentBill.type]"
+                            class="h-5 w-5 my-auto"
+                            v-bind:class="iconColorMap[currentBill.type]"
+                        />
+                    </div>
+                </template>
+
+                <template #header-extra>
+                    <!-- 手机：两行两列；电脑：一行 -->
+                    <div class="grid grid-cols-2 gap-2 xl:flex xl:gap-0 xl:space-x-3 xl:items-center">
+                        <!-- 编辑 -->
+                        <div
+                            class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
+                            v-bind:class="{'text-primary': mouseOnEdit}"
+                            v-on:mouseenter="mouseOnEditChange(true)"
+                            v-on:mouseleave="mouseOnEditChange(false)"
+                            v-on:click="editingChange"
+                        >
+                            <Icon class="h-5 w-5" icon="fluent:edit-48-regular"/>
+                            <div>{{ editing ? "完成" : "编辑" }}</div>
+                        </div>
+
+                        <!-- 退款（仅支出） -->
+                        <div
+                            v-if="currentBill.type === '支出'"
+                            class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
+                            v-bind:class="{'text-primary': mouseOnRefund}"
+                            v-on:mouseenter="mouseOnRefundChange(true)"
+                            v-on:mouseleave="mouseOnRefundChange(false)"
+                            v-on:click="refundChange"
+                        >
+                            <Icon class="h-5 w-5" icon="ph:arrows-down-up"/>
+                            <div>退款</div>
+
+                            <!-- 建议：弹窗宽度手机大一点 -->
+                            <n-modal v-model:show="showRefundModal" class="w-5/6 xl:w-1/7">
+                                <n-card>
+                                    <template #header>
+                                        <div class="s-title s-underline text-lg">提示</div>
+                                    </template>
+                                    <template #default>
+                                        <div class="text-center space-y-8">
+                                            <div class="mx-auto text-lg">确认退款？</div>
+                                            <div class="flex space-x-2 justify-end">
+                                                <n-button v-on:click="refundBill">确定</n-button>
+                                                <n-button v-on:click="showRefundModal=false">取消</n-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </n-card>
+                            </n-modal>
+                        </div>
+
+                        <!-- 删除 -->
+                        <div
+                            class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
+                            v-bind:class="{'text-primary': mouseOnDelete}"
+                            v-on:mouseenter="mouseOnDeleteChange(true)"
+                            v-on:mouseleave="mouseOnDeleteChange(false)"
+                            v-on:click="deleteChange"
+                        >
+                            <Icon class="h-5 w-5" icon="material-symbols:delete-forever"/>
+                            <div>删除</div>
+
+                            <n-modal v-model:show="showDeleteModal" class="w-5/6 xl:w-1/7">
+                                <n-card>
+                                    <template #header>
+                                        <div class="s-title s-underline text-lg">提示</div>
+                                    </template>
+                                    <template #default>
+                                        <div class="text-center space-y-8">
+                                            <div class="mx-auto text-lg">确认删除？</div>
+                                            <div class="flex space-x-2 justify-end">
+                                                <n-button v-on:click="deleteBill">确定</n-button>
+                                                <n-button v-on:click="showDeleteModal=false">取消</n-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </n-card>
+                            </n-modal>
+                        </div>
+
+                        <!-- 关闭：如果没有“退款”，让它占满一行更好看 -->
+                        <div
+                            class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
+                            v-bind:class="currentBill.type === '支出' ? '' : 'col-span-2 xl:col-span-1'"
+                            v-on:click="closeBillDetailModal"
+                        >
+                            <Icon class="h-5 w-5" icon="material-symbols:close"/>
+                            <div>关闭</div>
+                        </div>
+                    </div>
+                </template>
+
+
+                <!-- 内容区：把你桌面端 n-card 里 <template #default> 的 n-scrollbar 整段复制过来即可 -->
+                <template #default>
+                    <n-scrollbar class="max-h-[70vh]">
+                        <!-- 复制你原来的详情内容（金额/类别/账户/时间/备注/图片 ...） -->
+                        <!-- 注意：你原来是 xl:max-h-164，这里改成 max-h-[70vh] 更适合手机 -->
+                        <div class="space-y-3">
+                            <div class="space-y-2">
+                                <div class="text-lg my-auto">
+                                    金额
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-input-number v-model:value="currentBill.amount" v-if="editing">
+                                        <template #prefix>
+                                            ￥
+                                        </template>
+                                    </n-input-number>
+                                    <div v-if="!editing" class="text-15px">
+                                        ￥{{ currentBill.amount }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2"
+                                 v-if="currentBill.type === '支出' || currentBill.type === '收入'">
+                                <div class="text-lg my-auto">
+                                    类别
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-select v-model:value="currentBill.billCategory as any" v-if="editing"
+                                              v-bind:options="billCategoryList"
+                                              v-bind:render-label="cateSelectorRender as any" size="large"
+                                              class="w-1/2">
+                                    </n-select>
+                                    <div v-if="!editing" class="flex space-x-2 items-center">
+                                        <Icon class="h-5 w-5 text-primary"
+                                              v-bind:icon="billCategoryList.find(item => item.billCategoryName === currentBill.billCategory)?.svg as any">
+                                        </Icon>
+                                        <div class="text-15px">
+                                            {{ currentBill.billCategory }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2" v-if="currentBill.type==='支出'">
+                                <div class="text-lg my-auto">
+                                    支出账户
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-select v-model:value="currentBill.payAsset as any" v-if="editing"
+                                              v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any" size="large"
+                                              class="w-1/2">
+                                    </n-select>
+                                    <div v-if="!editing" class="flex space-x-2 items-center">
+                                        <Icon class="h-5 w-5 text-primary"
+                                              v-bind:icon="assetList.find(item => item.assetName === currentBill.payAsset)?.svg as any">
+                                        </Icon>
+                                        <div class="text-15px">
+                                            {{ currentBill.payAsset }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2" v-if="currentBill.type==='收入'">
+                                <div class="text-lg my-auto">
+                                    收入账户
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-select v-model:value="currentBill.incomeAsset as any" v-if="editing"
+                                              v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any" size="large"
+                                              class="w-1/2">
+                                    </n-select>
+                                    <div v-if="!editing" class="flex space-x-2 items-center">
+                                        <Icon class="h-5 w-5 text-primary"
+                                              v-bind:icon="assetList.find(item => item.assetName === currentBill.incomeAsset)?.svg as any">
+                                        </Icon>
+                                        <div class="text-15px">
+                                            {{ currentBill.incomeAsset }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-x-2 flex" v-if="currentBill.type==='转账'">
+                                <div class="w-1/2 space-y-2">
+                                    <div class="text-lg my-auto">
+                                        转出账户
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.outAsset as any" v-if="editing"
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any" size="large">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.outAsset)?.svg as any">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.outAsset }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-1/2 space-y-2">
+                                    <div class="text-lg my-auto">
+                                        转入账户
+                                    </div>
+                                    <div class="h-10 flex items-center">
+                                        <n-select v-model:value="currentBill.inAsset as any" v-if="editing"
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any" size="large">
+                                        </n-select>
+                                        <div v-if="!editing" class="flex space-x-2 items-center">
+                                            <Icon class="h-5 w-5 text-primary"
+                                                  v-bind:icon="assetList.find(item => item.assetName === currentBill.inAsset)?.svg as any">
+                                            </Icon>
+                                            <div class="text-15px">
+                                                {{ currentBill.inAsset }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2" v-if="currentBill.type==='退款'">
+                                <div class="text-lg my-auto">
+                                    退款账户
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-select v-model:value="currentBill.refundAsset as any" v-if="editing"
+                                              v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any" size="large"
+                                              class="w-1/2">
+                                    </n-select>
+                                    <div v-if="!editing" class="flex space-x-2 items-center">
+                                        <Icon class="h-5 w-5 text-primary"
+                                              v-bind:icon="assetList.find(item => item.assetName === currentBill.refundAsset)?.svg as any">
+                                        </Icon>
+                                        <div class="text-15px">
+                                            {{ currentBill.refundAsset }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2" v-if="currentBill.type==='转账'">
+                                <div class="text-lg my-auto">
+                                    手续费
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-input-number v-model:value="currentBill.transferFee as any" v-if="editing">
+                                        <template #prefix>
+                                            ￥
+                                        </template>
+                                    </n-input-number>
+                                    <div v-if="!editing" class="text-15px">
+                                        ￥{{ currentBill.transferFee }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="text-lg my-auto">
+                                    时间
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-date-picker v-if="editing" v-model:value="editTime" class="w-1/2"
+                                                   type="datetime" :input-readonly="true"
+                                                   :time-picker-props="timePickerProps"
+                                                   :update-value-on-close="true">
+                                    </n-date-picker>
+                                    <div v-if="!editing" class="text-15px">
+                                        {{ currentBill.billTime }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="text-lg my-auto">
+                                    备注
+                                </div>
+                                <div class="h-10 flex items-center">
+                                    <n-input v-if="editing" v-model:value="currentBill.remark" class="w-1/2"
+                                             size="large">
+                                    </n-input>
+                                    <div v-if="!editing" class="text-15px">
+                                        {{ currentBill.remark }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="text-lg my-auto">
+                                    图片
+                                </div>
+                                <div>
+                                    <div class="flex space-x-2" v-if="editing">
+                                        <img v-if="imageSrc !== 'data:image;base64,null'"
+                                             v-bind:src="imageSrc"
+                                             alt="图片" class="rounded-xl h-24"/>
+                                        <n-button class="my-auto" v-if="imageSrc !== 'data:image;base64,null'"
+                                                  v-on:click="deleteImage">
+                                            <template #default>
+                                                删除图片
+                                            </template>
+                                        </n-button>
+                                        <n-upload :custom-request="customRequest" class="w-1/5"
+                                                  list-type="image-card" max="1" v-on:change="changePicture"
+                                                  v-on:before-upload="beforeUpload">
+                                            <template #default>
+                                                <div>
+                                                    图片
+                                                </div>
+                                            </template>
+                                        </n-upload>
+                                        <div class="my-auto">
+                                            {{ fileName }}
+                                        </div>
+                                    </div>
+                                    <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
+                                         v-bind:src="imageSrc"
+                                         alt="图片" class="rounded-xl"/>
+                                    <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
+                                        <template #default>
+                                            什么也没有
+                                        </template>
+                                    </n-empty>
+                                </div>
+                            </div>
+                        </div>
+                    </n-scrollbar>
+                </template>
+            </n-card>
+        </n-modal>
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ComputedRef, h, onMounted, Ref, ref, VNodeChild, watch} from "vue";
+import {computed, ComputedRef, h, onMounted, onBeforeUnmount, Ref, ref, VNodeChild, watch} from "vue";
 import {
     addBillApi,
     changeBillApi,
@@ -375,9 +772,38 @@ import {MonthStatistic} from "@/views/components";
 import {Icon} from "@iconify/vue";
 import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
 import {AssetGetAllAssetResponse} from "@/interface";
+// calendar-date-locale.ts
+import {dateZhCN, type NDateLocale} from 'naive-ui'
 
+const dateZhCNSingleWeekday: NDateLocale = {
+    ...dateZhCN,
+    locale: {
+        ...dateZhCN.locale,
+        localize: {
+            ...dateZhCN.locale.localize,
+            // 关键：把 'EEE' 需要的 weekday，强制用 narrow 输出
+            day: (n: any, options: any) =>
+                dateZhCN.locale.localize?.day(n, {...options, width: 'narrow'})
+        }
+    } as any
+}
 let timePickerProps: TimePickerProps = {inputReadonly: true};
 const store = useStore();
+const showBillDetailModal = ref(false);
+
+const isDesktop = ref(false);
+let mql: MediaQueryList | null = null;
+
+function updateIsDesktop() {
+    // Tailwind xl 默认 1280px
+    isDesktop.value = window.matchMedia('(min-width: 1280px)').matches;
+}
+
+function closeBillDetailModal() {
+    showBillDetailModal.value = false;
+    editing.value = false; // 关弹窗顺便退出编辑态，避免下次打开还是编辑态
+}
+
 let bookId = ref<number>(0);
 
 interface DayStatisticTime extends BillDayStatisticTimeResponse {
@@ -454,6 +880,13 @@ onMounted(() => {
     if (bookId.value !== 0) {
         getData();
     }
+    // 新增：判定是否桌面 + 监听尺寸变化
+    updateIsDesktop();
+    mql = window.matchMedia('(min-width: 1280px)');
+    mql.addEventListener('change', updateIsDesktop);
+});
+onBeforeUnmount(() => {
+    mql?.removeEventListener('change', updateIsDesktop);
 });
 watch(() => store.bookId, (newValue: number) => {
     bookId.value = newValue;
@@ -503,23 +936,86 @@ function getPayMonth(): void {
     });
 }
 
+function fmtMobile(amount: number): string {
+    const x = Math.abs(amount);
+    if (x >= 10000) return (Math.round((amount / 10000) * 10) / 10) + "万";
+    return String(Math.round(amount)); // 手机别带小数，长度立刻下降
+}
+
+
+function fmtDesktop(amount: number): string {
+    const x = Math.abs(amount);
+    if (x >= 10000) return (Math.round((amount / 10000) * 10) / 10) + "万";
+    // 桌面保留两位小数
+    return amount.toFixed(2);
+}
+
+// ------------------ Calendar cell popover (点击单元格弹出) ------------------
+type DayAmount = { day: string; amount: number };
+
+const dayStatMap = computed(() => {
+    const map = new Map<string, { pay: number; income: number }>();
+    for (const it of dayStatisticTime.value.payStatistic as DayAmount[]) {
+        map.set(it.day, {pay: it.amount, income: 0});
+    }
+    for (const it of dayStatisticTime.value.incomeStatistic as DayAmount[]) {
+        const prev = map.get(it.day) ?? {pay: 0, income: 0};
+        prev.income = it.amount;
+        map.set(it.day, prev);
+    }
+    return map;
+});
+
+const activePopoverKey = ref<string | null>(null);
+
+function getCellStat(year: number, month: number, day: number) {
+    const key = dateToString(new Date(year, month - 1, day));
+    const v = dayStatMap.value.get(key) ?? {pay: 0, income: 0};
+    return {key, pay: v.pay ?? 0, income: v.income ?? 0};
+}
+
+function openDayPopover(year: number, month: number, day: number) {
+    const {key, pay, income} = getCellStat(year, month, day);
+    // 没有数据就不弹（同时 popover 也会 disabled）
+    if (pay === 0 && income === 0) {
+        activePopoverKey.value = null;
+        return;
+    }
+    activePopoverKey.value = key;
+}
+
+function closeDayPopover() {
+    activePopoverKey.value = null;
+}
+
 function calendarContent(year: number, month: number, day: number): string {
-    let content: string = "";
-    content += `<div class="text-red-500 text-xs">`;
-    dayStatisticTime.value.payStatistic.forEach((item: { day: string, amount: number }) => {
-        if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `-${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
-        }
-    });
-    content += `</div>`;
-    content += `<div class="text-green-500 text-xs">`;
-    dayStatisticTime.value.incomeStatistic.forEach((item: { day: string, amount: number }) => {
-        if (item.day === dateToString(new Date(year, month - 1, day))) {
-            content += `+${item.amount >= 10000 ? Math.round(item.amount / 1000) / 10 + "万" : item.amount}`;
-        }
-    });
-    content += `</div>`;
-    return content;
+    const key = dateToString(new Date(year, month - 1, day));
+
+    const pay = dayStatisticTime.value.payStatistic.find(
+        (i: { day: string; amount: number }) => i.day === key
+    )?.amount ?? 0;
+
+    const income = dayStatisticTime.value.incomeStatistic.find(
+        (i: { day: string; amount: number }) => i.day === key
+    )?.amount ?? 0;
+
+    if (pay === 0 && income === 0) return "";
+
+    // 手机：只显示点（绝不显示金额文本）
+    // 桌面：显示金额文本（必要时可 truncate）
+    return `
+    <div class="mt-1">
+      <div class="flex items-center gap-1 xl:hidden">
+        ${pay > 0 ? `<span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>` : ``}
+        ${income > 0 ? `<span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>` : ``}
+      </div>
+
+      <div class="hidden xl:block space-y-0.5">
+        ${pay > 0 ? `<div class="text-red-500 text-xs whitespace-nowrap">${"-" + fmtDesktop(pay)}</div>` : ``}
+        ${income > 0 ? `<div class="text-green-500 text-xs whitespace-nowrap">${"+" + fmtDesktop(income)}</div>` : ``}
+      </div>
+    </div>
+  `;
 }
 
 function changeDay(timestamp: number, info: { year: number, month: number, date: number }): void {
@@ -537,6 +1033,7 @@ function changeDay(timestamp: number, info: { year: number, month: number, date:
 function changeMonth(info: { year: number, month: number }): void {
     activeYear.value = info.year;
     activeMonth.value = info.month - 1;
+    activePopoverKey.value = null;
     getData();
 }
 
@@ -592,6 +1089,12 @@ watch(() => store.currentBill, (newValue: BillShow) => {
             imageSrc.value = "data:image;base64," + response;
         });
     }
+    if (!isDesktop.value && newValue?.id != undefined && !isNaN(newValue.id as any)) {
+        showBillDetailModal.value = true;
+    }
+});
+watch(isDesktop, (v) => {
+    if (v) showBillDetailModal.value = false;
 });
 let mouseOnEdit: Ref<boolean> = ref(false);
 let mouseOnRefund: Ref<boolean> = ref(false);

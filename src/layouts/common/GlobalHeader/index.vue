@@ -1,42 +1,63 @@
 <template>
-    <dark-mode-container class="global-header flex-y-center h-full">
-        <global-logo
-            v-if="showLogo"
-            :show-title="true"
-            :style="{ width: theme.sider.width + 'px' }"
-            class="h-full"
-        />
-        <div v-if="!showHeaderMenu" class="flex-1-hidden flex-y-center h-full">
-            <menu-collapse v-if="showMenuCollape"/>
-            <global-breadcrumb v-if="theme.header.crumb.visible"/>
+    <dark-mode-container
+        class="global-header flex items-center flex-nowrap h-full px-2 overflow-hidden"
+    >
+        <!-- 左侧：菜单/面包屑（移动端可以隐藏面包屑避免挤） -->
+        <div class="flex items-center flex-1 min-w-0 gap-2">
+            <global-logo
+                v-if="showLogo"
+                :show-title="true"
+                :style="{ width: theme.sider.width + 'px' }"
+                class="h-full shrink-0 hidden xl:flex"
+            />
+
+            <div v-if="!showHeaderMenu" class="flex items-center flex-1 min-w-0">
+                <menu-collapse v-if="showMenuCollape" class="shrink-0"/>
+                <!-- 面包屑移动端先隐藏，避免把右侧挤没 -->
+                <global-breadcrumb v-if="theme.header.crumb.visible" class="hidden xl:flex min-w-0"/>
+            </div>
+
+            <div
+                v-else
+                :style="{ justifyContent: theme.menu.horizontalPosition }"
+                class="flex items-center flex-1 min-w-0"
+            >
+                <header-menu class="min-w-0"/>
+            </div>
         </div>
-        <div
-            v-else
-            :style="{ justifyContent: theme.menu.horizontalPosition }"
-            class="flex-1-hidden flex-y-center h-full"
-        >
-            <header-menu/>
-        </div>
-        <div class="w-1/10">
-            <n-select v-model:value="bookId" :options="bookList as any" @update:value="changeBook">
+
+        <!-- 右侧：账本 + 日期 + 退出（不换行） -->
+        <div class="flex items-center gap-2 shrink-0">
+            <n-select
+                v-model:value="bookId"
+                :options="bookList as any"
+                class="w-30 xl:w-50"
+                :consistent-menu-width="false"
+                size="small"
+                @update:value="changeBook"
+            >
                 <template #action>
-                    <n-button v-on:click="addBook">
-                        <template #default>
-                            <Icon icon="material-symbols:add"/>
-                            <span>添加账本</span>
-                        </template>
+                    <n-button class="w-full xl:w-auto" @click.stop="addBook">
+                        <Icon icon="material-symbols:add"/>
+                        <span class="hidden xl:inline">添加账本</span>
+                        <span class="xl:hidden">新增</span>
                     </n-button>
-                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-1/2">
+                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-9/10 xl:w-1/2">
                         <n-card id="drawer-target" class="w-full">
                             <template #header>
                                 <div>新增账本</div>
                             </template>
                             <template #header-extra>
-                                <Icon icon="icon-park-outline:close" class="cursor-pointer h-4 w-4"
-                                      v-bind:class="{'text-primary':mouseOnClose}" v-on:mouseenter="mouseOnClose=true"
-                                      v-on:mouseleave="mouseOnClose=false"
-                                      v-on:click="showAdd=false"/>
+                                <Icon
+                                    icon="icon-park-outline:close"
+                                    class="cursor-pointer h-4 w-4"
+                                    v-bind:class="{ 'text-primary': mouseOnClose }"
+                                    v-on:mouseenter="mouseOnClose = true"
+                                    v-on:mouseleave="mouseOnClose = false"
+                                    v-on:click="showAdd = false"
+                                />
                             </template>
+
                             <template #default>
                                 <n-form ref="formRef" :model="model" :rules="rules">
                                     <n-form-item path="title" label="账本名称：">
@@ -46,34 +67,31 @@
                                         <n-input v-model:value="model.beginDate" @keydown.enter.prevent/>
                                     </n-form-item>
                                 </n-form>
+
                                 <n-button class="w-full addButton" type="primary" v-on:click="submitBook">
-                                    <template #default>
-                                        保存
-                                    </template>
+                                    <template #default>保存</template>
                                 </n-button>
                             </template>
                         </n-card>
                     </n-modal>
                 </template>
             </n-select>
-        </div>
-        <div class="flex items-center h-full ml-1/40">
-            <div class="flex items-center text-semobold mr-3 gap-2">
-                <div>
-                    <Icon :icon="'ri:calendar-2-fill'" class="text-20px"/>
-                </div>
-                {{ nowDate }}
+
+            <div class="flex items-center gap-2 whitespace-nowrap">
+                <Icon :icon="'ri:calendar-2-fill'" class="text-20px"/>
+                <!-- 手机端只显示 MM-DD，桌面显示 YYYY-MM-DD -->
+                <span class="text-sm xl:hidden">{{ nowDate.slice(5) }}</span>
+                <span class="text-base hidden xl:inline">{{ nowDate }}</span>
             </div>
-            <github-site/>
-            <full-screen/>
-            <theme-mode/>
-            <hover-container class="w-1/8 h-full" tooltip-content="退出">
-                <n-button :bordered="false" class="w-48px h-full" @click="showExitModal = true">
+
+            <hover-container class="h-full" tooltip-content="退出">
+                <n-button :bordered="false" class="w-12 h-full" @click="showExitModal = true">
                     <Icon :icon="'ri:logout-box-r-line'" class="text-20px"/>
                 </n-button>
             </hover-container>
         </div>
     </dark-mode-container>
+
     <div>
         <n-modal v-model:show="showExitModal">
             <div class="s-card p-8 space-y-7">
@@ -87,6 +105,7 @@
         </n-modal>
     </div>
 </template>
+
 
 <script lang="ts" setup>
 import {defineComponent, onMounted, reactive, Ref, ref} from "vue";
