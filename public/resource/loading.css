@@ -94,3 +94,17 @@
     font-weight: 500;
     color: #646464;
 }
+
+.loading-title-mobile {
+    display: none;
+}
+
+@media (max-width: 1279px) {
+    .loading-title-desktop {
+        display: none;
+    }
+
+    .loading-title-mobile {
+        display: block;
+    }
+}

@@ -9,6 +9,8 @@ export function getThemeSettings() {
     const themeColor = getThemeColor() || themeSetting.themeColor;
     const info = themeSetting.isCustomizeInfoColor ? themeSetting.otherColor.info : getColorPalette(themeColor, 7);
     const otherColor = {...themeSetting.otherColor, info};
+    const cachedLayout = getLayout();
+    const layoutMode = cachedLayout || resolveLayoutMode();
     const layout: ThemeLayout = new class implements ThemeLayout {
         minWidth: any;
         mode: ThemeLayoutMode;
@@ -19,8 +21,16 @@ export function getThemeSettings() {
             this.mode = mode;
             this.modeList = modeList;
         }
-    }(themeSetting.layout.minWidth, getLayout() || themeSetting.layout.mode, themeSetting.layout.modeList)
+    }(themeSetting.layout.minWidth, layoutMode, themeSetting.layout.modeList)
     return cloneDeep({...themeSetting, themeColor, otherColor, layout});
+}
+
+function resolveLayoutMode(): ThemeLayoutMode {
+    if (typeof window === "undefined" || !window.matchMedia) {
+        return themeSetting.layout.mode;
+    }
+    const isDesktop = window.matchMedia("(min-width: 1280px)").matches;
+    return isDesktop ? themeSetting.layout.mode : "vertical-mix";
 }
 
 type ColorType = "primary" | "info" | "success" | "warning" | "error";

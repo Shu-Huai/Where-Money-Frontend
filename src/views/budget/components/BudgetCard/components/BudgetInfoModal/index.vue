@@ -1,5 +1,5 @@
 <template>
-    <n-modal :auto-focus="false" :show="showModal" class="w-400px" display-directive="show" preset="card"
+    <n-modal :auto-focus="false" :show="showModal" class="w-[92vw] max-w-[400px] xl:w-400px" display-directive="show" preset="card"
              @close="closeModal" @after-enter="resetValue">
         <template #header>
             <n-space align="flex-end" justify="start">
@@ -18,28 +18,28 @@
             <n-form :inline="false" :model="budgetInfoVar" label-width="80">
                 <n-space :size="16" vertical>
                     <form-item-container label="类别">
-                        <n-input v-model:value="category.billCategoryName" :disabled="true" class="w-200px"
+                        <n-input v-model:value="category.billCategoryName" :disabled="true" class="flex-1 xl:w-200px xl:flex-none"
                                  size="medium" />
                         <Icon :icon="category.svg" class="text-primary mx-2" height="24"></Icon>
                     </form-item-container>
 
                     <form-item-container label="总额">
                         <n-input-number v-model:value="budgetInfoVar.limit" :disabled="!canInput" :min="0" :show-button="false"
-                                        class="w-200px" size="medium">
+                                        class="flex-1 xl:w-200px xl:flex-none" size="medium">
                             <template #prefix>￥</template>
                         </n-input-number>
                     </form-item-container>
 
                     <form-item-container label="已使用">
-                        <n-input-number v-model:value="budgetInfoVar.used" :disabled="!canInput" :min="0" :show-button="false"
-                                        class="w-200px" size="medium">
+                        <n-input-number v-model:value="budgetInfoVar.used" :disabled="true" :min="0" :show-button="false"
+                                        class="flex-1 xl:w-200px xl:flex-none" size="medium">
                             <template #prefix>￥</template>
                         </n-input-number>
                     </form-item-container>
 
                     <form-item-container label="消费次数">
-                        <n-input-number v-model:value="budgetInfoVar.times" :disabled="!canInput" :min="0" :show-button="true" :validator="(value) => value.toString().indexOf('.') === -1"
-                                        class="w-200px"
+                        <n-input-number v-model:value="budgetInfoVar.times" :disabled="true" :min="0" :show-button="true" :validator="(value) => value.toString().indexOf('.') === -1"
+                                        class="flex-1 xl:w-200px xl:flex-none"
                                         size="medium">
                             <template #prefix></template>
                         </n-input-number>
@@ -113,8 +113,8 @@ function applyChanges() {
         budgetId: budgetInfoVar.value.id,
         billCategoryId: budgetInfoVar.value.billCategoryId,
         limit: budgetInfoVar.value.limit,
-        amount: budgetInfoVar.value.used,
-        times: budgetInfoVar.value.times
+        amount: null,
+        times: null
     };
     updateBudget(param).then(() => {
         emit("update:budget", budgetInfoVar.value);
@@ -131,6 +131,12 @@ function applyChanges() {
 
 <style lang="scss" scoped>
 :deep(.option-container) {
-    width: 200px;
+    width: 100%;
+}
+
+@media (min-width: 1280px) {
+    :deep(.option-container) {
+        width: 200px;
+    }
 }
 </style>

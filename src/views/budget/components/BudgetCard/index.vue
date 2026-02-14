@@ -1,9 +1,9 @@
 <template>
     <n-card v-cloak :segmented="true" class="rounded-[16px] shadow-sm">
         <template #header>
-            <div class="flex-y-center justify-between">
-                <span class="text-xl font-bold">{{ book.title }}</span>
-                <n-button text @click="showAddModal = true; store.selectedBillCategoryId = -1;">
+            <div class="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
+                <span class="text-xl font-bold min-w-0 break-words">{{ book.title }}</span>
+                <n-button text class="self-start xl:self-auto" @click="showAddModal = true; store.selectedBillCategoryId = -1;">
                     <icon height="24px" icon="fluent:add-24-filled"/>
                     <span class="text-base ml-2">新增预算</span>
                 </n-button>
@@ -19,15 +19,15 @@
                 <n-card :bordered="false" :segmented="true" size="small">
                     <!-- 账本总预算 -->
                     <template #header>
-                        <div class="book-budget-info flex-y-center justify-between">
+                        <div class="book-budget-info flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                             <!-- 左侧 -->
-                            <div class="flex flex-col">
+                            <div class="flex flex-col min-w-0">
                                 <span class="text-lg font-bold">总预算</span>
-                                <span class="text-xs">总额: {{ formattedCurrencyNoSymbol(book.totalBudget) }}</span>
+                                <span class="text-xs break-words">总额: {{ formattedCurrencyNoSymbol(book.totalBudget) }}</span>
                             </div>
                             <!-- 右侧[进度条、修改]切换 -->
-                            <div class="flex-y-center justify-end">
-                                <div v-if="bookBudgetEdit" class="flex flex-col">
+                            <div class="flex items-end justify-end self-end xl:self-auto xl:items-center xl:justify-end">
+                                <div v-if="bookBudgetEdit" class="flex flex-col gap-2">
                                     <n-input-group>
                                         <n-input-group-label size="small">总额</n-input-group-label>
                                         <n-input-number v-model:value="bookTotalBudget" :min="bookBudgetTotalMin"
@@ -42,7 +42,7 @@
                                     </n-input-group>
                                     <n-input-group>
                                         <n-input-group-label size="small">已用</n-input-group-label>
-                                        <n-input-number v-model:value="bookUsedBudget" :min="bookBudgetUsedMin"
+                                        <n-input-number v-model:value="bookUsedBudget" :disabled="true" :min="bookBudgetUsedMin"
                                                         :show-button="false"
                                                         :style="{ width: '100px', textAlign: 'center' }"
                                                         size="small">
@@ -54,7 +54,7 @@
                                     </n-input-group>
                                 </div>
 
-                                <div v-else class="flex-y-center">
+                                <div v-else class="flex-y-center flex-shrink-0 gap-2">
                                     <n-button text @click="showBookBudgetInput">
                                         <div class="mr-2 h-40px flex items-end">
                                             <icon height="24" horizontalAlign="bottom" icon="carbon:edit"></icon>
@@ -84,18 +84,18 @@
                                          class="hover:bg-[#f6f6f6] dark:hover:bg-[#333]"
                                          @click="showBudgetInfoModal(budget)"
                             >
-                                <div class="budget-info flex-y-center justify-between px-2">
+                                <div class="budget-info flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between px-2">
                                     <!-- 左侧 icon和名字、额度信息 -->
-                                    <div class="flex-y-center">
+                                    <div class="flex-y-center min-w-0">
                                         <icon :height="iconWidth"
                                               :icon="mapBudgetToCategory.get(budget.id)?.svg as any" :width="iconWidth"
-                                              class="text-primary hover:text-primary-hover mr-3"/>
+                                              class="text-primary hover:text-primary-hover mr-3 flex-shrink-0"/>
 
-                                        <div class="flex flex-col">
-                                            <span class="text-base">
+                                        <div class="flex flex-col min-w-0">
+                                            <span class="text-base break-words">
                                                 {{ mapBudgetToCategory.get(budget.id)?.billCategoryName }}
                                             </span>
-                                            <span class="text-xs">
+                                            <span class="text-xs break-words">
                                                 总额: {{
                                                     formattedCurrencyNoSymbol(budget.limit)
                                                 }} | {{ budget.times.toFixed(0) }} 笔支出
@@ -103,19 +103,21 @@
                                         </div>
                                     </div>
                                     <!-- 右侧进度条 -->
-                                    <n-progress :gap-offset-degree="180"
-                                                :percentage="budgetRemainList![idx] < 0 ? 100 : (1 - budget.used / budget.limit) * 100"
-                                                :status="budget.used > budget.limit ? 'error' : 'success'"
-                                                type="circle">
-                                        <div class="text-center">
-                                            <p class="text-xs">
-                                                {{ budgetRemainList![idx] >= 0 ? "可用" : "超支" }}
-                                            </p>
-                                            <p class="text-xs">
-                                                {{ compactFormatter.format(Math.abs(budgetRemainList![idx])) }}
-                                            </p>
-                                        </div>
-                                    </n-progress>
+                                    <div class="flex-shrink-0 self-end xl:self-auto">
+                                        <n-progress :gap-offset-degree="180"
+                                                    :percentage="budgetRemainList![idx] < 0 ? 100 : (1 - budget.used / budget.limit) * 100"
+                                                    :status="budget.used > budget.limit ? 'error' : 'success'"
+                                                    type="circle">
+                                            <div class="text-center">
+                                                <p class="text-xs">
+                                                    {{ budgetRemainList![idx] >= 0 ? "可用" : "超支" }}
+                                                </p>
+                                                <p class="text-xs">
+                                                    {{ compactFormatter.format(Math.abs(budgetRemainList![idx])) }}
+                                                </p>
+                                            </div>
+                                        </n-progress>
+                                    </div>
                                 </div>
                             </n-list-item>
                         </n-list>
@@ -224,7 +226,7 @@ function submitBookBudgetChange() {
     const params = {
         bookId: props.book?.id as any,
         totalBudget: bookTotalBudget.value,
-        usedBudget: bookUsedBudget.value
+        usedBudget: null
     };
     setBookBudget(params).then(() => {
         bookBudgetEdit.value = false;
@@ -266,7 +268,7 @@ function showBudgetInfoModal(budget: Budget) {
 const compactFormatter = new Intl.NumberFormat("en-US", {
     notation: "compact",
     maximumFractionDigits: 2,
-    maximumSignificantDigits: 5
+    maximumSignificantDigits: 1
 });
 
 </script>
@@ -302,8 +304,6 @@ $--medium-progress-size: 64px;
         margin: 0;
 
         .n-list-item {
-            padding-left: 8px;
-            padding-right: 8px;
             border-radius: 8px;
 
             -webkit-transition-duration: 0.2s;

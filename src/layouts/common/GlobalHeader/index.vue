@@ -14,7 +14,7 @@
             <div v-if="!showHeaderMenu" class="flex items-center flex-1 min-w-0">
                 <menu-collapse v-if="showMenuCollape" class="shrink-0"/>
                 <!-- 面包屑移动端先隐藏，避免把右侧挤没 -->
-                <global-breadcrumb v-if="theme.header.crumb.visible" class="hidden xl:flex min-w-0"/>
+                <global-breadcrumb v-if="theme.header.crumb.visible" class="xl:flex min-w-0"/>
             </div>
 
             <div
@@ -77,18 +77,17 @@
                 </template>
             </n-select>
 
-            <div class="flex items-center gap-2 whitespace-nowrap">
-                <Icon :icon="'ri:calendar-2-fill'" class="text-20px"/>
-                <!-- 手机端只显示 MM-DD，桌面显示 YYYY-MM-DD -->
-                <span class="text-sm xl:hidden">{{ nowDate.slice(5) }}</span>
-                <span class="text-base hidden xl:inline">{{ nowDate }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                    <Icon :icon="'ri:calendar-2-fill'" class="text-16px"/>
+                    <!-- 手机端只显示 MM-DD，桌面显示 YYYY-MM-DD -->
+                    <span class="text-sm xl:hidden">{{ nowDate.slice(5) }}</span>
+                    <span class="text-base hidden xl:inline">{{ nowDate }}</span>
+                </div>
+                <hover-container class="w-8 h-full" tooltip-content="退出" @click="showExitModal = true">
+                    <Icon :icon="'ri:logout-box-r-line'" class="text-16px"/>
+                </hover-container>
             </div>
-
-            <hover-container class="h-full" tooltip-content="退出">
-                <n-button :bordered="false" class="w-12 h-full" @click="showExitModal = true">
-                    <Icon :icon="'ri:logout-box-r-line'" class="text-20px"/>
-                </n-button>
-            </hover-container>
         </div>
     </dark-mode-container>
 

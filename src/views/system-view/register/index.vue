@@ -5,27 +5,26 @@
             class="absolute left-48px top-24px z-3 text-20px"
             @update:dark="theme.setDarkMode"
         />
-        <div class="relative s-card p-14 z-4">
-            <!-- logo -->
-
-            <div class="text-4xl font-bold italic text-primary mb-4 -mt-5 -ml-2">
-                <span class="underline decoration-teal-500 decoration-6">T</span>
+        <div class="relative s-card p-14 z-4 w-9/10 xl:w-auto">
+            <Icon icon="ic:baseline-account-balance-wallet" class="absolute z-4 w-13 h-13 text-primary top-5 left-5"/>
+            <div class="text-6xl font-bold italic text-primary mb-6 mt-5 text-center">
+                &nbsp;&nbsp;&nbsp;<span class="underline decoration-teal-500 decoration-6">注&nbsp;&nbsp;&nbsp;册</span>&nbsp;&nbsp;&nbsp;
             </div>
-
-            <div class="s-title s-underline text-4xl text-center mb-3">注册</div>
 
             <n-form id="form" ref="formRef" :model="formValue" :rules="rules" :show-label="false">
                 <n-form-item label="用户名" path="userName">
                     <n-input
                         v-model:value="formValue.userName"
-                        class="roundInput"
-                        placeholder="用户名"
+                        :round="true"
+                        class="p-2"
+                        placeholder="账号"
                     />
                 </n-form-item>
                 <n-form-item label="密码" path="password">
                     <n-input
                         v-model:value="formValue.password"
-                        class="roundInput"
+                        :round="true"
+                        class="p-2"
                         placeholder="密码"
                         type="password"
                         @keyup="clearPasswordAgain"
@@ -34,8 +33,9 @@
                 <n-form-item label="重复密码" path="passwordAgain">
                     <n-input
                         v-model:value="formValue.passwordAgain"
-                        class="roundInput"
-                        placeholder="重复密码"
+                        :round="true"
+                        class="p-2"
+                        placeholder="确认密码"
                         type="password"
                         @keyup.enter="postRegister"
                     />
@@ -64,7 +64,7 @@
                     </n-button>
                 </n-form-item>
             </n-form>
-            <div>
+            <div class="mt-2">
                 已经有账号？
                 <a id="registerLink" href="../login">点我登录</a>
             </div>
@@ -72,8 +72,8 @@
         <login-bg :theme-color="bgThemeColor" />
 
         <n-modal v-model:show="showModal">
-            <n-card :bordered="false" size="huge" style="width: 600px" title="使用条款">
-                <n-scrollbar :x-scrollable="true" style="max-height: 300px">
+            <n-card :bordered="false" size="huge" title="使用条款" class="xl:w-1/3 w-9/10">
+                <n-scrollbar :x-scrollable="true" style="max-height: 400px">
                     <div v-html="protocol"></div>
                 </n-scrollbar>
                 <template #footer>
@@ -92,6 +92,7 @@ import { getColorPalette, mixColor } from "@/utils";
 import { useThemeStore } from "@/store";
 import { LoginBg } from "../login/components";
 import { DarkModeSwitch } from "@/components";
+import { Icon } from "@iconify/vue";
 
 const { routerPush } = useRouterPush();
 const theme = useThemeStore();
@@ -190,18 +191,6 @@ defineExpose({
 });
 </script>
 <style>
-#form {
-    display: inline-block;
-    width: 300px;
-}
-
-.roundInput {
-    margin-top: 20px;
-    width: 300px;
-    padding: 5px;
-    border-radius: 20px;
-}
-
 label {
     color: white;
 }
