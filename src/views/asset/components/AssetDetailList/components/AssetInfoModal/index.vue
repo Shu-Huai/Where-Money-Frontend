@@ -2,137 +2,165 @@
     <n-modal
         :auto-focus="false"
         :show="showModal"
-        class="w-500px"
         display-directive="show"
         preset="card"
+        class="w-[calc(100vw-32px)] xl:w-500px"
         @close="closeModal"
         @after-enter="getAssetInfoById"
     >
         <template #header>
-            <n-space align="flex-end" justify="start">
-                <span class="text-lg font-bold">资产信息</span>
-                <n-button size="small" text @click="canInput = true">
-                    <div v-show="!canInput" class="flex-y-center">
-                        <span class="text-sm">修改</span>
-                        <Icon height="1rem" icon="fluent:edit-48-regular" width="1rem"></Icon>
-                    </div>
-                </n-button>
-            </n-space>
+            <div class="flex items-end justify-between">
+                <div class="flex items-end gap-2">
+                    <span class="font-bold text-base xl:text-lg">资产信息</span>
+
+                    <n-button size="small" text @click="canInput = true" :disabled="canInput">
+                        <div v-show="!canInput" class="flex items-center gap-1">
+                            <span class="text-xs xl:text-sm">修改</span>
+                            <Icon height="1rem" icon="fluent:edit-48-regular" width="1rem"/>
+                        </div>
+                    </n-button>
+                </div>
+            </div>
         </template>
 
         <template #default>
             <n-form v-if="assetInfo !== undefined" :model="assetInfo">
-                <n-space :size="16" vertical>
-                    <form-item-container label="资产类型">
-                        <n-radio-group
-                            v-model:value="assetInfo.type"
-                            name="assetTypeGroup"
-                            size="medium"
-                        >
-                            <n-radio-button
-                                v-for="(typeName) in ['信用卡', '充值', '投资理财', '资金']"
-                                :key="typeName"
-                                :disabled="true"
-                                :label="typeName"
-                                :value="typeName"
+                <div class="flex flex-col gap-4">
+                    <!-- 资产类型 -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产类型</div>
+                        <div class="flex-1 overflow-x-auto overflow-y-hidden">
+                            <n-radio-group
+                                v-model:value="assetInfo.type"
+                                name="assetTypeGroup"
                                 size="medium"
+                                class="min-w-max"
                             >
-                                <span>{{ typeName }}</span>
-                            </n-radio-button>
-                        </n-radio-group>
-                    </form-item-container>
+                                <n-radio-button
+                                    v-for="typeName in ['信用卡', '充值', '投资理财', '资金']"
+                                    :key="typeName"
+                                    :disabled="true"
+                                    :label="typeName"
+                                    :value="typeName"
+                                    size="medium"
+                                >
+                                    <span>{{ typeName }}</span>
+                                </n-radio-button>
+                            </n-radio-group>
+                        </div>
+                    </div>
 
-                    <form-item-container label="资产图标">
-                        <n-input
-                            v-model:value="assetInfo.svg"
-                            :disabled="!canInput"
-                            class="w-240px"
-                            size="medium"
-                        />
-                        <Icon
-                            :icon="assetInfo.svg"
-                            class="text-primary mx-2"
-                            height="24"
-                        />
-                    </form-item-container>
-
-                    <form-item-container label="资产名称">
-                        <n-input
-                            v-model:value="assetInfo.assetName"
-                            :disabled="!canInput"
-                            class="w-240px"
-                            size="medium"
-                        />
-                    </form-item-container>
-
-                    <form-item-container :label="assetInfo.type === '信用卡' ? '当前欠款（负数）' : '资产余额'">
-                        <n-input-number
-                            v-model:value="assetInfo.balance"
-                            :disabled="!canInput"
-                            :show-button="false"
-                            :validator="validateAssetBalance"
-                            class="w-240px"
-                            size="medium"
-                        >
-                            <template #prefix>
-                                <span>￥</span>
-                            </template>
-                        </n-input-number>
-                    </form-item-container>
-
-                    <form-item-container label="计入资产总额">
-                        <n-switch
-                            v-model:value="assetInfo.inTotal"
-                            :disabled="!canInput"
-                            size="medium"
-                        />
-                    </form-item-container>
-
-                    <template v-if="assetInfo.type === '信用卡'">
-                        <n-divider>账单设置</n-divider>
-                        <form-item-container label="总额度">
-                            <n-input-number
-                                v-model:value="assetInfo.quota"
+                    <!-- 资产图标 -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产图标</div>
+                        <div class="flex items-center gap-2 flex-1">
+                            <n-input
+                                v-model:value="assetInfo.svg"
                                 :disabled="!canInput"
-                                :min="0"
+                                class="w-full xl:w-240px"
+                                size="medium"
+                            />
+                            <Icon :icon="assetInfo.svg" class="text-primary shrink-0" height="24"/>
+                        </div>
+                    </div>
+
+                    <!-- 资产名称 -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产名称</div>
+                        <div class="flex-1">
+                            <n-input
+                                v-model:value="assetInfo.assetName"
+                                :disabled="!canInput"
+                                class="w-full xl:w-240px"
+                                size="medium"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- 资产余额/欠款 -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">
+                            {{ assetInfo.type === '信用卡' ? '当前欠款（负数）' : '资产余额' }}
+                        </div>
+                        <div class="flex-1">
+                            <n-input-number
+                                v-model:value="assetInfo.balance"
+                                :disabled="!canInput"
                                 :show-button="false"
-                                class="w-240px"
+                                :validator="validateAssetBalance"
+                                class="w-full xl:w-240px"
                                 size="medium"
                             >
-                                <template #prefix>
-                                    <span>￥</span>
-                                </template>
+                                <template #prefix>￥</template>
                             </n-input-number>
-                        </form-item-container>
+                        </div>
+                    </div>
 
-                        <form-item-container label="出账日">
-                            <n-input-number
-                                v-model:value="assetInfo.billDate"
+                    <!-- 计入资产总额 -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">计入资产总额</div>
+                        <div class="flex-1">
+                            <n-switch
+                                v-model:value="assetInfo.inTotal"
                                 :disabled="!canInput"
-                                :max="31"
-                                :min="1"
-                                class="w-240px text-center"
                                 size="medium"
-                            >
-                                <template #prefix>每月</template>
-                                <template #suffix>日</template>
-                            </n-input-number>
-                        </form-item-container>
+                            />
+                        </div>
+                    </div>
 
-                        <form-item-container label="还款日">
-                            <n-input-number
-                                v-model:value="assetInfo.repayDate"
-                                :disabled="!canInput"
-                                :max="31"
-                                :min="1"
-                                class="w-240px text-center"
-                                size="medium"
-                            >
-                                <template #prefix>每月</template>
-                                <template #suffix>日</template>
-                            </n-input-number>
-                        </form-item-container>
+                    <!-- 信用卡额外字段 -->
+                    <template v-if="assetInfo.type === '信用卡'">
+                        <n-divider class="my-1">账单设置</n-divider>
 
+                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">总额度</div>
+                            <div class="flex-1">
+                                <n-input-number
+                                    v-model:value="assetInfo.quota"
+                                    :disabled="!canInput"
+                                    :min="0"
+                                    :show-button="false"
+                                    class="w-full xl:w-240px"
+                                    size="medium"
+                                >
+                                    <template #prefix>￥</template>
+                                </n-input-number>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">出账日</div>
+                            <div class="flex-1">
+                                <n-input-number
+                                    v-model:value="assetInfo.billDate"
+                                    :disabled="!canInput"
+                                    :max="31"
+                                    :min="1"
+                                    class="w-full xl:w-240px text-center"
+                                    size="medium"
+                                >
+                                    <template #prefix>每月</template>
+                                    <template #suffix>日</template>
+                                </n-input-number>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">还款日</div>
+                            <div class="flex-1">
+                                <n-input-number
+                                    v-model:value="assetInfo.repayDate"
+                                    :disabled="!canInput"
+                                    :max="31"
+                                    :min="1"
+                                    class="w-full xl:w-240px text-center"
+                                    size="medium"
+                                >
+                                    <template #prefix>每月</template>
+                                    <template #suffix>日</template>
+                                </n-input-number>
+                            </div>
+                        </div>
                     </template>
 
                     <n-button
@@ -143,45 +171,28 @@
                     >
                         <span>确定</span>
                     </n-button>
-                </n-space>
+                </div>
             </n-form>
         </template>
     </n-modal>
 </template>
 
-
 <script lang="ts" setup>
-
-import { defineEmits, defineProps, ref, watch } from "vue";
-
-import { Asset, AssetGetAssetResponse } from "@/interface";
-import { getAssetApi } from "@/apis";
-import { FormItemContainer } from "../";
-
-import { useMessage } from "naive-ui";
-import { Icon } from "@iconify/vue";
-
+import {defineEmits, defineProps, ref, watch} from "vue";
+import {Asset, AssetGetAssetResponse} from "@/interface";
+import {getAssetApi} from "@/apis";
+import {useMessage} from "naive-ui";
+import {Icon} from "@iconify/vue";
 
 const props = defineProps({
-    showModal: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    assetId: {
-        type: Number,
-        required: true,
-        default: 0
-    }
+    showModal: {type: Boolean, required: true, default: false},
+    assetId: {type: Number, required: true, default: 0}
 });
 
-/**
- * @description 按ID获取资产信息
- */
 const assetInfo = ref<Asset>();
 
 function getAssetInfoById() {
-    const params = { id: props.assetId };
+    const params = {id: props.assetId};
     getAssetApi(params).then((res: AssetGetAssetResponse) => {
         assetInfo.value = res.asset;
     }).catch((err: Error) => {
@@ -189,27 +200,16 @@ function getAssetInfoById() {
     });
 }
 
-/**
- * @description 是否禁用输入框
- */
 const canInput = ref(false);
 
-watch(() => props.assetId,
-    () => {
-        getAssetInfoById();
-    }
-);
+watch(() => props.assetId, () => {
+    getAssetInfoById();
+});
 
-/**
- * @description 资产金额验证
- */
 function validateAssetBalance(value: number) {
     if (assetInfo.value === undefined) return false;
-    if (assetInfo.value.type === "信用卡" && value > 0) {
-        return false;
-    }
+    if (assetInfo.value.type === "信用卡" && value > 0) return false;
     return !(assetInfo.value.type !== "信用卡" && value < 0);
-    
 }
 
 const emit = defineEmits(["update:showModal", "changeSubmitted"]);
@@ -221,9 +221,6 @@ async function closeModal() {
 
 const message = useMessage();
 
-/**
- * @description 应用修改
- */
 function applyChanges() {
     if (assetInfo.value!.type === "信用卡" && assetInfo.value!.balance > 0) {
         message.error("欠款金额请输入负数！");
@@ -234,11 +231,8 @@ function applyChanges() {
         emit("changeSubmitted", assetInfo.value!);
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
-:deep(.option-container) {
-    width: 240px;
-}
+/* 这版不再依赖 FormItemContainer，因此不需要 option-container 的固定宽度了 */
 </style>

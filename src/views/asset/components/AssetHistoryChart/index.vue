@@ -51,7 +51,22 @@ watch(
 );
 
 function initAndPlotLineChart() {
-    if (lineChartAreaRef.value === undefined) return;
+    if (lineChartAreaRef.value === undefined) {
+        return;
+    }
+    const isXl = window.matchMedia("(min-width: 1280px)").matches;
+
+    const fullFmt = new Intl.NumberFormat("zh-CN", {
+        style: "decimal",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
+
+    const compactFmt = new Intl.NumberFormat("zh-CN", {
+        notation: "compact",          // 关键：紧凑表示
+        compactDisplay: "short",      // zh-CN 下会是 万/亿
+        maximumFractionDigits: 2
+    });
     lineChart.value = new Line(lineChartAreaRef.value as any, {
         color: color ? color : "#2092C6",
         data: props.statisticList,
@@ -71,12 +86,11 @@ function initAndPlotLineChart() {
             max: null,
             tickCount: 4,
             label: {
-                style: {fontSize: 14},
-                formatter: (text: string) => (new Intl.NumberFormat("zh-CN", {
-                    style: "decimal",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2
-                }).format(parseFloat(text)))
+                style: { fontSize: isXl ? 14 : 12 },
+                formatter: (text: string) => {
+                    const v = Number(text);
+                    return isXl ? fullFmt.format(v) : compactFmt.format(v);
+                }
             },
             line: {
                 "style": {

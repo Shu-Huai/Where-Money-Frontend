@@ -1,44 +1,41 @@
 <template>
-    <n-space
-        :size="16"
-        :style="{ minHeight: `calc(100vh - ${minHeight}px)` }"
-        :vertical="true"
-    >
-        <n-grid
-            :item-responsive="true"
-            :x-gap="16"
-            :y-gap="16"
-        >
-            <n-grid-item span="0:24 640:24 1024:9">
+    <div class="w-full flex flex-col gap-4 xl:gap-4" :style="{ minHeight: `calc(100vh - ${minHeight}px)` }">
+        <!-- 上面两张卡：手机竖排；xl 横排 9/15 -->
+        <div class="grid grid-cols-1 gap-4 xl:grid-cols-24 xl:gap-4">
+            <div class="min-w-0 xl:col-span-9">
                 <asset-summarization
                     v-model:debt="debt"
                     v-model:net="net"
                     v-model:total="total"
-                    class="h-250px"
+                    class="h-auto xl:h-[250px]"
                 />
-            </n-grid-item>
-            <n-grid-item span="0:24 640:24 1024:15">
+            </div>
+
+            <div class="min-w-0 xl:col-span-15">
                 <asset-history-chart
                     :statistic-list="dayStatisticList"
-                    class="h-250px"
+                    class="h-[250px] xl:h-[250px]"
                 />
-            </n-grid-item>
-        </n-grid>
+            </div>
+        </div>
 
-        <asset-detail-list
-            v-model:asset-list="assetList"
-            @asset-list-changed="pullAllAsset"
-        />
-    </n-space>
+        <!-- 明细：保持一列，避免溢出 -->
+        <div class="min-w-0">
+            <asset-detail-list
+                v-model:asset-list="assetList"
+                @asset-list-changed="pullAllAsset"
+            />
+        </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
 
-import { computed, onMounted, ref, Ref, watch } from "vue";
-import { getAllAsset, getDayStatistic } from "@/apis";
-import { Asset, AssetDayStatistic, AssetDayStatisticTimeResponse, AssetGetAllAssetResponse } from "@/interface";
-import { AssetDetailList, AssetHistoryChart, AssetSummarization } from "./components";
-import { useThemeStore } from "@/store";
+import {computed, onMounted, ref, Ref, watch} from "vue";
+import {getAllAsset, getDayStatistic} from "@/apis";
+import {Asset, AssetDayStatistic, AssetDayStatisticTimeResponse, AssetGetAllAssetResponse} from "@/interface";
+import {AssetDetailList, AssetHistoryChart, AssetSummarization} from "./components";
+import {useThemeStore} from "@/store";
 
 const theme = useThemeStore();
 const minHeight = computed(() => (theme.tab.height + theme.header.height + theme.footer.height + 32));
@@ -73,7 +70,7 @@ watch(assetList, (newValue: Asset[]) => {
         return cur.balance > 0 ? acc : acc + cur.balance;
     }, 0);
     net.value = total.value + debt.value;
-}, { deep: true });
+}, {deep: true});
 
 // 第二张卡片：资产变化曲线
 const dayStatisticList: Ref<AssetDayStatistic[]> = ref([]);
