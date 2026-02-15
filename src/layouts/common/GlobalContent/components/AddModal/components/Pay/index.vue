@@ -88,7 +88,7 @@
                                 </div>
                                 <n-spin :show="isManageLoading" class="flex-1 min-h-0">
                                     <n-scrollbar class="xl:max-h-96 pr-2"
-                                                 :class="editingCategoryId ? 'max-h-105 ':'max-h-55 '">
+                                                 :class="editingCategoryId ? 'max-h-100 ':'max-h-50 '">
                                         <div v-if="billCategoryList.length === 0"
                                              class="text-center text-sm text-gray-500 py-6">
                                             暂无分类
