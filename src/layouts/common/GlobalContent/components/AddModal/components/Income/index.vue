@@ -13,12 +13,9 @@
             <n-modal v-model:show="showUpdateModal">
                 <n-card class="w-[92vw] max-w-[980px]">
                     <template #header>
-                        <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex flex-row gap-2 lg:flex-row items-center lg:justify-between">
                             <div class="space-y-1">
                                 <div class="text-base font-semibold">分类管理</div>
-                                <div class="text-xs text-gray-500">
-                                    管理当前账本的收入分类，SVG 可为空使用默认图标
-                                </div>
                             </div>
                             <div class="flex items-center gap-2">
                                 <n-button size="small" secondary v-on:click="refreshBillCategoryList(true)">
@@ -86,7 +83,7 @@
                                     <div class="text-xs text-gray-500">共 {{ billCategoryList.length }} 项</div>
                                 </div>
                                 <n-spin :show="isManageLoading">
-                                    <n-scrollbar class="max-h-80 lg:max-h-96 pr-2">
+                                    <n-scrollbar class="max-h-50 xl:max-h-96 pr-2">
                                         <div v-if="billCategoryList.length === 0"
                                              class="text-center text-sm text-gray-500 py-6">
                                             暂无分类
