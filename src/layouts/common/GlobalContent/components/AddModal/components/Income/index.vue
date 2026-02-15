@@ -13,7 +13,7 @@
             <n-modal v-model:show="showUpdateModal">
                 <n-card class="w-[92vw] max-w-[980px]">
                     <template #header>
-                        <div class="flex gap-2 flex-row xl:items-center xl:justify-between">
+                        <div class="flex gap-2 flex-row items-center xl:justify-between">
                             <div class="space-y-1">
                                 <div class="text-base font-semibold">分类管理</div>
                             </div>
@@ -88,7 +88,7 @@
                                 </div>
                                 <n-spin :show="isManageLoading" class="flex-1 min-h-0">
                                     <n-scrollbar class="xl:max-h-96 pr-2"
-                                                 :class="editingCategoryId ? 'max-h-105 ':'max-h-55 '">
+                                                 :class="editingCategoryId ? 'max-h-100 ':'max-h-50 '">
                                         <div v-if="billCategoryList.length === 0"
                                              class="text-center text-sm text-gray-500 py-6">
                                             暂无分类
