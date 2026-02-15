@@ -53,14 +53,23 @@
                     <!-- 资产图标 -->
                     <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
                         <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产图标</div>
-                        <div class="flex items-center gap-2 flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 flex-1">
                             <n-input
                                 v-model:value="assetInfo.svg"
                                 :disabled="!canInput"
-                                class="w-full xl:w-240px"
+                                class="w-full sm:flex-1 xl:w-240px"
                                 size="medium"
                             />
-                            <Icon :icon="assetInfo.svg" class="text-primary shrink-0" height="24"/>
+                            <div class="flex items-center gap-2">
+                                <n-button size="small" secondary :disabled="!canInput" @click="openIconPicker">
+                                    选择图标
+                                </n-button>
+                                <Icon
+                                    :icon="assetInfo.svg || 'icon-park-outline:tag'"
+                                    class="text-primary shrink-0"
+                                    height="24"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -175,6 +184,7 @@
             </n-form>
         </template>
     </n-modal>
+    <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected" />
 </template>
 
 <script lang="ts" setup>
@@ -183,6 +193,7 @@ import {Asset, AssetGetAssetResponse} from "@/interface";
 import {getAssetApi} from "@/apis";
 import {useMessage} from "naive-ui";
 import {Icon} from "@iconify/vue";
+import IconifyPicker from "@/components/custom/IconifyPicker/index.vue";
 
 const props = defineProps({
     showModal: {type: Boolean, required: true, default: false},
@@ -190,6 +201,7 @@ const props = defineProps({
 });
 
 const assetInfo = ref<Asset>();
+const showIconPicker = ref(false);
 
 function getAssetInfoById() {
     const params = {id: props.assetId};
@@ -217,6 +229,7 @@ const emit = defineEmits(["update:showModal", "changeSubmitted"]);
 async function closeModal() {
     emit("update:showModal", false);
     canInput.value = false;
+    showIconPicker.value = false;
 }
 
 const message = useMessage();
@@ -230,6 +243,16 @@ function applyChanges() {
         canInput.value = false;
         emit("changeSubmitted", assetInfo.value!);
     }
+}
+
+function openIconPicker() {
+    if (!canInput.value) return;
+    showIconPicker.value = true;
+}
+
+function handleIconSelected(iconName: string) {
+    if (!assetInfo.value) return;
+    assetInfo.value.svg = iconName;
 }
 </script>
 

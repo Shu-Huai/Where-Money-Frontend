@@ -40,13 +40,22 @@
                     <!-- 资产图标 -->
                     <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
                         <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产图标</div>
-                        <div class="flex items-center gap-2 flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 flex-1">
                             <n-input
                                 v-model:value.trim="assetInfo.svg"
-                                class="w-full xl:w-240px"
+                                class="w-full sm:flex-1 xl:w-240px"
                                 size="medium"
                             />
-                            <Icon :icon="assetInfo.svg" class="text-info shrink-0" height="24" />
+                            <div class="flex items-center gap-2">
+                                <n-button size="small" secondary @click="openIconPicker">
+                                    选择图标
+                                </n-button>
+                                <Icon
+                                    :icon="assetInfo.svg || 'icon-park-outline:tag'"
+                                    class="text-info shrink-0"
+                                    height="24"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -147,12 +156,14 @@
             </n-form>
         </template>
     </n-modal>
+    <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected" />
 </template>
 
 <script lang="ts" setup>
 import { defineEmits, defineProps, ref } from "vue";
 import { useMessage } from "naive-ui";
 import { Icon } from "@iconify/vue";
+import IconifyPicker from "@/components/custom/IconifyPicker/index.vue";
 
 const props = defineProps({
     showModal: {
@@ -163,6 +174,7 @@ const props = defineProps({
 });
 
 const assetInfo = ref<any>({ inTotal: true });
+const showIconPicker = ref(false);
 
 function validateAssetBalance(value: number) {
     if (assetInfo.value === undefined) return false;
@@ -174,6 +186,7 @@ const emit = defineEmits(["update:showModal", "newAssetSubmitted"]);
 
 function closeModal() {
     emit("update:showModal", false);
+    showIconPicker.value = false;
 }
 
 const message = useMessage();
@@ -212,6 +225,14 @@ function submitHandler() {
         assetInfo.value.inTotal = true;
         message.success("添加成功！");
     }
+}
+
+function openIconPicker() {
+    showIconPicker.value = true;
+}
+
+function handleIconSelected(iconName: string) {
+    assetInfo.value.svg = iconName;
 }
 </script>
 

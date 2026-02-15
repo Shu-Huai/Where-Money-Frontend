@@ -47,11 +47,24 @@
                                         placeholder="分类名称"
                                         clearable
                                     />
-                                    <n-input
-                                        v-model:value="addCategoryForm.svg"
-                                        placeholder="图标（Iconify 名称，可空）"
-                                        clearable
-                                    />
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                        <n-input
+                                            v-model:value="addCategoryForm.svg"
+                                            class="w-full sm:flex-1"
+                                            placeholder="图标（Iconify 名称，可空）"
+                                            clearable
+                                        />
+                                        <div class="flex items-center gap-2">
+                                            <n-button size="small" secondary v-on:click="openIconPicker('add')">
+                                                选择图标
+                                            </n-button>
+                                            <div
+                                                class="h-9 w-9 rounded-full bg-white border border-gray-100 flex items-center justify-center shrink-0">
+                                                <Icon :icon="addCategoryForm.svg || 'icon-park-outline:tag'"
+                                                      class="text-primary w-5 h-5"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <n-select
                                         v-model:value="addCategoryForm.type"
                                         :options="categoryTypeOptions"
@@ -113,20 +126,35 @@
                                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                                                     <n-input
                                                         v-model:value="editCategoryForm.name"
-                                                        placeholder="名称（留空则不修改）"
+                                                        :placeholder="`名称（当前：${item.billCategoryName}）`"
                                                         clearable
                                                     />
-                                                    <n-input
-                                                        v-model:value="editCategoryForm.svg"
-                                                        placeholder="图标（留空可为空）"
-                                                        clearable
-                                                    />
+                                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                                        <n-input
+                                                            v-model:value="editCategoryForm.svg"
+                                                            class="w-full sm:flex-1"
+                                                            :placeholder="`图标（当前：${item.svg || '无'}）`"
+                                                            clearable
+                                                        />
+                                                        <div class="flex items-center gap-2">
+                                                            <n-button size="small" secondary
+                                                                      v-on:click="openIconPicker('edit')">
+                                                                选择图标
+                                                            </n-button>
+                                                            <div
+                                                                class="h-9 w-9 rounded-full bg-white border border-gray-100 flex items-center justify-center shrink-0">
+                                                                <Icon
+                                                                    :icon="editCategoryForm.svg || 'icon-park-outline:tag'"
+                                                                    class="text-primary w-5 h-5"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                                                     <n-select
                                                         v-model:value="editCategoryForm.type"
                                                         :options="categoryTypeOptions"
-                                                        placeholder="类型（可空）"
+                                                        :placeholder="`类型（当前：${item.type}）`"
                                                         clearable
                                                     />
                                                     <div
@@ -153,6 +181,7 @@
                     </template>
                 </n-card>
             </n-modal>
+            <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected" />
             <div class="space-y-2">
                 <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
                     <div class="col-span-1 lg:col-span-2">
@@ -317,6 +346,7 @@ import {intToString} from "@/utils/dateComputer";
 import {Icon} from "@iconify/vue";
 import {BillCategoryItem} from "./components";
 import {useStore} from "@/stores/store";
+import IconifyPicker from "@/components/custom/IconifyPicker/index.vue";
 
 let timePickerProps: TimePickerProps = {inputReadonly: true};
 let remark: Ref<string> = ref("");
@@ -449,6 +479,8 @@ function addBill(): void {
 let mouseOnClose: Ref<boolean> = ref(false);
 
 let showUpdateModal: Ref<boolean> = ref(false);
+const showIconPicker: Ref<boolean> = ref(false);
+const iconPickerTarget: Ref<"add" | "edit"> = ref("add");
 
 type BillCategoryType = "支出" | "收入";
 
@@ -469,7 +501,7 @@ const editingCategoryId: Ref<number> = ref(0);
 const editCategoryForm = ref<{ name: string; svg: string; type: BillCategoryType | null }>({
     name: "",
     svg: "",
-    type: "收入"
+    type: null
 });
 const editCategoryLoading: Ref<boolean> = ref(false);
 
@@ -484,6 +516,19 @@ function resetAddForm(): void {
 
 function openCategoryManager(): void {
     showUpdateModal.value = true;
+}
+
+function openIconPicker(target: "add" | "edit"): void {
+    iconPickerTarget.value = target;
+    showIconPicker.value = true;
+}
+
+function handleIconSelected(iconName: string): void {
+    if (iconPickerTarget.value === "add") {
+        addCategoryForm.value.svg = iconName;
+    } else {
+        editCategoryForm.value.svg = iconName;
+    }
 }
 
 async function refreshBillCategoryList(showMessage = false): Promise<void> {
@@ -510,15 +555,15 @@ async function refreshBillCategoryList(showMessage = false): Promise<void> {
 function startEditCategory(item: BillCategory): void {
     editingCategoryId.value = item.id;
     editCategoryForm.value = {
-        name: item.billCategoryName || "",
-        svg: item.svg || "",
-        type: item.type || "收入"
+        name: "",
+        svg: "",
+        type: null
     };
 }
 
 function cancelEditCategory(): void {
     editingCategoryId.value = 0;
-    editCategoryForm.value = {name: "", svg: "", type: "收入"};
+    editCategoryForm.value = {name: "", svg: "", type: null};
 }
 
 async function addCategory(): Promise<void> {
@@ -584,6 +629,7 @@ watch(showUpdateModal, (value: boolean) => {
     if (value) {
         refreshBillCategoryList();
     } else {
+        showIconPicker.value = false;
         cancelEditCategory();
         resetAddForm();
     }

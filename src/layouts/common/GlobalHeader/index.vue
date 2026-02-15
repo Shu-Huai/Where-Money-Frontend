@@ -217,7 +217,7 @@ function submitBook(): void {
     formRef.value?.validate((errors: any) => {
         if (!errors) {
             addBookApi({title: model.title, beginDate: parseInt(model.beginDate)}).then(() => {
-                window.$message.error("新增成功");
+                window.$message.success("新增成功");
                 showAdd.value = false;
             });
         }
