@@ -36,7 +36,12 @@ function deleteBillCategoryApi(params: { id: number }): any {
     return http.delete("/book/bill-category", params);
 }
 
-function addBillCategoryApi(params: { bookId: number, billCategoryName: string, svg: string, type: "支出" | "收入" }): any {
+function addBillCategoryApi(params: {
+    bookId: number,
+    billCategoryName: string,
+    svg: string,
+    type: "支出" | "收入"
+}): any {
     return http.post("/book/bill-category", params);
 }
 
@@ -51,6 +56,10 @@ function updateBillCategoryApi(params: {
     return http.put("/book/bill-category", params);
 }
 
+function deleteBookApi(params: { id: number }): any {
+    return http.delete("/book/book", params);
+}
+
 export {
     addBookApi,
     getBookApi,
@@ -61,5 +70,6 @@ export {
     getPayMonthApi,
     deleteBillCategoryApi,
     addBillCategoryApi,
-    updateBillCategoryApi
+    updateBillCategoryApi,
+    deleteBookApi
 };

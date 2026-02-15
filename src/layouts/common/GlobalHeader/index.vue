@@ -42,7 +42,30 @@
                         <span class="hidden xl:inline">添加账本</span>
                         <span class="xl:hidden">新增</span>
                     </n-button>
-                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-9/10 xl:w-1/2">
+                    <n-button class="w-full xl:w-auto mt-2 xl:mt-0 xl:ml-2" @click.stop="showDeleteModal = true">
+                        <Icon icon="material-symbols:delete"/>
+                        <span class="hidden xl:inline">删除账本</span>
+                        <span class="xl:hidden">删除</span>
+                    </n-button>
+                    <n-modal v-model:show="showDeleteModal" class="w-4/5 xl:w-1/6">
+                        <n-card class="w-full">
+                            <template #header>
+                                <div>删除账本</div>
+                            </template>
+                            <template #default>
+                                <div>确定删除账本 {{ bookList.find((item) => item.id === bookId)?.title }} 吗？</div>
+                                <div class="mt-3 flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-yellow-700">
+                                    <Icon icon="material-symbols:warning-rounded" class="text-18px"/>
+                                    <span class="text-sm">该操作不可恢复</span>
+                                </div>
+                            </template>
+                            <template #footer>
+                                <n-button class="w-full" type="default" @click="deleteBook">确定</n-button>
+                                <n-button class="w-full mt-2" type="primary" @click="showDeleteModal = false">取消</n-button>
+                            </template>
+                        </n-card>
+                    </n-modal>
+                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-4/5 xl:w-1/6">
                         <n-card id="drawer-target" class="w-full">
                             <template #header>
                                 <div>新增账本</div>
@@ -120,7 +143,7 @@ import GlobalLogo from "../GlobalLogo/index.vue";
 import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode} from "./components";
 import {Icon} from "@iconify/vue";
 import {dateToString, now} from "@/utils/dateComputer";
-import {addBookApi, getAllBookApi} from "@/apis";
+import {addBookApi, getAllBookApi, deleteBookApi} from "@/apis";
 import {EnumStorageKey} from "@/enum";
 
 const {routerPush, routerBack} = useRouterPush();
@@ -221,6 +244,23 @@ function submitBook(): void {
                 showAdd.value = false;
             });
         }
+    });
+}
+
+let showDeleteModal: Ref<boolean> = ref(false);
+
+function deleteBook(): void {
+    if (bookList.value.length === 1) {
+        window.$message.error("至少保留一个账本");
+        return;
+    }
+    deleteBookApi({id: bookId.value}).then(() => {
+        window.$message.success("删除成功");
+        bookList.value = bookList.value.filter((item: BookShow) => item.value !== bookId.value);
+        bookId.value = bookList.value[0].value;
+        storage.set(EnumStorageKey["bookId"], bookId.value);
+        store.bookId = bookId.value;
+        showDeleteModal.value = false;
     });
 }
 
