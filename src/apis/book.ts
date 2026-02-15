@@ -47,6 +47,7 @@ function updateBillCategoryApi(params: {
     type: "支出" | "收入",
     bookId: number
 }): any {
+    console.log(params)
     return http.put("/book/bill-category", params);
 }
 

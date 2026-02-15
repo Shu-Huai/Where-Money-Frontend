@@ -31,7 +31,7 @@ const http = {
             method: "put",
             url
         };
-        if (params) config.data = params;
+        if (params) config.params = params;
         return request(config);
     },
     delete(url: string, params: any) {
