@@ -12,6 +12,10 @@ export function setBookBudget(params: { bookId: number, totalBudget?: number, us
     return http.patch("budget/budget/total", params);
 }
 
+export function deleteBudget(params: { budgetId: number }): any {
+    return http.delete("budget/budget", params);
+}
+
 export function updateBudget(params: {
     budgetId: number,
     billCategoryId?: number,
