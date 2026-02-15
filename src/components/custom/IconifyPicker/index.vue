@@ -47,7 +47,7 @@
                         结果来自 Iconify Search API，仅支持英文关键词。每次最多显示 {{ limit }} 条。
                     </div>
                     <n-spin :show="isLoading">
-                        <n-scrollbar class="max-h-60 sm:max-h-72 lg:max-h-[420px] pr-2">
+                        <n-scrollbar class="max-h-60 lg:max-h-[420px] pr-2">
                             <div
                                 v-if="!isLoading && icons.length === 0"
                                 class="text-center text-sm text-gray-500 py-8"
