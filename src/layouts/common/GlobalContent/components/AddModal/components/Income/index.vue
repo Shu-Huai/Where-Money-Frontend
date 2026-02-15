@@ -13,7 +13,7 @@
             <n-modal v-model:show="showUpdateModal">
                 <n-card class="w-[92vw] max-w-[980px]">
                     <template #header>
-                        <div class="flex flex-row gap-2 lg:flex-row items-center lg:justify-between">
+                        <div class="flex gap-2 flex-row xl:items-center xl:justify-between">
                             <div class="space-y-1">
                                 <div class="text-base font-semibold">分类管理</div>
                             </div>
@@ -32,8 +32,11 @@
                     </template>
 
                     <template #default>
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
+                        <div class="flex flex-col gap-4 h-[70vh] xl:h-auto xl:grid xl:grid-cols-3 xl:gap-4">
+                            <div
+                                class="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3 flex-none transition-[max-height] duration-200"
+                                :class="editingCategoryId ? 'max-h-16 overflow-hidden xl:max-h-none xl:overflow-visible' : 'max-h-none'"
+                            >
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm font-semibold">新增分类</div>
                                     <div class="text-xs text-gray-500">名称必填</div>
@@ -44,10 +47,10 @@
                                         placeholder="分类名称"
                                         clearable
                                     />
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                    <div class="flex flex-col xl:flex-row xl:items-center gap-2">
                                         <n-input
                                             v-model:value="addCategoryForm.svg"
-                                            class="w-full sm:flex-1"
+                                            class="w-full xl:flex-1"
                                             placeholder="图标（Iconify 名称，可空）"
                                             clearable
                                         />
@@ -77,13 +80,15 @@
                                     </n-button>
                                 </div>
                             </div>
-                            <div class="lg:col-span-2 rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+                            <div
+                                class="xl:col-span-2 rounded-lg border border-gray-200 bg-white p-4 flex flex-col gap-3 flex-1 min-h-0 xl:flex-none">
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm font-semibold">已有分类</div>
                                     <div class="text-xs text-gray-500">共 {{ billCategoryList.length }} 项</div>
                                 </div>
-                                <n-spin :show="isManageLoading">
-                                    <n-scrollbar class="max-h-50 xl:max-h-96 pr-2">
+                                <n-spin :show="isManageLoading" class="flex-1 min-h-0">
+                                    <n-scrollbar class="xl:max-h-96 pr-2"
+                                                 :class="editingCategoryId ? 'max-h-105 ':'max-h-55 '">
                                         <div v-if="billCategoryList.length === 0"
                                              class="text-center text-sm text-gray-500 py-6">
                                             暂无分类
@@ -120,16 +125,16 @@
                                             </div>
                                             <div v-if="editingCategoryId === item.id"
                                                  class="space-y-2 pt-2 border-t border-dashed border-gray-200">
-                                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                                                <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
                                                     <n-input
                                                         v-model:value="editCategoryForm.name"
                                                         :placeholder="`名称（当前：${item.billCategoryName}）`"
                                                         clearable
                                                     />
-                                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                                    <div class="flex flex-col xl:flex-row xl:items-center gap-2">
                                                         <n-input
                                                             v-model:value="editCategoryForm.svg"
-                                                            class="w-full sm:flex-1"
+                                                            class="w-full xl:flex-1"
                                                             :placeholder="`图标（当前：${item.svg || '无'}）`"
                                                             clearable
                                                         />
@@ -147,7 +152,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                                                <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
                                                     <n-select
                                                         v-model:value="editCategoryForm.type"
                                                         :options="categoryTypeOptions"
@@ -155,7 +160,7 @@
                                                         clearable
                                                     />
                                                     <div
-                                                        class="text-xs text-gray-500 flex items-center lg:justify-end">
+                                                        class="text-xs text-gray-500 flex items-center xl:justify-end">
                                                         留空将提交 null
                                                     </div>
                                                 </div>
