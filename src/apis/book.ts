@@ -32,6 +32,24 @@ function getPayMonthApi(params: { bookId: number, month: string }): any {
     return http.get("/book/pay-month", params);
 }
 
+function deleteBillCategoryApi(params: { id: number }): any {
+    return http.delete("/book/bill-category", params);
+}
+
+function addBillCategoryApi(params: { bookId: number, billCategoryName: string, svg: string, type: "支出" | "收入" }): any {
+    return http.post("/book/bill-category", params);
+}
+
+function updateBillCategoryApi(params: {
+    id: number,
+    billCategoryName: string,
+    svg: string,
+    type: "支出" | "收入",
+    bookId: number
+}): any {
+    return http.put("/book/bill-category", params);
+}
+
 export {
     addBookApi,
     getBookApi,
@@ -39,5 +57,8 @@ export {
     getAllBillCategoryApi,
     getBalanceMonthApi,
     getIncomeMonthApi,
-    getPayMonthApi
+    getPayMonthApi,
+    deleteBillCategoryApi,
+    addBillCategoryApi,
+    updateBillCategoryApi
 };
