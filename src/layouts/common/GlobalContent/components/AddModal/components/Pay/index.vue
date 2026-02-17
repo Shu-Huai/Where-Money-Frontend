@@ -265,17 +265,18 @@
                     <div>
                         <n-scrollbar class="h-78">
                             <n-spin v-if="isAssetLoading" class="flex items-center h-78"></n-spin>
-                            <n-radio-group v-if="!isAssetLoading" v-model:value="assetSelector" class="space-y-4 ">
-                                <div v-for="item in assetList">
-                                    <n-radio v-bind:key="item.id" v-bind:value="item.assetName">
-                                        <div class="flex space-x-2 align-middle">
-                                            <div>
-                                                <Icon :icon="item.svg" class="text-primary w-8 h-8"/>
+                            <n-radio-group v-if="!isAssetLoading" v-model:value="assetSelector"
+                                           class="space-y-4 asset-radio-group w-full">
+                                <div v-for="item in assetList" class="w-full">
+                                    <n-radio v-bind:key="item.id" v-bind:value="item.assetName" class="w-full">
+                                        <div class="flex items-center w-full gap-2">
+                                            <div class="flex items-center gap-2 min-w-0 flex-1">
+                                                <Icon :icon="item.svg" class="text-primary w-8 h-8 shrink-0"/>
+                                                <div class="min-w-0 truncate">
+                                                    {{ item.assetName }}
+                                                </div>
                                             </div>
-                                            <div class="w-100 m-auto">
-                                                {{ item.assetName }}
-                                            </div>
-                                            <div class="m-auto">
+                                            <div class="shrink-0 text-right tabular-nums">
                                                 ￥{{ item.balance }}
                                             </div>
                                         </div>
@@ -662,5 +663,9 @@ watch(showUpdateModal, (value: boolean) => {
         font-size: 12px;
         line-height: 1;
     }
+}
+
+.asset-radio-group :deep(.n-radio__label) {
+    width: 100%;
 }
 </style>
