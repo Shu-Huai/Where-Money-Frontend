@@ -3,7 +3,7 @@
  * @param { string }id - 元素id
  */
 function initSvgLogo(id) {
-    const isDesktop = window.matchMedia ? window.matchMedia("(min-width: 1280px)").matches : true;
+    const isDesktop = window.matchMedia ? window.matchMedia("(min-width: 1024px)").matches : true;
     const desktopDisplay = isDesktop ? "block" : "none";
     const mobileDisplay = isDesktop ? "none" : "block";
     const svgStr = `<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px">

@@ -1,12 +1,12 @@
 <template>
     <div class="flex-center text-18px hover:text-primary cursor-pointer" @click="handleSwitch">
-        <icon-mdi-moon-waning-crescent v-if="darkMode" />
-        <icon-mdi-white-balance-sunny v-else />
+        <icon-mdi-moon-waning-crescent v-if="darkMode"/>
+        <icon-mdi-white-balance-sunny v-else/>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import {computed} from "vue";
 
 interface Props {
     /** 暗黑模式 */

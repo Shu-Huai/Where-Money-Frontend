@@ -20,4 +20,4 @@ function changePasswordApi(params: any): any {
     return http.patch("/user/password", params);
 }
 
-export { registerApi, loginApi, getProtocolApi, changeUserNameApi, changePasswordApi };
+export {registerApi, loginApi, getProtocolApi, changeUserNameApi, changePasswordApi};

@@ -1,4 +1,4 @@
-import { BillBillResponse } from "@/interface";
+import {BillBillResponse} from "@/interface";
 
 export interface BillMaxMinTimeResponse {
     max: BillBillResponse;

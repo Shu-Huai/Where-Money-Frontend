@@ -86,7 +86,7 @@ function initAndPlotLineChart() {
             max: null,
             tickCount: 4,
             label: {
-                style: { fontSize: isXl ? 14 : 12 },
+                style: {fontSize: isXl ? 14 : 12},
                 formatter: (text: string) => {
                     const v = Number(text);
                     return isXl ? fullFmt.format(v) : compactFmt.format(v);

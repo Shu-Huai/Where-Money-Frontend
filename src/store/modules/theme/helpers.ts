@@ -29,7 +29,7 @@ function resolveLayoutMode(): ThemeLayoutMode {
     if (typeof window === "undefined" || !window.matchMedia) {
         return themeSetting.layout.mode;
     }
-    const isDesktop = window.matchMedia("(min-width: 1280px)").matches;
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     return isDesktop ? themeSetting.layout.mode : "vertical-mix";
 }
 

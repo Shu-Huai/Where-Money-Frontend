@@ -1,4 +1,4 @@
-import { BaseBill } from "@/interface";
+import {BaseBill} from "@/interface";
 
 export interface PayBill extends BaseBill {
     payAssetId: number;

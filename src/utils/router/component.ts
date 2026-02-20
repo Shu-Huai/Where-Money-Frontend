@@ -1,8 +1,8 @@
-import type { Component } from "vue";
-import { EnumLayoutComponentName } from "@/enum";
-import { BasicLayout, BlankLayout } from "@/layouts";
-import { views } from "@/views";
-import type { LayoutComponentName } from "@/interface";
+import type {Component} from "vue";
+import {EnumLayoutComponentName} from "@/enum";
+import {BasicLayout, BlankLayout} from "@/layouts";
+import {views} from "@/views";
+import type {LayoutComponentName} from "@/interface";
 
 type LayoutComponent = Record<LayoutComponentName, () => Promise<Component>>;
 
@@ -29,6 +29,6 @@ export function getViewComponent(routeKey: AuthRoute.RouteKey) {
 /** 给页面组件设置名称 */
 async function setViewComponentName(asyncComponent: () => Promise<Component>, name: string) {
     const component = (await asyncComponent()) as { default: Component };
-    Object.assign(component.default, { name });
+    Object.assign(component.default, {name});
     return component;
 }

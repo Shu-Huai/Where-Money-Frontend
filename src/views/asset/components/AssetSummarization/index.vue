@@ -2,7 +2,7 @@
     <n-card :bordered="false" class="rounded-16px shadow-sm h-250px">
         <template #header>
             <n-space align="center">
-                <Icon height="24px" icon="carbon:wallet" width="24px" />
+                <Icon height="24px" icon="carbon:wallet" width="24px"/>
                 <span class="font-bold text-xl">资产总览</span>
             </n-space>
         </template>
@@ -40,11 +40,11 @@
 
 <script lang="ts" setup>
 // vue
-import { defineProps } from "vue";
+import {defineProps} from "vue";
 // components
-import { Icon } from "@iconify/vue";
+import {Icon} from "@iconify/vue";
 // .ts
-import { formattedCurrencyNoSymbol } from "@/utils";
+import {formattedCurrencyNoSymbol} from "@/utils";
 
 const props = defineProps({
     total: {

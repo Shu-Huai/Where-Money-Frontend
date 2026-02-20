@@ -1,5 +1,5 @@
-import { h } from "vue";
-import { Icon } from "@iconify/vue";
+import {h} from "vue";
+import {Icon} from "@iconify/vue";
 
 /**
  * 动态渲染iconify
@@ -15,5 +15,5 @@ export function iconifyRender(icon: string, color?: string, size?: number) {
     if (size) {
         style.size = `${size}px`;
     }
-    return () => h(Icon, { icon, style });
+    return () => h(Icon, {icon, style});
 }

@@ -33,4 +33,4 @@ function stringToDate(dateStr: string): Date {
     return new Date(dateStr);
 }
 
-export { intToString, stringToInt, now, dateToString, stringToDate };
+export {intToString, stringToInt, now, dateToString, stringToDate};

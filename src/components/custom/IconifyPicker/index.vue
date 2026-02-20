@@ -20,18 +20,18 @@
                 <div class="space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-2">
                         <n-input
-                            class="iconify-search-input w-full sm:flex-1"
                             v-model:value="query"
-                            placeholder="搜索图标，如 money / food / wallet"
+                            class="iconify-search-input w-full sm:flex-1"
                             clearable
+                            placeholder="搜索图标，如 money / food / wallet"
                             v-on:keydown.enter.prevent="performSearch(true)"
                         >
                             <template #prefix>
-                                <Icon icon="ri:search-line" class="text-gray-500" />
+                                <Icon class="text-gray-500" icon="ri:search-line"/>
                             </template>
                         </n-input>
                         <div class="flex items-center gap-2 flex-wrap">
-                            <n-button class="w-full sm:w-auto" type="primary" :loading="isLoading"
+                            <n-button :loading="isLoading" class="w-full sm:w-auto" type="primary"
                                       v-on:click="performSearch(true)">
                                 搜索
                             </n-button>
@@ -61,7 +61,7 @@
                                     class="group rounded-lg border border-gray-200 bg-white p-2 flex flex-col items-center gap-1 hover:border-primary"
                                     v-on:click="selectIcon(iconName)"
                                 >
-                                    <Icon :icon="iconName" class="text-primary w-6 h-6" />
+                                    <Icon :icon="iconName" class="text-primary w-6 h-6"/>
                                     <div class="text-[10px] text-gray-500 truncate w-full text-center">
                                         {{ iconName }}
                                     </div>
@@ -73,9 +73,9 @@
                         <div class="text-xs text-gray-500">已显示 {{ icons.length }} 个</div>
                         <n-button
                             v-if="hasMore"
-                            size="small"
-                            secondary
                             :loading="isLoading"
+                            secondary
+                            size="small"
                             v-on:click="loadMore"
                         >
                             加载更多

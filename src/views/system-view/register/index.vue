@@ -5,8 +5,8 @@
             class="absolute left-48px top-24px z-3 text-20px"
             @update:dark="theme.setDarkMode"
         />
-        <div class="relative s-card p-14 z-4 w-9/10 xl:w-auto">
-            <Icon icon="ic:baseline-account-balance-wallet" class="absolute z-4 w-13 h-13 text-primary top-5 left-5"/>
+        <div class="relative s-card p-14 z-4 w-9/10 lg:w-1/2 xl:w-auto">
+            <Icon class="absolute z-4 w-13 h-13 text-primary top-5 left-5" icon="ic:baseline-account-balance-wallet"/>
             <div class="text-6xl font-bold italic text-primary mb-6 mt-5 text-center">
                 &nbsp;&nbsp;&nbsp;<span class="underline decoration-teal-500 decoration-6">注&nbsp;&nbsp;&nbsp;册</span>&nbsp;&nbsp;&nbsp;
             </div>
@@ -69,10 +69,10 @@
                 <a id="registerLink" href="../login">点我登录</a>
             </div>
         </div>
-        <login-bg :theme-color="bgThemeColor" />
+        <login-bg :theme-color="bgThemeColor"/>
 
         <n-modal v-model:show="showModal">
-            <n-card :bordered="false" size="huge" title="使用条款" class="xl:w-1/3 w-9/10">
+            <n-card :bordered="false" class="xl:w-1/3 lg:w-1/2 w-9/10" size="huge" title="使用条款">
                 <n-scrollbar :x-scrollable="true" style="max-height: 400px">
                     <div v-html="protocol"></div>
                 </n-scrollbar>
@@ -84,17 +84,17 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { Router } from "vue-router";
-import { useRouterPush } from "@/composables";
-import { getProtocolApi, registerApi } from "@/apis";
-import { computed, Ref, ref } from "vue";
-import { getColorPalette, mixColor } from "@/utils";
-import { useThemeStore } from "@/store";
-import { LoginBg } from "../login/components";
-import { DarkModeSwitch } from "@/components";
-import { Icon } from "@iconify/vue";
+import {Router} from "vue-router";
+import {useRouterPush} from "@/composables";
+import {getProtocolApi, registerApi} from "@/apis";
+import {computed, Ref, ref} from "vue";
+import {getColorPalette, mixColor} from "@/utils";
+import {useThemeStore} from "@/store";
+import {LoginBg} from "../login/components";
+import {DarkModeSwitch} from "@/components";
+import {Icon} from "@iconify/vue";
 
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 const theme = useThemeStore();
 const bgThemeColor = computed(() => (theme.darkMode ? getColorPalette(theme.themeColor, 7) : theme.themeColor));
 const bgColor = computed(() => {
@@ -110,7 +110,7 @@ interface Form {
 }
 
 const formRef: Ref = ref(null);
-const formValue: Ref<Form> = ref({ userName: "", password: "", passwordAgain: "" });
+const formValue: Ref<Form> = ref({userName: "", password: "", passwordAgain: ""});
 const readProtocol: Ref<boolean> = ref(true);
 const showModal: Ref<boolean> = ref(false);
 const protocol: Ref<string> = ref("");
@@ -154,10 +154,10 @@ declare const window: Window & { $message: any; $router: Router };
 function postRegister(): void {
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
-            registerApi({ userName: formValue.value.userName, password: formValue.value.password })
+            registerApi({userName: formValue.value.userName, password: formValue.value.password})
                 .then((_response: any) => {
                     window.$message.success("注册成功");
-                    routerPush({ name: "login" });
+                    routerPush({name: "login"});
                 })
                 .catch((_error: {}) => {
                 });

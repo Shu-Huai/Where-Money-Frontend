@@ -3,7 +3,7 @@
         <template #trigger>
             <n-input v-model:value="modelValue" placeholder="点击选择图标" readonly>
                 <template #suffix>
-                    <Icon :icon="modelValue ? modelValue : emptyIcon" class="text-30px p-5px" />
+                    <Icon :icon="modelValue ? modelValue : emptyIcon" class="text-30px p-5px"/>
                 </template>
             </n-input>
         </template>
@@ -20,14 +20,14 @@
                 />
             </template>
         </div>
-        <n-empty v-else class="w-306px" description="你什么也找不到" />
+        <n-empty v-else class="w-306px" description="你什么也找不到"/>
     </n-popover>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { Icon } from "@iconify/vue";
-import { useThemeStore } from "@/store";
+import {computed, ref} from "vue";
+import {Icon} from "@iconify/vue";
+import {useThemeStore} from "@/store";
 
 interface Props {
     /** 选中的图标 */

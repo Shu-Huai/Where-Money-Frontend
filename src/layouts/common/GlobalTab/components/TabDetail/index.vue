@@ -25,12 +25,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, reactive, ref, watch } from "vue";
-import { useEventListener } from "@vueuse/core";
-import { ButtonTab, ChromeTab } from "@/components";
-import { useTabStore, useThemeStore } from "@/store";
-import { setTabRoutes } from "@/utils";
-import { ContextMenu } from "./components";
+import {computed, nextTick, reactive, ref, watch} from "vue";
+import {useEventListener} from "@vueuse/core";
+import {ButtonTab, ChromeTab} from "@/components";
+import {useTabStore, useThemeStore} from "@/store";
+import {setTabRoutes} from "@/utils";
+import {ContextMenu} from "./components";
 
 interface Emits {
     (e: "scroll", clientX: number): void;
@@ -51,7 +51,7 @@ async function getActiveTabClientX() {
     await nextTick();
     if (tabRef.value) {
         const activeTabElement = tabRef.value.children[tab.activeTabIndex];
-        const { x, width } = activeTabElement.getBoundingClientRect();
+        const {x, width} = activeTabElement.getBoundingClientRect();
         const clientX = x + width / 2;
         setTimeout(() => {
             emit("scroll", clientX);
@@ -75,13 +75,13 @@ function hideDropdown() {
 }
 
 function setDropdown(x: number, y: number, currentPath: string) {
-    Object.assign(dropdown, { x, y, currentPath });
+    Object.assign(dropdown, {x, y, currentPath});
 }
 
 /** 点击右键菜单 */
 async function handleContextMenu(e: MouseEvent, path: string) {
     e.preventDefault();
-    const { clientX, clientY } = e;
+    const {clientX, clientY} = e;
     hideDropdown();
     setDropdown(clientX, clientY, path);
     await nextTick();

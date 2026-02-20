@@ -1,9 +1,11 @@
 <template>
     <n-card v-cloak :segmented="true" class="rounded-[16px] shadow-sm">
         <template #header>
-            <div class="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
+            <div
+                class="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between lg:flex-row lg:items-center lg:justify-between">
                 <span class="text-xl font-bold min-w-0 break-words">{{ book.title }}</span>
-                <n-button text class="self-start xl:self-auto" @click="showAddModal = true; store.selectedBillCategoryId = -1;">
+                <n-button class="self-start xl:self-auto lg:self-auto" text
+                          @click="showAddModal = true; store.selectedBillCategoryId = -1;">
                     <icon height="24px" icon="fluent:add-24-filled"/>
                     <span class="text-base ml-2">新增预算</span>
                 </n-button>
@@ -19,14 +21,18 @@
                 <n-card :bordered="false" :segmented="true" size="small">
                     <!-- 账本总预算 -->
                     <template #header>
-                        <div class="book-budget-info flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        <div
+                            class="book-budget-info flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between lg:flex-row lg:items-center lg:justify-between">
                             <!-- 左侧 -->
                             <div class="flex flex-col min-w-0">
                                 <span class="text-lg font-bold">总预算</span>
-                                <span class="text-xs break-words">总额: {{ formattedCurrencyNoSymbol(book.totalBudget) }}</span>
+                                <span class="text-xs break-words">总额: {{
+                                        formattedCurrencyNoSymbol(book.totalBudget)
+                                    }}</span>
                             </div>
                             <!-- 右侧[进度条、修改]切换 -->
-                            <div class="flex items-end justify-end self-end xl:self-auto xl:items-center xl:justify-end">
+                            <div
+                                class="flex items-end justify-end self-end xl:self-auto xl:items-center xl:justify-end lg:self-auto lg:items-center lg:justify-end">
                                 <div v-if="bookBudgetEdit" class="flex flex-col gap-2">
                                     <n-input-group>
                                         <n-input-group-label size="small">总额</n-input-group-label>
@@ -42,7 +48,8 @@
                                     </n-input-group>
                                     <n-input-group>
                                         <n-input-group-label size="small">已用</n-input-group-label>
-                                        <n-input-number v-model:value="bookUsedBudget" :disabled="true" :min="bookBudgetUsedMin"
+                                        <n-input-number v-model:value="bookUsedBudget" :disabled="true"
+                                                        :min="bookBudgetUsedMin"
                                                         :show-button="false"
                                                         :style="{ width: '100px', textAlign: 'center' }"
                                                         size="small">
@@ -84,7 +91,8 @@
                                          class="hover:bg-[#f6f6f6] dark:hover:bg-[#333]"
                                          @click="showBudgetInfoModal(budget)"
                             >
-                                <div class="budget-info flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between px-2">
+                                <div
+                                    class="budget-info flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between px-2 lg:flex-row lg:items-center lg:justify-between">
                                     <!-- 左侧 icon和名字、额度信息 -->
                                     <div class="flex-y-center min-w-0">
                                         <icon :height="iconWidth"
@@ -103,7 +111,7 @@
                                         </div>
                                     </div>
                                     <!-- 右侧进度条 -->
-                                    <div class="flex-shrink-0 self-end xl:self-auto">
+                                    <div class="flex-shrink-0 self-end xl:self-auto lg:self-auto">
                                         <n-progress :gap-offset-degree="180"
                                                     :percentage="budgetRemainList![idx] < 0 ? 100 : (1 - budget.used / budget.limit) * 100"
                                                     :status="budget.used > budget.limit ? 'error' : 'success'"
@@ -125,7 +133,7 @@
                 </n-card>
             </template>
 
-            <add-budget-modal v-bind:book="book" v-model:show-modal="showAddModal" :disabled-categories="categoryInUse"
+            <add-budget-modal v-model:show-modal="showAddModal" :disabled-categories="categoryInUse" v-bind:book="book"
                               @manual-update-book="emit('manualUpdateBook')"/>
 
             <budget-info-modal v-model:budget="budgetTemp as any" v-model:show-modal="showInfoModal"

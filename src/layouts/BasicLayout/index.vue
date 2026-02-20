@@ -22,21 +22,21 @@
             <global-sider/>
         </template>
         <global-content/>
-<!--        <template #footer>-->
-<!--            <global-footer/>-->
-<!--        </template>-->
+        <!--        <template #footer>-->
+        <!--            <global-footer/>-->
+        <!--        </template>-->
     </AdminLayout>
     <setting-drawer/>
 </template>
 
 <script lang="ts" setup>
 import {onMounted} from "vue";
-import {AdminLayout, PageTab} from "@soybeanjs/vue-materials";
+import {AdminLayout} from "@soybeanjs/vue-materials";
 import "@soybeanjs/vue-materials/dist/style.css";
 import {useAppStore, useThemeStore} from "@/store";
 import {useBasicLayout} from "@/composables";
 import {useStore} from "@/stores/store";
-import {GlobalContent, GlobalFooter, GlobalHeader, GlobalSider, GlobalTab, SettingDrawer} from "../common";
+import {GlobalContent, GlobalHeader, GlobalSider, GlobalTab, SettingDrawer} from "../common";
 
 const app = useAppStore();
 const theme = useThemeStore();

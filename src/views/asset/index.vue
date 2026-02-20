@@ -1,8 +1,8 @@
 <template>
-    <div class="w-full flex flex-col gap-4 xl:gap-4" :style="{ minHeight: `calc(100vh - ${minHeight}px)` }">
+    <div :style="{ minHeight: `calc(100vh - ${minHeight}px)` }" class="w-full flex flex-col gap-4 xl:gap-4 lg:gap-4">
         <!-- 上面两张卡：手机竖排；xl 横排 9/15 -->
-        <div class="grid grid-cols-1 gap-4 xl:grid-cols-24 xl:gap-4">
-            <div class="min-w-0 xl:col-span-9">
+        <div class="grid grid-cols-1 gap-4 xl:grid-cols-24 xl:gap-4 lg:grid-cols-24 lg:gap-4">
+            <div class="min-w-0 xl:col-span-9 lg:col-span-9">
                 <asset-summarization
                     v-model:debt="debt"
                     v-model:net="net"
@@ -11,10 +11,10 @@
                 />
             </div>
 
-            <div class="min-w-0 xl:col-span-15">
+            <div class="min-w-0 xl:col-span-15 lg:col-span-15">
                 <asset-history-chart
                     :statistic-list="dayStatisticList"
-                    class="h-[250px] xl:h-[250px]"
+                    class="h-[250px]"
                 />
             </div>
         </div>

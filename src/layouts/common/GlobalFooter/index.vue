@@ -5,5 +5,5 @@
 </template>
 
 <script lang="ts" setup>
-import { DarkModeContainer } from "@/components";</script>
+import {DarkModeContainer} from "@/components";</script>
 <style scoped></style>

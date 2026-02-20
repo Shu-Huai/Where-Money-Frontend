@@ -1,7 +1,7 @@
 <template>
     <div class="flex-col-center wh-full">
         <div class="w-400px h-400px text-primary">
-            <component :is="active" />
+            <component :is="active"/>
         </div>
         <router-link :to="{ name: routeHomePath }">
             <n-button type="primary">回到首页</n-button>
@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { Component } from "vue";
-import { computed } from "vue";
-import { SvgNoPermission, SvgNotFound, SvgServiceError } from "@/components";
-import { routeName } from "@/router";
+import type {Component} from "vue";
+import {computed} from "vue";
+import {SvgNoPermission, SvgNotFound, SvgServiceError} from "@/components";
+import {routeName} from "@/router";
 
 type ExceptionType = "403" | "404" | "500";
 

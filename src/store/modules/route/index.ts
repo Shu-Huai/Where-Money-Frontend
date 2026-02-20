@@ -1,8 +1,8 @@
-import type { Router } from "vue-router";
-import { defineStore } from "pinia";
-import { transformAuthRouteToMenu, transformRouteToList } from "@/utils";
-import { sidebarRoutes } from "@/router/routes";
-import type { GlobalMenuOption } from "@/interface";
+import type {Router} from "vue-router";
+import {defineStore} from "pinia";
+import {transformAuthRouteToMenu, transformRouteToList} from "@/utils";
+import {sidebarRoutes} from "@/router/routes";
+import type {GlobalMenuOption} from "@/interface";
 
 interface RouteState {
     /** 是否添加过动态路由 */

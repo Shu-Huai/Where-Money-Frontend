@@ -1,6 +1,7 @@
-import type { App } from "vue";
+import type {App} from "vue";
 import {
     create,
+    NAlert,
     NBreadcrumb,
     NBreadcrumbItem,
     NButton,
@@ -43,7 +44,6 @@ import {
     NMenu,
     NMessageProvider,
     NModal,
-    NAlert,
     NNotificationProvider,
     NPagination,
     NPopover,

@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="space-y-10">
-            <n-scrollbar class="h-50 lg:h-70">
-                <n-spin v-if="isLoading" class="flex items-center h-50 lg:h-70"></n-spin>
-                <div class="grid grid-cols-6 lg:grid-cols-10 lg:gap-4 gap-1">
+            <n-scrollbar class="h-50 xl:h-70 lg:h-40">
+                <n-spin v-if="isLoading" class="flex items-center h-50 xl:h-70 lg:h-40"></n-spin>
+                <div class="grid grid-cols-6 xl:grid-cols-10 xl:gap-4 gap-1 lg:grid-cols-10 lg:gap-2">
                     <BillCategoryItem v-for="item in billCategoryList" :billCategory="item"></BillCategoryItem>
-                    <n-button class="w-full h-12 my-auto" strong secondary type="primary"
+                    <n-button class="w-full h-12 my-auto" secondary strong type="primary"
                               v-on:click="openCategoryManager">管理
                     </n-button>
                 </div>
@@ -13,12 +13,13 @@
             <n-modal v-model:show="showUpdateModal">
                 <n-card class="w-[92vw] max-w-[980px]">
                     <template #header>
-                        <div class="flex gap-2 flex-row xl:items-center xl:justify-between">
+                        <div
+                            class="flex gap-2 flex-row xl:items-center xl:justify-between lg:items-center lg:justify-between">
                             <div class="space-y-1">
                                 <div class="text-base font-semibold">分类管理</div>
                             </div>
                             <div class="flex items-center gap-2">
-                                <n-button size="small" secondary v-on:click="refreshBillCategoryList(true)">
+                                <n-button secondary size="small" v-on:click="refreshBillCategoryList(true)">
                                     刷新
                                 </n-button>
                             </div>
@@ -32,10 +33,11 @@
                     </template>
 
                     <template #default>
-                        <div class="flex flex-col gap-4 h-[70vh] xl:h-auto xl:grid xl:grid-cols-3 xl:gap-4">
+                        <div
+                            class="flex flex-col gap-4 h-[70vh] xl:h-auto xl:grid xl:grid-cols-3 xl:gap-4 lg:h-auto lg:grid lg:grid-cols-3 lg:gap-4">
                             <div
+                                :class="editingCategoryId ? 'max-h-16 overflow-hidden xl:max-h-none xl:overflow-visible lg:max-h-none lg:overflow-visible' : 'max-h-none'"
                                 class="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3 flex-none transition-[max-height] duration-200"
-                                :class="editingCategoryId ? 'max-h-16 overflow-hidden xl:max-h-none xl:overflow-visible' : 'max-h-none'"
                             >
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm font-semibold">新增分类</div>
@@ -44,18 +46,19 @@
                                 <div class="space-y-2">
                                     <n-input
                                         v-model:value="addCategoryForm.name"
-                                        placeholder="分类名称"
                                         clearable
+                                        placeholder="分类名称"
                                     />
-                                    <div class="flex flex-col xl:flex-row xl:items-center gap-2">
+                                    <div
+                                        class="flex flex-col xl:flex-row xl:items-center gap-2 lg:flex-row lg:items-center">
                                         <n-input
                                             v-model:value="addCategoryForm.svg"
-                                            class="w-full xl:flex-1"
-                                            placeholder="图标（Iconify 名称，可空）"
+                                            class="w-full xl:flex-1 lg:flex-1"
                                             clearable
+                                            placeholder="图标（Iconify 名称，可空）"
                                         />
                                         <div class="flex items-center gap-2">
-                                            <n-button size="small" secondary v-on:click="openIconPicker('add')">
+                                            <n-button secondary size="small" v-on:click="openIconPicker('add')">
                                                 选择图标
                                             </n-button>
                                             <div
@@ -71,9 +74,9 @@
                                         size="small"
                                     />
                                     <n-button
+                                        :loading="addCategoryLoading"
                                         class="w-full"
                                         type="primary"
-                                        :loading="addCategoryLoading"
                                         v-on:click="addCategory"
                                     >
                                         添加
@@ -81,14 +84,14 @@
                                 </div>
                             </div>
                             <div
-                                class="xl:col-span-2 rounded-lg border border-gray-200 bg-white p-4 flex flex-col gap-3 flex-1 min-h-0 xl:flex-none">
+                                class="xl:col-span-2 rounded-lg border border-gray-200 bg-white p-4 flex flex-col gap-3 flex-1 min-h-0 xl:flex-none lg:col-span-2 lg:flex-none">
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm font-semibold">已有分类</div>
                                     <div class="text-xs text-gray-500">共 {{ billCategoryList.length }} 项</div>
                                 </div>
                                 <n-spin :show="isManageLoading" class="flex-1 min-h-0">
-                                    <n-scrollbar class="xl:max-h-96 pr-2"
-                                                 :class="editingCategoryId ? 'max-h-100 ':'max-h-50 '">
+                                    <n-scrollbar :class="editingCategoryId ? 'max-h-100 ':'max-h-50 '"
+                                                 class="xl:max-h-96 pr-2 lg:max-h-96">
                                         <div v-if="billCategoryList.length === 0"
                                              class="text-center text-sm text-gray-500 py-6">
                                             暂无分类
@@ -112,12 +115,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex items-center gap-2 shrink-0">
-                                                    <n-button size="small" secondary
+                                                    <n-button secondary size="small"
                                                               v-on:click="startEditCategory(item)">
                                                         编辑
                                                     </n-button>
-                                                    <n-button size="small" type="error" ghost
-                                                              :loading="deletingCategoryId === item.id"
+                                                    <n-button :loading="deletingCategoryId === item.id" ghost size="small"
+                                                              type="error"
                                                               v-on:click="deleteCategory(item)">
                                                         删除
                                                     </n-button>
@@ -125,21 +128,23 @@
                                             </div>
                                             <div v-if="editingCategoryId === item.id"
                                                  class="space-y-2 pt-2 border-t border-dashed border-gray-200">
-                                                <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
+                                                <div
+                                                    class="grid grid-cols-1 xl:grid-cols-2 gap-2 lg:grid-cols-2 lg:gap-2">
                                                     <n-input
                                                         v-model:value="editCategoryForm.name"
                                                         :placeholder="`名称（当前：${item.billCategoryName}）`"
                                                         clearable
                                                     />
-                                                    <div class="flex flex-col xl:flex-row xl:items-center gap-2">
+                                                    <div
+                                                        class="flex flex-col xl:flex-row xl:items-center gap-2 lg:flex-row lg:items-center">
                                                         <n-input
                                                             v-model:value="editCategoryForm.svg"
-                                                            class="w-full xl:flex-1"
                                                             :placeholder="`图标（当前：${item.svg || '无'}）`"
+                                                            class="w-full xl:flex-1 lg:flex-1"
                                                             clearable
                                                         />
                                                         <div class="flex items-center gap-2">
-                                                            <n-button size="small" secondary
+                                                            <n-button secondary size="small"
                                                                       v-on:click="openIconPicker('edit')">
                                                                 选择图标
                                                             </n-button>
@@ -152,7 +157,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
+                                                <div
+                                                    class="grid grid-cols-1 xl:grid-cols-2 gap-2 lg:grid-cols-2 lg:gap-2">
                                                     <n-select
                                                         v-model:value="editCategoryForm.type"
                                                         :options="categoryTypeOptions"
@@ -160,13 +166,13 @@
                                                         clearable
                                                     />
                                                     <div
-                                                        class="text-xs text-gray-500 flex items-center xl:justify-end">
+                                                        class="text-xs text-gray-500 flex items-center xl:justify-end lg:justify-end">
                                                         留空将提交 null
                                                     </div>
                                                 </div>
                                                 <div class="flex items-center gap-2">
-                                                    <n-button size="small" type="primary"
-                                                              :loading="editCategoryLoading"
+                                                    <n-button :loading="editCategoryLoading" size="small"
+                                                              type="primary"
                                                               v-on:click="applyEditCategory(item)">
                                                         保存
                                                     </n-button>
@@ -226,9 +232,9 @@
                         </n-button>
                     </div>
                     <div class="col-span-2 lg:col-span-1">
-                        <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
-                                       type="datetime" :update-value-on-close="true"
-                                       :time-picker-props="timePickerProps"/>
+                        <n-date-picker v-model:value="timestamp" :input-readonly="true" :time-picker-props="timePickerProps"
+                                       :update-value-on-close="true" placement="top-start"
+                                       type="datetime"/>
                     </div>
                 </div>
                 <div class="flex space-x-2">
@@ -268,7 +274,7 @@
                             <n-radio-group v-if="!isAssetLoading" v-model:value="assetSelector"
                                            class="space-y-4 asset-radio-group w-full">
                                 <div v-for="item in assetList" class="w-full">
-                                    <n-radio v-bind:key="item.id" v-bind:value="item.assetName" class="w-full">
+                                    <n-radio v-bind:key="item.id" class="w-full" v-bind:value="item.assetName">
                                         <div class="flex items-center w-full gap-2">
                                             <div class="flex items-center gap-2 min-w-0 flex-1">
                                                 <Icon :icon="item.svg" class="text-primary w-8 h-8 shrink-0"/>

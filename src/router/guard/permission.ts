@@ -1,7 +1,7 @@
-import type { NavigationGuardNext, RouteLocationNormalized, Router } from "vue-router";
-import { routeName } from "@/router";
-import { exeStrategyActions, storage } from "@/utils";
-import { useRouteStore } from "@/store";
+import type {NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
+import {routeName} from "@/router";
+import {exeStrategyActions, storage} from "@/utils";
+import {useRouteStore} from "@/store";
 import {EnumStorageKey} from "@/enum";
 
 async function createDynamicRouteGuard(
@@ -25,7 +25,7 @@ export async function createPermissionGuard(
     if (!permission) return;
     if (to.meta.href) {
         window.open(to.meta.href as any);
-        next({ path: from.fullPath, replace: true, query: from.query });
+        next({path: from.fullPath, replace: true, query: from.query});
         return;
     }
     const token = storage.get(EnumStorageKey["token"]);
@@ -34,7 +34,7 @@ export async function createPermissionGuard(
         [
             (to.name === routeName("login") && token != null),
             () => {
-                next({ name: routeName("root") });
+                next({name: routeName("root")});
             }
         ],
         [
@@ -47,7 +47,7 @@ export async function createPermissionGuard(
             token == null && needLogin,
             () => {
                 const redirect = to.fullPath;
-                next({ name: routeName("login"), query: { redirect } });
+                next({name: routeName("login"), query: {redirect}});
             }
         ],
         [

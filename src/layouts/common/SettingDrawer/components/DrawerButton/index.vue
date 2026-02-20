@@ -5,13 +5,13 @@
         type="primary"
         @click="app.toggleSettingdrawerVisible"
     >
-        <icon-ant-design:close-outlined v-if="app.settingDrawerVisible" class="text-24px" />
-        <icon-ant-design:setting-outlined v-else class="text-24px" />
+        <icon-ant-design:close-outlined v-if="app.settingDrawerVisible" class="text-24px"/>
+        <icon-ant-design:setting-outlined v-else class="text-24px"/>
     </n-button>
 </template>
 
 <script lang="ts" setup>
-import { useAppStore } from "@/store";
+import {useAppStore} from "@/store";
 
 const app = useAppStore();
 </script>

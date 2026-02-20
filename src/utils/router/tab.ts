@@ -1,6 +1,6 @@
-import { EnumStorageKey } from "@/enum";
-import type { GlobalTabRoute } from "@/interface";
-import { getLocal, setLocal } from "../storages";
+import {EnumStorageKey} from "@/enum";
+import type {GlobalTabRoute} from "@/interface";
+import {getLocal, setLocal} from "../storages";
 
 /** 缓存多页签数据 */
 export function setTabRoutes(data: GlobalTabRoute[]) {

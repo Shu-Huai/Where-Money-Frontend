@@ -1,5 +1,5 @@
-import type { GlobalMenuOption } from "@/interface";
-import { iconifyRender } from "@/utils";
+import type {GlobalMenuOption} from "@/interface";
+import {iconifyRender} from "@/utils";
 
 /** 路由不转换菜单 */
 function hideInMenu(route: AuthRoute.Route) {
@@ -8,12 +8,12 @@ function hideInMenu(route: AuthRoute.Route) {
 
 /** 给菜单添加可选属性 */
 function addPartialProps(menuItem: GlobalMenuOption, icon?: string, children?: GlobalMenuOption[]) {
-    const item = { ...menuItem };
+    const item = {...menuItem};
     if (icon) {
-        Object.assign(item, { icon: iconifyRender(icon) });
+        Object.assign(item, {icon: iconifyRender(icon)});
     }
     if (children) {
-        Object.assign(item, { children });
+        Object.assign(item, {children});
     }
     return item;
 }
@@ -25,7 +25,7 @@ function addPartialProps(menuItem: GlobalMenuOption, icon?: string, children?: G
 export function transformAuthRouteToMenu(routes: AuthRoute.Route[]): GlobalMenuOption[] {
     const globalMenu: GlobalMenuOption[] = [];
     routes.forEach(route => {
-        const { name, path, meta } = route;
+        const {name, path, meta} = route;
         const routeName = name as string;
         let menuChildren: GlobalMenuOption[] | undefined;
         if (route.children) {

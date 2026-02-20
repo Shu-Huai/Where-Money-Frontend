@@ -2,7 +2,7 @@
     <n-divider title-placement="center">界面功能</n-divider>
     <n-space size="large" vertical>
         <setting-menu label="固定头部和多页签">
-            <n-switch :value="theme.fixedHeaderAndTab" @update:value="theme.setIsFixedHeaderAndTab" />
+            <n-switch :value="theme.fixedHeaderAndTab" @update:value="theme.setIsFixedHeaderAndTab"/>
         </setting-menu>
         <setting-menu label="顶部菜单位置">
             <n-select
@@ -32,7 +32,7 @@
             />
         </setting-menu>
         <setting-menu label="多页签缓存">
-            <n-switch :value="theme.tab.isCache" @update:value="theme.setTabIsCache" />
+            <n-switch :value="theme.tab.isCache" @update:value="theme.setTabIsCache"/>
         </setting-menu>
         <setting-menu label="侧边栏展开宽度">
             <n-input-number
@@ -53,13 +53,13 @@
             />
         </setting-menu>
         <setting-menu label="固定底部">
-            <n-switch :value="theme.footer.fixed" @update:value="theme.setFooterIsFixed" />
+            <n-switch :value="theme.footer.fixed" @update:value="theme.setFooterIsFixed"/>
         </setting-menu>
     </n-space>
 </template>
 
 <script lang="ts" setup>
-import { useThemeStore } from "@/store";
+import {useThemeStore} from "@/store";
 import SettingMenu from "../SettingMenu/index.vue";
 
 const theme = useThemeStore();

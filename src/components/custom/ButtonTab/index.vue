@@ -10,15 +10,15 @@
       <slot></slot>
     </span>
         <div v-if="closable" class="pl-10px">
-            <icon-close :is-active="isIconActive" :primary-color="primaryColor" @click="handleClose" />
+            <icon-close :is-active="isIconActive" :primary-color="primaryColor" @click="handleClose"/>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useBoolean } from "@/hooks";
-import { addColorAlpha } from "@/utils";
+import {computed} from "vue";
+import {useBoolean} from "@/hooks";
+import {addColorAlpha} from "@/utils";
 import IconClose from "../IconClose/index.vue";
 
 interface Props {
@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>();
 
-const { bool: isHover, setTrue, setFalse } = useBoolean();
+const {bool: isHover, setTrue, setFalse} = useBoolean();
 
 const isIconActive = computed(() => props.isActive || isHover.value);
 

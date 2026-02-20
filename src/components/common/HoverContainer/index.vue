@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import type { FollowerPlacement } from "vueuc";
+import {computed} from "vue";
+import type {FollowerPlacement} from "vueuc";
 
 interface Props {
     /** tooltip显示文本 */

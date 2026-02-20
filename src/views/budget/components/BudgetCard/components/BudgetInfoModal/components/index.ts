@@ -1,1 +1,1 @@
-export { default as FormItemContainer } from "./FormItemContainer/index.vue";
+export {default as FormItemContainer} from "./FormItemContainer/index.vue";

@@ -14,8 +14,8 @@ export default function useBodyScroll(duration = 300) {
     };
 
     function getInitBodyStyle() {
-        const { overflow, paddingRight } = document.body.style;
-        Object.assign(defaultStyle, { overflow, paddingRight });
+        const {overflow, paddingRight} = document.body.style;
+        Object.assign(defaultStyle, {overflow, paddingRight});
     }
 
     function setScrollBodyStyle() {

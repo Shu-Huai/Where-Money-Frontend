@@ -19,4 +19,4 @@ function formattedCurrencyWithSymbol(currency?: number) {
     return currencyFormatter.format(currency);
 }
 
-export { formattedCurrencyNoSymbol, formattedCurrencyWithSymbol };
+export {formattedCurrencyNoSymbol, formattedCurrencyWithSymbol};

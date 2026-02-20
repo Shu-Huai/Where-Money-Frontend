@@ -13,8 +13,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useThemeStore } from "@/store";
-import { LayoutCheckbox } from "./components";
+import {useThemeStore} from "@/store";
+import {LayoutCheckbox} from "./components";
 
 const theme = useThemeStore();
 </script>

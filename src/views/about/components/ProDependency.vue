@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import { pkgJson } from "../model";
+import {pkgJson} from "../model";
 
-const { dependencies } = pkgJson;
+const {dependencies} = pkgJson;
 </script>
 <style scoped></style>

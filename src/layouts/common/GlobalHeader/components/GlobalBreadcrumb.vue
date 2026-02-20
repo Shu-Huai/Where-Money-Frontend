@@ -26,25 +26,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { routePath } from "@/router";
-import { useRouteStore, useThemeStore } from "@/store";
-import { useRouterPush } from "@/composables";
-import { getBreadcrumbByRouteKey } from "@/utils";
-import type { GlobalMenuOption } from "@/interface";
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+import {routePath} from "@/router";
+import {useRouteStore, useThemeStore} from "@/store";
+import {useRouterPush} from "@/composables";
+import {getBreadcrumbByRouteKey} from "@/utils";
+import type {GlobalMenuOption} from "@/interface";
 
 const route = useRoute();
 const theme = useThemeStore();
 const routeStore = useRouteStore();
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 
 const breadcrumbs = computed(() =>
     getBreadcrumbByRouteKey(route.name as string, routeStore.menus as GlobalMenuOption[], routePath("root"))
 );
 
 function dropdownSelect(key: string) {
-    routerPush({ name: key });
+    routerPush({name: key});
 }
 </script>
 <style scoped></style>

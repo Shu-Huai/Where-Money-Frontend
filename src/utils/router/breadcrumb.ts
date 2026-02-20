@@ -1,4 +1,4 @@
-import type { GlobalBreadcrumb, GlobalMenuOption } from "@/interface";
+import type {GlobalBreadcrumb, GlobalMenuOption} from "@/interface";
 
 /**
  * 获取面包屑数据

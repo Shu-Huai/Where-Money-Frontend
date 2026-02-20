@@ -1,5 +1,5 @@
-import { nextTick } from "vue";
-import { defineStore } from "pinia";
+import {nextTick} from "vue";
+import {defineStore} from "pinia";
 
 interface AppState {
     /** 重载页面(控制页面的显示) */
@@ -35,7 +35,7 @@ export const useAppStore = defineStore("app-store", {
                 this.reloadFlag = true;
             }
             setTimeout(() => {
-                document.documentElement.scrollTo({ left: 0, top: 0 });
+                document.documentElement.scrollTo({left: 0, top: 0});
             }, 100);
         },
         /** 打开设置抽屉 */

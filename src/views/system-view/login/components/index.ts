@@ -1,3 +1,3 @@
 import LoginBg from "./LoginBg/index.vue";
 
-export { LoginBg };
+export {LoginBg};

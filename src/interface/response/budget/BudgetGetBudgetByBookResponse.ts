@@ -1,5 +1,5 @@
-import { Budget } from "@/interface/schemas";
+import {Budget} from "@/interface/schemas";
 
 export interface BudgetGetBudgetByBookResponse {
     budgetList: Budget[];
-};
+}

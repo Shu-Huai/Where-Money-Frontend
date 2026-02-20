@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import type { FollowerPlacement } from "vueuc";
-import { EnumThemeLayoutMode } from "@/enum";
-import type { ThemeLayoutMode } from "@/interface";
+import {computed} from "vue";
+import type {FollowerPlacement} from "vueuc";
+import {EnumThemeLayoutMode} from "@/enum";
+import type {ThemeLayoutMode} from "@/interface";
 
 interface Props {
     /** 布局模式 */

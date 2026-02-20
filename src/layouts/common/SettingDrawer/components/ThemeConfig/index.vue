@@ -1,6 +1,6 @@
 <template>
     <n-divider title-placement="center">主题配置</n-divider>
-    <textarea id="themeConfigCopyTarget" v-model="dataClipboardText" class="absolute opacity-0" />
+    <textarea id="themeConfigCopyTarget" v-model="dataClipboardText" class="absolute opacity-0"/>
     <n-space vertical>
         <div ref="copyRef" data-clipboard-target="#themeConfigCopyTarget">
             <n-button :block="true" type="primary">拷贝当前配置</n-button>
@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import Clipboard from "clipboard";
-import { useThemeStore } from "@/store";
+import {useThemeStore} from "@/store";
 
 const theme = useThemeStore();
 
@@ -45,7 +45,7 @@ const stopHandle = watch(
     () => {
         dataClipboardText.value = getClipboardText();
     },
-    { deep: true }
+    {deep: true}
 );
 
 onMounted(() => {

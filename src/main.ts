@@ -1,7 +1,7 @@
-import { createApp } from "vue";
-import { setupAssets, setupNaiveUI } from "@/plugins";
-import { setupRouter } from "@/router";
-import { setupStore } from "@/store";
+import {createApp} from "vue";
+import {setupAssets, setupNaiveUI} from "@/plugins";
+import {setupRouter} from "@/router";
+import {setupStore} from "@/store";
 import App from "./App.vue";
 
 async function setupApp() {
