@@ -1,5 +1,5 @@
-import { EnumThemeAnimateMode, EnumThemeHorizontalMenuPosition, EnumThemeLayoutMode, EnumThemeTabMode } from "@/enum";
-import type { ThemeAnimateMode, ThemeHorizontalMenuPosition, ThemeLayoutMode, ThemeTabMode } from "./enum";
+import {EnumThemeAnimateMode, EnumThemeHorizontalMenuPosition, EnumThemeLayoutMode, EnumThemeTabMode} from "@/enum";
+import type {ThemeAnimateMode, ThemeHorizontalMenuPosition, ThemeLayoutMode, ThemeTabMode} from "./enum";
 
 /** 主题相关类型 */
 export interface ThemeSetting {

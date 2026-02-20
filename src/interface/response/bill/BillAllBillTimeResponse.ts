@@ -1,4 +1,5 @@
-import { BillBillResponse } from "@/interface";
+import {BillBillResponse} from "@/interface";
+
 export interface BillAllBillTimeResponse {
     billList: Array<BillBillResponse>;
 }

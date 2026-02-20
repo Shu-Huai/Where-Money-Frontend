@@ -2,20 +2,20 @@
     <n-modal
         :auto-focus="false"
         :show="showModal"
+        class="w-[calc(100vw-32px)] xl:w-500px lg:w-500px"
         display-directive="show"
         preset="card"
-        class="w-[calc(100vw-32px)] xl:w-500px"
         @close="closeModal"
         @after-enter="getAssetInfoById"
     >
         <template #header>
             <div class="flex items-end justify-between">
                 <div class="flex items-end gap-2">
-                    <span class="font-bold text-base xl:text-lg">资产信息</span>
+                    <span class="font-bold text-base xl:text-lg lg:text-lg">资产信息</span>
 
-                    <n-button size="small" text @click="canInput = true" :disabled="canInput">
+                    <n-button :disabled="canInput" size="small" text @click="canInput = true">
                         <div v-show="!canInput" class="flex items-center gap-1">
-                            <span class="text-xs xl:text-sm">修改</span>
+                            <span class="text-xs xl:text-sm lg:text-sm">修改</span>
                             <Icon height="1rem" icon="fluent:edit-48-regular" width="1rem"/>
                         </div>
                     </n-button>
@@ -27,14 +27,15 @@
             <n-form v-if="assetInfo !== undefined" :model="assetInfo">
                 <div class="flex flex-col gap-4">
                     <!-- 资产类型 -->
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产类型</div>
+                    <div
+                        class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">资产类型</div>
                         <div class="flex-1 overflow-x-auto overflow-y-hidden">
                             <n-radio-group
                                 v-model:value="assetInfo.type"
+                                class="min-w-max"
                                 name="assetTypeGroup"
                                 size="medium"
-                                class="min-w-max"
                             >
                                 <n-radio-button
                                     v-for="typeName in ['信用卡', '充值', '投资理财', '资金']"
@@ -51,17 +52,18 @@
                     </div>
 
                     <!-- 资产图标 -->
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产图标</div>
+                    <div
+                        class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">资产图标</div>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-2 flex-1">
                             <n-input
                                 v-model:value="assetInfo.svg"
                                 :disabled="!canInput"
-                                class="w-full sm:flex-1 xl:w-240px"
+                                class="w-full sm:flex-1 xl:w-240px lg:w-240px"
                                 size="medium"
                             />
                             <div class="flex items-center gap-2">
-                                <n-button size="small" secondary :disabled="!canInput" @click="openIconPicker">
+                                <n-button :disabled="!canInput" secondary size="small" @click="openIconPicker">
                                     选择图标
                                 </n-button>
                                 <Icon
@@ -74,21 +76,23 @@
                     </div>
 
                     <!-- 资产名称 -->
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">资产名称</div>
+                    <div
+                        class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">资产名称</div>
                         <div class="flex-1">
                             <n-input
                                 v-model:value="assetInfo.assetName"
                                 :disabled="!canInput"
-                                class="w-full xl:w-240px"
+                                class="w-full xl:w-240px lg:w-240px"
                                 size="medium"
                             />
                         </div>
                     </div>
 
                     <!-- 资产余额/欠款 -->
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">
+                    <div
+                        class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">
                             {{ assetInfo.type === '信用卡' ? '当前欠款（负数）' : '资产余额' }}
                         </div>
                         <div class="flex-1">
@@ -97,7 +101,7 @@
                                 :disabled="!canInput"
                                 :show-button="false"
                                 :validator="validateAssetBalance"
-                                class="w-full xl:w-240px"
+                                class="w-full xl:w-240px lg:w-240px"
                                 size="medium"
                             >
                                 <template #prefix>￥</template>
@@ -106,8 +110,9 @@
                     </div>
 
                     <!-- 计入资产总额 -->
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                        <div class="text-sm text-gray-500 xl:w-24 shrink-0">计入资产总额</div>
+                    <div
+                        class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                        <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">计入资产总额</div>
                         <div class="flex-1">
                             <n-switch
                                 v-model:value="assetInfo.inTotal"
@@ -121,15 +126,16 @@
                     <template v-if="assetInfo.type === '信用卡'">
                         <n-divider class="my-1">账单设置</n-divider>
 
-                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">总额度</div>
+                        <div
+                            class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">总额度</div>
                             <div class="flex-1">
                                 <n-input-number
                                     v-model:value="assetInfo.quota"
                                     :disabled="!canInput"
                                     :min="0"
                                     :show-button="false"
-                                    class="w-full xl:w-240px"
+                                    class="w-full xl:w-240px lg:w-240px"
                                     size="medium"
                                 >
                                     <template #prefix>￥</template>
@@ -137,15 +143,16 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">出账日</div>
+                        <div
+                            class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">出账日</div>
                             <div class="flex-1">
                                 <n-input-number
                                     v-model:value="assetInfo.billDate"
                                     :disabled="!canInput"
                                     :max="31"
                                     :min="1"
-                                    class="w-full xl:w-240px text-center"
+                                    class="w-full xl:w-240px text-center lg:w-240px"
                                     size="medium"
                                 >
                                     <template #prefix>每月</template>
@@ -154,15 +161,16 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col xl:flex-row xl:items-center xl:gap-4">
-                            <div class="text-sm text-gray-500 xl:w-24 shrink-0">还款日</div>
+                        <div
+                            class="flex flex-col xl:flex-row xl:items-center xl:gap-4 lg:flex-row lg:items-center lg:gap-4">
+                            <div class="text-sm text-gray-500 xl:w-24 shrink-0 lg:w-24">还款日</div>
                             <div class="flex-1">
                                 <n-input-number
                                     v-model:value="assetInfo.repayDate"
                                     :disabled="!canInput"
                                     :max="31"
                                     :min="1"
-                                    class="w-full xl:w-240px text-center"
+                                    class="w-full xl:w-240px text-center lg:w-240px"
                                     size="medium"
                                 >
                                     <template #prefix>每月</template>
@@ -184,7 +192,7 @@
             </n-form>
         </template>
     </n-modal>
-    <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected" />
+    <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected"/>
 </template>
 
 <script lang="ts" setup>

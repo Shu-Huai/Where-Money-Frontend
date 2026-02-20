@@ -4,9 +4,9 @@
              v-on:click="setChosen">
             <div>
                 <Icon :icon="billCategory.svg || 'icon-park-outline:tag'"
-                      class="text-primary lg:w-8 lg:h-8 m-auto h-5 w-5"/>
+                      class="text-primary xl:w-8 xl:h-8 m-auto h-5 w-5 lg:w-6 lg:h-6"/>
             </div>
-            <div class="text-xs lg:text-base">
+            <div class="text-xs xl:text-base lg:text-sm">
                 {{ billCategory.billCategoryName }}
             </div>
         </div>
@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue";
-import { Ref, ref, watch } from "vue";
-import { useStore } from "@/stores/store";
+import {Icon} from "@iconify/vue";
+import {Ref, ref, watch} from "vue";
+import {useStore} from "@/stores/store";
 
 let store = useStore();
 const props: any = defineProps({

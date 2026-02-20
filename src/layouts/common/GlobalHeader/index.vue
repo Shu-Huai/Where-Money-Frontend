@@ -8,13 +8,13 @@
                 v-if="showLogo"
                 :show-title="true"
                 :style="{ width: theme.sider.width + 'px' }"
-                class="h-full shrink-0 hidden xl:flex"
+                class="h-full shrink-0 hidden xl:flex lg:flex"
             />
 
             <div v-if="!showHeaderMenu" class="flex items-center flex-1 min-w-0">
                 <menu-collapse v-if="showMenuCollape" class="shrink-0"/>
                 <!-- 面包屑移动端先隐藏，避免把右侧挤没 -->
-                <global-breadcrumb v-if="theme.header.crumb.visible" class="xl:flex min-w-0"/>
+                <global-breadcrumb v-if="theme.header.crumb.visible" class="xl:flex lg:flex min-w-0"/>
             </div>
 
             <div
@@ -30,63 +30,66 @@
         <div class="flex items-center gap-2 shrink-0">
             <n-select
                 v-model:value="bookId"
-                :options="bookList as any"
-                class="w-30 xl:w-50"
                 :consistent-menu-width="false"
+                :options="bookList as any"
+                class="w-30 xl:w-50 lg:w-50"
                 size="small"
                 @update:value="changeBook"
             >
                 <template #action>
-                    <n-button class="w-full xl:w-auto" @click.stop="addBook">
+                    <n-button class="w-full xl:w-auto lg:w-auto" @click.stop="addBook">
                         <Icon icon="material-symbols:add"/>
-                        <span class="hidden xl:inline">添加账本</span>
-                        <span class="xl:hidden">新增</span>
+                        <span class="hidden xl:inline lg:inline">添加账本</span>
+                        <span class="xl:hidden lg:hidden">新增</span>
                     </n-button>
-                    <n-button class="w-full xl:w-auto mt-2 xl:mt-0 xl:ml-2" @click.stop="showDeleteModal = true">
+                    <n-button class="w-full xl:w-auto mt-2 xl:mt-0 xl:ml-2 lg:w-auto lg:mt-0 lg:ml-2"
+                              @click.stop="showDeleteModal = true">
                         <Icon icon="material-symbols:delete"/>
-                        <span class="hidden xl:inline">删除账本</span>
-                        <span class="xl:hidden">删除</span>
+                        <span class="hidden xl:inline lg:inline">删除账本</span>
+                        <span class="xl:hidden lg:hidden">删除</span>
                     </n-button>
-                    <n-modal v-model:show="showDeleteModal" class="w-4/5 xl:w-1/6">
+                    <n-modal v-model:show="showDeleteModal" class="w-4/5 xl:w-1/6 lg:w-1/4">
                         <n-card class="w-full">
                             <template #header>
                                 <div>删除账本</div>
                             </template>
                             <template #default>
                                 <div>确定删除账本 {{ bookList.find((item) => item.id === bookId)?.title }} 吗？</div>
-                                <div class="mt-3 flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-yellow-700">
-                                    <Icon icon="material-symbols:warning-rounded" class="text-18px"/>
+                                <div
+                                    class="mt-3 flex items-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-yellow-700">
+                                    <Icon class="text-18px" icon="material-symbols:warning-rounded"/>
                                     <span class="text-sm">该操作不可恢复</span>
                                 </div>
                             </template>
                             <template #footer>
                                 <n-button class="w-full" type="default" @click="deleteBook">确定</n-button>
-                                <n-button class="w-full mt-2" type="primary" @click="showDeleteModal = false">取消</n-button>
+                                <n-button class="w-full mt-2" type="primary" @click="showDeleteModal = false">取消
+                                </n-button>
                             </template>
                         </n-card>
                     </n-modal>
-                    <n-modal :mask-closable="false" v-model:show="showAdd" class="w-4/5 xl:w-1/6">
+                    <n-modal v-model:show="showAdd" :mask-closable="false" class="w-4/5 xl:w-1/6 lg:w-1/4">
                         <n-card id="drawer-target" class="w-full">
                             <template #header>
                                 <div>新增账本</div>
                             </template>
                             <template #header-extra>
                                 <Icon
-                                    icon="icon-park-outline:close"
                                     class="cursor-pointer h-4 w-4"
+                                    icon="icon-park-outline:close"
                                     v-bind:class="{ 'text-primary': mouseOnClose }"
+                                    v-on:click="showAdd = false"
                                     v-on:mouseenter="mouseOnClose = true"
                                     v-on:mouseleave="mouseOnClose = false"
-                                    v-on:click="showAdd = false"
                                 />
                             </template>
 
                             <template #default>
                                 <n-form ref="formRef" :model="model" :rules="rules">
-                                    <n-form-item path="title" label="账本名称：">
+                                    <n-form-item label="账本名称：" path="title">
                                         <n-input v-model:value="model.title" @keydown.enter.prevent/>
                                     </n-form-item>
-                                    <n-form-item path="beginDate" label="开始日期：">
+                                    <n-form-item label="开始日期：" path="beginDate">
                                         <n-input v-model:value="model.beginDate" @keydown.enter.prevent/>
                                     </n-form-item>
                                 </n-form>
@@ -104,8 +107,8 @@
                 <div class="flex items-center gap-2">
                     <Icon :icon="'ri:calendar-2-fill'" class="text-16px"/>
                     <!-- 手机端只显示 MM-DD，桌面显示 YYYY-MM-DD -->
-                    <span class="text-sm xl:hidden">{{ nowDate.slice(5) }}</span>
-                    <span class="text-base hidden xl:inline">{{ nowDate }}</span>
+                    <span class="text-sm xl:hidden lg:hidden">{{ nowDate.slice(5) }}</span>
+                    <span class="text-base hidden xl:inline lg:inline">{{ nowDate }}</span>
                 </div>
                 <hover-container class="w-8 h-full" tooltip-content="退出" @click="showExitModal = true">
                     <Icon :icon="'ri:logout-box-r-line'" class="text-16px"/>
@@ -140,10 +143,10 @@ import {storage} from "@/utils";
 import type {Book, BookGetAllBookResponse, GlobalHeaderProps} from "@/interface";
 import {useStore} from "@/stores/store";
 import GlobalLogo from "../GlobalLogo/index.vue";
-import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode} from "./components";
+import {GlobalBreadcrumb, HeaderMenu, MenuCollapse} from "./components";
 import {Icon} from "@iconify/vue";
 import {dateToString, now} from "@/utils/dateComputer";
-import {addBookApi, getAllBookApi, deleteBookApi} from "@/apis";
+import {addBookApi, deleteBookApi, getAllBookApi} from "@/apis";
 import {EnumStorageKey} from "@/enum";
 
 const {routerPush, routerBack} = useRouterPush();

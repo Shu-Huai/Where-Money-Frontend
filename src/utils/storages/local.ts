@@ -1,4 +1,4 @@
-import { decrypto, encrypto } from "../crypto";
+import {decrypto, encrypto} from "../crypto";
 
 interface StorageData {
     value: unknown;
@@ -9,7 +9,7 @@ interface StorageData {
 const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
 
 export function setLocal(key: string, value: unknown, expire: number | null = DEFAULT_CACHE_TIME) {
-    const storageData: StorageData = { value, expire: expire !== null ? new Date().getTime() + expire * 1000 : null };
+    const storageData: StorageData = {value, expire: expire !== null ? new Date().getTime() + expire * 1000 : null};
     const json = encrypto(storageData);
     window.localStorage.setItem(key, json);
 }
@@ -24,7 +24,7 @@ export function getLocal<T>(key: string) {
             // 防止解析失败
         }
         if (storageData) {
-            const { value, expire } = storageData;
+            const {value, expire} = storageData;
             // 在有效期内直接返回
             if (expire === null || expire >= Date.now()) {
                 return value as T;

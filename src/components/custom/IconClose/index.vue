@@ -6,14 +6,14 @@
         @mouseleave="setFalse"
     >
         <transition name="fade">
-            <icon-mdi:close-circle v-if="isHover" key="hover" class="absolute" />
-            <icon-mdi:close v-else key="unhover" class="absolute" />
+            <icon-mdi:close-circle v-if="isHover" key="hover" class="absolute"/>
+            <icon-mdi:close v-else key="unhover" class="absolute"/>
         </transition>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { useBoolean } from "@/hooks";
+import {useBoolean} from "@/hooks";
 
 interface Props {
     /** 激活状态 */
@@ -30,6 +30,6 @@ withDefaults(defineProps<Props>(), {
     defaultColor: "#9ca3af"
 });
 
-const { bool: isHover, setTrue, setFalse } = useBoolean();
+const {bool: isHover, setTrue, setFalse} = useBoolean();
 </script>
 <style scoped></style>

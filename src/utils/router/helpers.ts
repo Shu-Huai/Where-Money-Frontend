@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from "vue-router";
-import { getLayoutComponent, getViewComponent } from "./component";
+import type {RouteRecordRaw} from "vue-router";
+import {getLayoutComponent, getViewComponent} from "./component";
 
 type ComponentAction = Record<AuthRoute.RouteComponent, () => void>;
 
@@ -33,16 +33,16 @@ export function transformRouteToList(routes: AuthRoute.Route[], treeMap: AuthRou
 function transformAuthRouteToVueRoute(item: AuthRoute.Route) {
     const resultRoute: RouteRecordRaw[] = [];
 
-    const itemRoute = { ...item } as RouteRecordRaw;
+    const itemRoute = {...item} as RouteRecordRaw;
 
     // 动态path
     if (hasDynamicPath(item)) {
-        Object.assign(itemRoute, { path: item.meta.dynamicPath });
+        Object.assign(itemRoute, {path: item.meta.dynamicPath});
     }
 
     // 外链路由
     if (hasHref(item)) {
-        Object.assign(itemRoute, { component: getViewComponent("not-found-page") });
+        Object.assign(itemRoute, {component: getViewComponent("not-found-page")});
     }
 
     // 路由组件
@@ -57,7 +57,7 @@ function transformAuthRouteToVueRoute(item: AuthRoute.Route) {
             multi() {
                 // 多级路由一定有子路由
                 if (hasChildren(item)) {
-                    Object.assign(itemRoute, { meta: { ...itemRoute.meta, multi: true } });
+                    Object.assign(itemRoute, {meta: {...itemRoute.meta, multi: true}});
                     delete itemRoute.component;
                 } else {
                     console.log("多级路由缺少子路由: ", item);

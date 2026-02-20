@@ -1,11 +1,11 @@
 <template>
     <div :style="{ backgroundColor: color }" class="flex-center w-20px h-20px rounded-2px shadow cursor-pointer">
-        <icon-ic-outline-check v-if="checked" :class="[iconClass, isWhite ? 'text-gray-700' : 'text-white']" />
+        <icon-ic-outline-check v-if="checked" :class="[iconClass, isWhite ? 'text-gray-700' : 'text-white']"/>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import {computed} from "vue";
 
 interface Props {
     /** 颜色 */

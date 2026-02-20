@@ -23,4 +23,4 @@ function updateAsset(params: { assetId: number, [key: string]: any }): any {
     return http.patch("asset/asset", params);
 }
 
-export { addAsset, getAllAsset, getAssetApi, getDayStatistic, updateAsset };
+export {addAsset, getAllAsset, getAssetApi, getDayStatistic, updateAsset};

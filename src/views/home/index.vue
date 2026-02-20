@@ -1,95 +1,124 @@
 <template>
     <div>
-        <div class="xl:flex xl:space-x-5 space-y-5 xl:space-y-0">
-            <div class="xl:w-7/20 space-y-5">
-                <div class="xl:flex xl:space-x-3 space-y-3 xl:space-y-0">
-                    <div class="xl:w-1/2">
-                        <MonthStatistic v-bind:amount="balanceMonth" type="balance">
-                        </MonthStatistic>
+        <div class="space-y-5 lg:flex lg:gap-5 lg:space-y-0 xl:flex xl:space-x-5 xl:gap-0">
+            <div class="space-y-5 lg:w-1/2 xl:contents xl:space-y-0 xl:space-x-5">
+                <div class="xl:w-7/20 xl:order-1 space-y-5">
+                    <div class="xl:flex xl:space-x-3 space-y-3 xl:space-y-0 lg:flex lg:space-x-3 lg:space-y-0">
+                        <div class="xl:w-1/2 lg:w-1/2">
+                            <MonthStatistic type="balance" v-bind:amount="balanceMonth">
+                            </MonthStatistic>
+                        </div>
+                        <div class="xl:w-1/2 space-y-3 lg:w-1/2">
+                            <MonthStatistic type="pay" v-bind:amount="payMonth">
+                            </MonthStatistic>
+                            <MonthStatistic type="income" v-bind:amount="incomeMonth">
+                            </MonthStatistic>
+                        </div>
                     </div>
-                    <div class="xl:w-1/2 space-y-3">
-                        <MonthStatistic v-bind:amount="payMonth" type="pay">
-                        </MonthStatistic>
-                        <MonthStatistic v-bind:amount="incomeMonth" type="income">
-                        </MonthStatistic>
-                    </div>
-                </div>
-                <n-card class="rounded-xl xl:h-125">
-                    <template #default>
-                        <n-config-provider :date-locale="dateZhCNSingleWeekday">
-                            <n-calendar @panel-change="changeMonth" class="xl:h-105 h-85">
-                                <template #default="{ year, month, date }">
-                                    <n-popover
-                                        trigger="manual"
-                                        placement="bottom"
-                                        :show-arrow="false"
-                                        :show="activePopoverKey === getCellStat(year, month, date).key"
-                                        :disabled="getCellStat(year, month, date).pay === 0 && getCellStat(year, month, date).income === 0"
-                                        :on-clickoutside="closeDayPopover"
-                                    >
-                                        <template #trigger>
-                                            <div class="w-full pt-1" v-on:click="openDayPopover(year, month, date)">
-                                                <!-- 手机：只显示点 -->
-                                                <div class="flex items-center gap-1 xl:hidden">
+                    <n-card class="rounded-xl xl:h-125">
+                        <template #default>
+                            <n-config-provider :date-locale="dateZhCNSingleWeekday">
+                                <n-calendar class="xl:h-105 h-85" @panel-change="changeMonth">
+                                    <template #default="{ year, month, date }">
+                                        <n-popover
+                                            :disabled="getCellStat(year, month, date).pay === 0 && getCellStat(year, month, date).income === 0"
+                                            :on-clickoutside="closeDayPopover"
+                                            :show="activePopoverKey === getCellStat(year, month, date).key"
+                                            :show-arrow="false"
+                                            placement="bottom"
+                                            trigger="manual"
+                                        >
+                                            <template #trigger>
+                                                <div class="w-full pt-1" v-on:click="openDayPopover(year, month, date)">
+                                                    <!-- 手机：只显示点 -->
+                                                    <div class="flex items-center gap-1 xl:hidden">
                                                     <span
                                                         v-if="getCellStat(year, month, date).pay > 0"
                                                         class="h-1.5 w-1.5 rounded-full bg-red-500"
                                                     />
-                                                    <span
-                                                        v-if="getCellStat(year, month, date).income > 0"
-                                                        class="h-1.5 w-1.5 rounded-full bg-green-500"
-                                                    />
-                                                </div>
-
-                                                <!-- 电脑：显示金额 -->
-                                                <div class="hidden xl:block space-y-0.5">
-                                                    <div
-                                                        v-if="getCellStat(year, month, date).pay > 0"
-                                                        class="text-red-500 text-xs whitespace-nowrap"
-                                                    >
-                                                        -{{ fmtCalendarAmount(getCellStat(year, month, date).pay) }}
+                                                        <span
+                                                            v-if="getCellStat(year, month, date).income > 0"
+                                                            class="h-1.5 w-1.5 rounded-full bg-green-500"
+                                                        />
                                                     </div>
-                                                    <div
-                                                        v-if="getCellStat(year, month, date).income > 0"
-                                                        class="text-green-500 text-xs whitespace-nowrap"
-                                                    >
-                                                        +{{ fmtCalendarAmount(getCellStat(year, month, date).income) }}
+
+                                                    <!-- 电脑：显示金额 -->
+                                                    <div class="hidden xl:block space-y-0.5">
+                                                        <div
+                                                            v-if="getCellStat(year, month, date).pay > 0"
+                                                            class="text-red-500 text-xs whitespace-nowrap"
+                                                        >
+                                                            -{{ fmtCalendarAmount(getCellStat(year, month, date).pay) }}
+                                                        </div>
+                                                        <div
+                                                            v-if="getCellStat(year, month, date).income > 0"
+                                                            class="text-green-500 text-xs whitespace-nowrap"
+                                                        >
+                                                            +{{
+                                                                fmtCalendarAmount(getCellStat(year, month, date).income)
+                                                            }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </template>
+                                            </template>
 
-                                        <div class="text-sm leading-6">
-                                            <div class="text-xs text-gray-500">
-                                                {{ getCellStat(year, month, date).key }}
+                                            <div class="text-sm leading-6">
+                                                <div class="text-xs text-gray-500">
+                                                    {{ getCellStat(year, month, date).key }}
+                                                </div>
+                                                <div class="text-red-500">
+                                                    支出：-{{ fmtCalendarAmount(getCellStat(year, month, date).pay) }}
+                                                </div>
+                                                <div class="text-green-600">
+                                                    收入：+{{ fmtCalendarAmount(getCellStat(year, month, date).income) }}
+                                                </div>
+                                                <div>
+                                                    净额：{{
+                                                        (getCellStat(year, month, date).income - getCellStat(year, month, date).pay).toFixed(2)
+                                                    }}
+                                                </div>
                                             </div>
-                                            <div class="text-red-500">
-                                                支出：-{{ fmtCalendarAmount(getCellStat(year, month, date).pay) }}
-                                            </div>
-                                            <div class="text-green-600">
-                                                收入：+{{ fmtCalendarAmount(getCellStat(year, month, date).income) }}
-                                            </div>
-                                            <div>
-                                                净额：{{
-                                                    (getCellStat(year, month, date).income - getCellStat(year, month, date).pay).toFixed(2)
-                                                }}
-                                            </div>
-                                        </div>
-                                    </n-popover>
-                                </template>
-                            </n-calendar>
-                        </n-config-provider>
-                    </template>
-                </n-card>
+                                        </n-popover>
+                                    </template>
+                                </n-calendar>
+                            </n-config-provider>
+                        </template>
+                    </n-card>
+                </div>
+                <div class="xl:w-3/10 xl:order-3 space-y-5">
+                    <n-card class="rounded-xl">
+                        <template #header>
+                            <div>分类统计</div>
+                        </template>
+                        <template #default>
+                            <n-tabs v-model:value="pieSwitch" :animated="true" type="line" @update:value="refreshPie">
+                                <n-tab-pane name="支出" tab="支出">
+                                    <div ref="payCateRef" class="h-80">
+                                    </div>
+                                </n-tab-pane>
+                                <n-tab-pane name="收入" tab="收入">
+                                    <div ref="incomeCateRef" class="h-80">
+                                    </div>
+                                </n-tab-pane>
+                            </n-tabs>
+                        </template>
+                    </n-card>
+                    <n-card class="rounded-xl">
+                        <n-scrollbar class="max-h-120">
+                            <n-data-table :columns="cateColumns" :data="cateData">
+                            </n-data-table>
+                        </n-scrollbar>
+                    </n-card>
+                </div>
             </div>
-            <div class="xl:w-7/20 space-y-5">
+            <div class="lg:w-1/2 xl:w-7/20 xl:order-2 space-y-5">
                 <div>
                     <n-card class="rounded-xl">
                         <template #header>
                             <div>收支分布</div>
                         </template>
                         <template #default>
-                            <n-tabs type="line" :animated="true" @update:value="refreshLine" v-model:value="lineSwitch">
+                            <n-tabs v-model:value="lineSwitch" :animated="true" type="line" @update:value="refreshLine">
                                 <n-tab-pane name="支出" tab="支出">
                                     <div ref="payDayRef" class="h-80">
                                     </div>
@@ -137,41 +166,16 @@
                     </n-scrollbar>
                 </n-card>
             </div>
-            <div class="xl:w-3/10 space-y-5">
-                <n-card class="rounded-xl">
-                    <template #header>
-                        <div>分类统计</div>
-                    </template>
-                    <template #default>
-                        <n-tabs type="line" :animated="true" @update:value="refreshPie" v-model:value="pieSwitch">
-                            <n-tab-pane name="支出" tab="支出">
-                                <div ref="payCateRef" class="h-80">
-                                </div>
-                            </n-tab-pane>
-                            <n-tab-pane name="收入" tab="收入">
-                                <div ref="incomeCateRef" class="h-80">
-                                </div>
-                            </n-tab-pane>
-                        </n-tabs>
-                    </template>
-                </n-card>
-                <n-card class="rounded-xl">
-                    <n-scrollbar class="max-h-120">
-                        <n-data-table :columns="cateColumns" :data="cateData">
-                        </n-data-table>
-                    </n-scrollbar>
-                </n-card>
-            </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, h, nextTick, onMounted, Ref, ref, watch } from "vue";
-import { getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi } from "@/apis/book";
-import { useStore } from "@/stores/store";
-import { dateToString, now } from "@/utils/dateComputer";
-import { Icon } from "@iconify/vue";
-import { dateZhCN, type NDateLocale } from "naive-ui";
+import {computed, ComputedRef, h, nextTick, onMounted, Ref, ref, watch} from "vue";
+import {getBalanceMonthApi, getIncomeMonthApi, getPayMonthApi} from "@/apis/book";
+import {useStore} from "@/stores/store";
+import {dateToString, now} from "@/utils/dateComputer";
+import {Icon} from "@iconify/vue";
+import {dateZhCN, type NDateLocale} from "naive-ui";
 import {
     BillCategory,
     BillDayStatisticTimeResponse,
@@ -180,7 +184,7 @@ import {
     BookIncomeMonthResponse,
     BookPayMonthResponse
 } from "@/interface";
-import { MonthStatistic } from "@/views/components";
+import {MonthStatistic} from "@/views/components";
 import * as echarts from "echarts";
 import {
     getBillCategoryApi,
@@ -189,8 +193,8 @@ import {
     getMaxMinIncomeTimeApi,
     getMaxMinPayTimeApi
 } from "@/apis";
-import { BillCategoryStatisticTimeResponse } from "@/interface/response/bill/BillCategoryStatisticTimeResponse";
-import { useThemeStore } from "@/store";
+import {BillCategoryStatisticTimeResponse} from "@/interface/response/bill/BillCategoryStatisticTimeResponse";
+import {useThemeStore} from "@/store";
 
 const dateZhCNSingleWeekday: NDateLocale = {
     ...dateZhCN,
@@ -199,7 +203,7 @@ const dateZhCNSingleWeekday: NDateLocale = {
         localize: {
             ...dateZhCN.locale.localize,
             day: (n: any, options: any) =>
-                dateZhCN.locale.localize?.day(n, { ...options, width: "narrow" })
+                dateZhCN.locale.localize?.day(n, {...options, width: "narrow"})
         }
     } as any
 };
@@ -214,8 +218,8 @@ interface DayStatisticTime extends BillDayStatisticTimeResponse {
 interface CategoryStatisticTime extends BillCategoryStatisticTimeResponse {
 }
 
-let dayStatisticTime: Ref<DayStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
-let categoryStatisticTime: Ref<CategoryStatisticTime> = ref({ payStatistic: [], incomeStatistic: [] });
+let dayStatisticTime: Ref<DayStatisticTime> = ref({payStatistic: [], incomeStatistic: []});
+let categoryStatisticTime: Ref<CategoryStatisticTime> = ref({payStatistic: [], incomeStatistic: []});
 let lineSwitch: Ref<"支出" | "收入"> = ref("支出");
 let pieSwitch: Ref<"支出" | "收入"> = ref("支出");
 let maxPay: Ref<number> = ref(0);
@@ -275,7 +279,7 @@ onMounted(() => {
     bookId.value = store.bookId;
     if (bookId.value !== 0) {
         getData();
-        getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
+        getBillCategoryApi({bookId: bookId.value}).then((res: any) => {
             billCategory.value = res;
         }).catch(() => {
         });
@@ -285,7 +289,7 @@ watch(() => store.bookId, (newValue: number) => {
     bookId.value = newValue;
     if (bookId.value !== 0) {
         getData();
-        getBillCategoryApi({ bookId: bookId.value }).then((res: any) => {
+        getBillCategoryApi({bookId: bookId.value}).then((res: any) => {
             billCategory.value = res;
         }).catch(() => {
         });
@@ -320,7 +324,7 @@ function getBalanceMonth(): void {
 let incomeMonth: Ref<number> = ref(0);
 
 function getIncomeMonth(): void {
-    getIncomeMonthApi({ bookId: bookId.value, month: startTime.value }).then((response: BookIncomeMonthResponse) => {
+    getIncomeMonthApi({bookId: bookId.value, month: startTime.value}).then((response: BookIncomeMonthResponse) => {
         incomeMonth.value = response.amount;
     });
 }
@@ -328,7 +332,7 @@ function getIncomeMonth(): void {
 let payMonth: Ref<number> = ref(0);
 
 function getPayMonth(): void {
-    getPayMonthApi({ bookId: bookId.value, month: startTime.value }).then((response: BookPayMonthResponse) => {
+    getPayMonthApi({bookId: bookId.value, month: startTime.value}).then((response: BookPayMonthResponse) => {
         payMonth.value = response.amount;
     });
 }
@@ -350,7 +354,10 @@ function initLineChart(type: "支出" | "收入"): void {
     let lineData: Array<number> = [];
     let maxNum = 0;
     let minNum = 0;
-    (type === "支出" ? dayStatisticTime.value.payStatistic : dayStatisticTime.value.incomeStatistic).forEach((item: { day: string, amount: number }) => {
+    (type === "支出" ? dayStatisticTime.value.payStatistic : dayStatisticTime.value.incomeStatistic).forEach((item: {
+        day: string,
+        amount: number
+    }) => {
         lineData.push(item.amount);
         if (item.amount > maxNum) {
             maxNum = item.amount;
@@ -411,10 +418,10 @@ type DayAmount = { day: string; amount: number };
 const dayStatMap = computed(() => {
     const map = new Map<string, { pay: number; income: number }>();
     for (const it of dayStatisticTime.value.payStatistic as DayAmount[]) {
-        map.set(it.day, { pay: it.amount, income: 0 });
+        map.set(it.day, {pay: it.amount, income: 0});
     }
     for (const it of dayStatisticTime.value.incomeStatistic as DayAmount[]) {
-        const prev = map.get(it.day) ?? { pay: 0, income: 0 };
+        const prev = map.get(it.day) ?? {pay: 0, income: 0};
         prev.income = it.amount;
         map.set(it.day, prev);
     }
@@ -425,12 +432,12 @@ const activePopoverKey = ref<string | null>(null);
 
 function getCellStat(year: number, month: number, day: number) {
     const key = dateToString(new Date(year, month - 1, day));
-    const v = dayStatMap.value.get(key) ?? { pay: 0, income: 0 };
-    return { key, pay: v.pay ?? 0, income: v.income ?? 0 };
+    const v = dayStatMap.value.get(key) ?? {pay: 0, income: 0};
+    return {key, pay: v.pay ?? 0, income: v.income ?? 0};
 }
 
 function openDayPopover(year: number, month: number, day: number) {
-    const { key, pay, income } = getCellStat(year, month, day);
+    const {key, pay, income} = getCellStat(year, month, day);
     if (pay === 0 && income === 0) {
         activePopoverKey.value = null;
         return;
@@ -527,7 +534,7 @@ function initPieChart(type: "支出" | "收入"): void {
 }
 
 let charts: Array<any> = [];
-window.onresize = function() {
+window.onresize = function () {
     for (let i = 0; i < charts.length; i++) {
         charts[i].resize();
     }
@@ -576,8 +583,8 @@ class dayItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "p-0" },
-                        { default: () => row[this.key] }
+                        {class: "p-0"},
+                        {default: () => row[this.key]}
                     );
                 };
                 break;
@@ -585,8 +592,8 @@ class dayItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "text-red-500 p-0" },
-                        { default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key] }
+                        {class: "text-red-500 p-0"},
+                        {default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key]}
                     );
                 };
                 break;
@@ -594,8 +601,8 @@ class dayItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "text-green-500 p-0" },
-                        { default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key] }
+                        {class: "text-green-500 p-0"},
+                        {default: () => row[this.key] >= 10000 ? Math.round(row[this.key] / 1000) / 10 + "万" : row[this.key]}
                     );
                 };
                 break;
@@ -649,7 +656,7 @@ class cateItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "p-0 flex space-x-2" },
+                        {class: "p-0 flex space-x-2"},
                         {
                             default: () => [
                                 h(
@@ -661,8 +668,8 @@ class cateItem {
                                 ),
                                 h(
                                     "p",
-                                    { class: "my-auto" },
-                                    { default: () => row[this.key] }
+                                    {class: "my-auto"},
+                                    {default: () => row[this.key]}
                                 )
                             ]
                         }
@@ -674,8 +681,8 @@ class cateItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "text-red-500 p-0" },
-                        { default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount }
+                        {class: "text-red-500 p-0"},
+                        {default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount}
                     );
                 };
                 this.sorter = (a: { amount: number; }, b: { amount: number; }) => {
@@ -686,8 +693,8 @@ class cateItem {
                 this.render = (row: any) => {
                     return h(
                         "p",
-                        { class: "text-green-500 p-0" },
-                        { default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount }
+                        {class: "text-green-500 p-0"},
+                        {default: () => row.amount >= 10000 ? Math.round(row.amount / 1000) / 10 + "万" : row.amount}
                     );
                 };
                 this.sorter = (a: { amount: number; }, b: { amount: number; }) => {

@@ -1,1 +1,1 @@
-export { default as BudgetCard } from "./BudgetCard/index.vue";
+export {default as BudgetCard} from "./BudgetCard/index.vue";

@@ -82,9 +82,9 @@
                         </n-popover>
                     </div>
                     <div class="col-span-2 lg:col-span-1">
-                        <n-date-picker v-model:value="timestamp" :input-readonly="true" placement="top-start"
-                                       type="datetime" :update-value-on-close="true"
-                                       :time-picker-props="timePickerProps"/>
+                        <n-date-picker v-model:value="timestamp" :input-readonly="true" :time-picker-props="timePickerProps"
+                                       :update-value-on-close="true" placement="top-start"
+                                       type="datetime"/>
                     </div>
                 </div>
                 <div class="flex space-x-2">
@@ -413,24 +413,25 @@ function addBill(): void {
 
 <style scoped>
 /* <style scoped> */
-@media (max-width: 1023px) { /* Tailwind 的 lg 是 1024px 起 */
-  .upload-mini-on-mobile :deep(.n-upload-file--image-card),
-  .upload-mini-on-mobile :deep(.n-upload-trigger--image-card) {
-    width: 56px;
-    height: 56px;
-  }
+@media (max-width: 1023px) {
+    /* Tailwind 的 lg 是 1024px 起 */
+    .upload-mini-on-mobile :deep(.n-upload-file--image-card),
+    .upload-mini-on-mobile :deep(.n-upload-trigger--image-card) {
+        width: 56px;
+        height: 56px;
+    }
 
-  /* 有些版本内部还会单独控制图片/图标容器，顺便限制一下 */
-  .upload-mini-on-mobile :deep(.n-upload-file--image-card .n-upload-file__preview),
-  .upload-mini-on-mobile :deep(.n-upload-trigger--image-card .n-upload-trigger__content) {
-    width: 56px;
-    height: 56px;
-  }
+    /* 有些版本内部还会单独控制图片/图标容器，顺便限制一下 */
+    .upload-mini-on-mobile :deep(.n-upload-file--image-card .n-upload-file__preview),
+    .upload-mini-on-mobile :deep(.n-upload-trigger--image-card .n-upload-trigger__content) {
+        width: 56px;
+        height: 56px;
+    }
 
-  /* 让“图片”两个字别把卡片撑高/撑松 */
-  .upload-mini-on-mobile :deep(.n-upload-trigger__text) {
-    font-size: 12px;
-    line-height: 1;
-  }
+    /* 让“图片”两个字别把卡片撑高/撑松 */
+    .upload-mini-on-mobile :deep(.n-upload-trigger__text) {
+        font-size: 12px;
+        line-height: 1;
+    }
 }
 </style>

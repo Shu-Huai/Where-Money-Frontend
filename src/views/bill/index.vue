@@ -1,16 +1,18 @@
 <template>
     <div>
-        <div class="flex flex-col space-y-5 xl:flex-row xl:space-y-0 xl:space-x-5">
+        <div
+            class="flex flex-col space-y-5 xl:flex-row xl:space-y-0 xl:space-x-5 lg:flex-row lg:space-y-0 lg:space-x-5">
             <div class="w-full space-y-5 xl:w-7/20">
-                <div class="flex flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3">
-                    <div class="w-full xl:w-1/2">
-                        <MonthStatistic v-bind:amount="balanceMonth" type="balance">
+                <div
+                    class="flex flex-col space-y-3 xl:flex-row xl:space-y-0 xl:space-x-3 lg:flex-row lg:space-y-0 lg:space-x-3">
+                    <div class="w-full xl:w-1/2 lg:w-1/2">
+                        <MonthStatistic type="balance" v-bind:amount="balanceMonth">
                         </MonthStatistic>
                     </div>
-                    <div class="w-full space-y-3 xl:w-1/2">
-                        <MonthStatistic v-bind:amount="payMonth" type="pay">
+                    <div class="w-full space-y-3 xl:w-1/2 lg:w-1/2">
+                        <MonthStatistic type="pay" v-bind:amount="payMonth">
                         </MonthStatistic>
-                        <MonthStatistic v-bind:amount="incomeMonth" type="income">
+                        <MonthStatistic type="income" v-bind:amount="incomeMonth">
                         </MonthStatistic>
                     </div>
                 </div>
@@ -18,33 +20,36 @@
                     <n-card class="rounded-xl xl:h-125">
                         <template #default>
                             <n-config-provider :date-locale="dateZhCNSingleWeekday">
-                                <n-calendar @update:value="changeDay" @panel-change="changeMonth" class="xl:h-105 h-85">
+                                <n-calendar class="xl:h-105 lg:h-85 h-85" @update:value="changeDay"
+                                            @panel-change="changeMonth">
                                     <template #header="{ year, month }">
-                                        <div v-on:click="getAllBillMonth()" class="cursor-pointer">
+                                        <div class="cursor-pointer" v-on:click="getAllBillMonth()">
                                             {{ year + " " + numberToCharMonth(month) }}
                                         </div>
                                     </template>
                                     <template #default="{ year, month, date }">
                                         <n-popover
-                                            trigger="manual"
-                                            placement="bottom"
-                                            :show-arrow="false"
-                                            :show="activePopoverKey === getCellStat(year, month, date).key"
                                             :disabled="getCellStat(year, month, date).pay === 0 && getCellStat(year, month, date).income === 0"
                                             :on-clickoutside="closeDayPopover"
+                                            :show="activePopoverKey === getCellStat(year, month, date).key"
+                                            :show-arrow="false"
+                                            placement="bottom"
+                                            trigger="manual"
                                         >
                                             <template #trigger>
                                                 <div class="w-full pt-1" v-on:click="openDayPopover(year, month, date)">
                                                     <!-- 手机：只显示点 -->
                                                     <div class="flex items-center gap-1 xl:hidden">
-          <span
-              v-if="getCellStat(year, month, date).pay > 0"
-              class="h-1.5 w-1.5 rounded-full bg-red-500"
-          />
+                                                        <span
+                                                            v-if="getCellStat(year, month, date).pay > 0"
+                                                            class="h-1.5 w-1.5 rounded-full bg-red-500"
+                                                        >
+                                                        </span>
                                                         <span
                                                             v-if="getCellStat(year, month, date).income > 0"
                                                             class="h-1.5 w-1.5 rounded-full bg-green-500"
-                                                        />
+                                                        >
+                                                        </span>
                                                     </div>
 
                                                     <!-- 电脑：显示金额 -->
@@ -92,39 +97,39 @@
             </div>
             <div class="w-full xl:w-3/10">
                 <div>
-                    <n-scrollbar class="xl:h-185">
-                        <DayBillList v-for="item in billDayList" v-bind:day="item[0]" v-bind:bill-list="item[1]"
-                                     class="mb-3">
+                    <n-scrollbar class="xl:h-185 lg:h-150">
+                        <DayBillList v-for="item in billDayList" class="mb-3" v-bind:bill-list="item[1]"
+                                     v-bind:day="item[0]">
                         </DayBillList>
                     </n-scrollbar>
                 </div>
             </div>
             <div class="hidden xl:block xl:w-7/20 space-y-5">
-                <n-card class="rounded-xl" v-if="currentBill.id != undefined">
+                <n-card v-if="currentBill.id != undefined" class="rounded-xl">
                     <template #header>
                         <div class="flex space-x-3">
                             <div>
                                 账单详情
                             </div>
-                            <Icon v-bind:icon="iconMap[currentBill.type]" class="h-5 w-5 my-auto"
-                                  v-bind:class="iconColorMap[currentBill.type]"/>
+                            <Icon class="h-5 w-5 my-auto" v-bind:class="iconColorMap[currentBill.type]"
+                                  v-bind:icon="iconMap[currentBill.type]"/>
                         </div>
                     </template>
                     <template #header-extra>
                         <div class="flex space-x-2">
                             <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnEdit}"
-                                 v-on:mouseenter="mouseOnEditChange(true)"
-                                 v-on:mouseleave="mouseOnEditChange(false)" v-on:click="editingChange">
+                                 v-on:click="editingChange"
+                                 v-on:mouseenter="mouseOnEditChange(true)" v-on:mouseleave="mouseOnEditChange(false)">
                                 <div class="text-base">
                                     {{ editing ? "完成" : "编辑" }}
                                 </div>
                                 <Icon class="my-auto h-5 w-5" icon="fluent:edit-48-regular">
                                 </Icon>
                             </div>
-                            <div class="flex space-x-2 cursor-pointer" v-if="currentBill.type==='支出'"
+                            <div v-if="currentBill.type==='支出'" class="flex space-x-2 cursor-pointer"
                                  v-bind:class="{'text-primary':mouseOnRefund}"
-                                 v-on:mouseenter="mouseOnRefundChange(true)"
-                                 v-on:mouseleave="mouseOnRefundChange(false)" v-on:click="refundChange">
+                                 v-on:click="refundChange"
+                                 v-on:mouseenter="mouseOnRefundChange(true)" v-on:mouseleave="mouseOnRefundChange(false)">
                                 <div class="text-base">
                                     退款
                                 </div>
@@ -148,8 +153,8 @@
                                 </n-modal>
                             </div>
                             <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnDelete}"
-                                 v-on:mouseenter="mouseOnDeleteChange(true)"
-                                 v-on:mouseleave="mouseOnDeleteChange(false)" v-on:click="deleteChange">
+                                 v-on:click="deleteChange"
+                                 v-on:mouseenter="mouseOnDeleteChange(true)" v-on:mouseleave="mouseOnDeleteChange(false)">
                                 <div class="text-base">
                                     删除
                                 </div>
@@ -182,7 +187,7 @@
                                         金额
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-input-number v-model:value="currentBill.amount" v-if="editing">
+                                        <n-input-number v-if="editing" v-model:value="currentBill.amount">
                                             <template #prefix>
                                                 ￥
                                             </template>
@@ -192,16 +197,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2"
-                                     v-if="currentBill.type === '支出' || currentBill.type === '收入'">
+                                <div v-if="currentBill.type === '支出' || currentBill.type === '收入'"
+                                     class="space-y-2">
                                     <div class="text-lg my-auto">
                                         类别
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.billCategory as any" v-if="editing"
-                                                  v-bind:options="billCategoryList"
-                                                  v-bind:render-label="cateSelectorRender as any" size="large"
-                                                  class="w-1/2">
+                                        <n-select v-if="editing" v-model:value="currentBill.billCategory as any"
+                                                  class="w-1/2"
+                                                  size="large" v-bind:options="billCategoryList"
+                                                  v-bind:render-label="cateSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -213,15 +218,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2" v-if="currentBill.type==='支出'">
+                                <div v-if="currentBill.type==='支出'" class="space-y-2">
                                     <div class="text-lg my-auto">
                                         支出账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.payAsset as any" v-if="editing"
-                                                  v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender as any" size="large"
-                                                  class="w-1/2">
+                                        <n-select v-if="editing" v-model:value="currentBill.payAsset as any"
+                                                  class="w-1/2"
+                                                  size="large" v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -233,15 +238,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2" v-if="currentBill.type==='收入'">
+                                <div v-if="currentBill.type==='收入'" class="space-y-2">
                                     <div class="text-lg my-auto">
                                         收入账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.incomeAsset as any" v-if="editing"
-                                                  v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender as any" size="large"
-                                                  class="w-1/2">
+                                        <n-select v-if="editing" v-model:value="currentBill.incomeAsset as any"
+                                                  class="w-1/2"
+                                                  size="large" v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -253,15 +258,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-x-2 flex" v-if="currentBill.type==='转账'">
+                                <div v-if="currentBill.type==='转账'" class="space-x-2 flex">
                                     <div class="w-1/2 space-y-2">
                                         <div class="text-lg my-auto">
                                             转出账户
                                         </div>
                                         <div class="h-10 flex items-center">
-                                            <n-select v-model:value="currentBill.outAsset as any" v-if="editing"
-                                                      v-bind:options="assetList"
-                                                      v-bind:render-label="assetSelectorRender as any" size="large">
+                                            <n-select v-if="editing" v-model:value="currentBill.outAsset as any"
+                                                      size="large"
+                                                      v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -278,9 +283,9 @@
                                             转入账户
                                         </div>
                                         <div class="h-10 flex items-center">
-                                            <n-select v-model:value="currentBill.inAsset as any" v-if="editing"
-                                                      v-bind:options="assetList"
-                                                      v-bind:render-label="assetSelectorRender as any" size="large">
+                                            <n-select v-if="editing" v-model:value="currentBill.inAsset as any"
+                                                      size="large"
+                                                      v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -293,15 +298,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2" v-if="currentBill.type==='退款'">
+                                <div v-if="currentBill.type==='退款'" class="space-y-2">
                                     <div class="text-lg my-auto">
                                         退款账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.refundAsset as any" v-if="editing"
-                                                  v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender as any" size="large"
-                                                  class="w-1/2">
+                                        <n-select v-if="editing" v-model:value="currentBill.refundAsset as any"
+                                                  class="w-1/2"
+                                                  size="large" v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -313,12 +318,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-y-2" v-if="currentBill.type==='转账'">
+                                <div v-if="currentBill.type==='转账'" class="space-y-2">
                                     <div class="text-lg my-auto">
                                         手续费
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-input-number v-model:value="currentBill.transferFee as any" v-if="editing">
+                                        <n-input-number v-if="editing" v-model:value="currentBill.transferFee as any">
                                             <template #prefix>
                                                 ￥
                                             </template>
@@ -333,10 +338,10 @@
                                         时间
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-date-picker v-if="editing" v-model:value="editTime" class="w-1/2"
-                                                       type="datetime" :input-readonly="true"
-                                                       :time-picker-props="timePickerProps"
-                                                       :update-value-on-close="true">
+                                        <n-date-picker v-if="editing" v-model:value="editTime" :input-readonly="true"
+                                                       :time-picker-props="timePickerProps" :update-value-on-close="true"
+                                                       class="w-1/2"
+                                                       type="datetime">
                                         </n-date-picker>
                                         <div v-if="!editing" class="text-15px">
                                             {{ currentBill.billTime }}
@@ -361,11 +366,11 @@
                                         图片
                                     </div>
                                     <div>
-                                        <div class="flex space-x-2" v-if="editing">
+                                        <div v-if="editing" class="flex space-x-2">
                                             <img v-if="imageSrc !== 'data:image;base64,null'"
-                                                 v-bind:src="imageSrc"
-                                                 alt="图片" class="rounded-xl h-24"/>
-                                            <n-button class="my-auto" v-if="imageSrc !== 'data:image;base64,null'"
+                                                 alt="图片"
+                                                 class="rounded-xl h-24" v-bind:src="imageSrc"/>
+                                            <n-button v-if="imageSrc !== 'data:image;base64,null'" class="my-auto"
                                                       v-on:click="deleteImage">
                                                 <template #default>
                                                     删除图片
@@ -385,8 +390,8 @@
                                             </div>
                                         </div>
                                         <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
-                                             v-bind:src="imageSrc"
-                                             alt="图片" class="rounded-xl"/>
+                                             alt="图片"
+                                             class="rounded-xl" v-bind:src="imageSrc"/>
                                         <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
                                             <template #default>
                                                 什么也没有
@@ -403,35 +408,36 @@
         <!-- 手机端：账单详情弹窗 -->
         <n-modal
             v-model:show="showBillDetailModal"
-            class="xl:hidden"
             :mask-closable="true"
+            class="xl:hidden"
         >
             <n-card
-                class="w-[92vw] max-w-[92vw] rounded-xl"
-                :bordered="false"
                 v-if="currentBill.id != undefined"
+                :bordered="false"
+                class="w-[92vw] max-w-[92vw] rounded-xl lg:w-1/2"
             >
                 <template #header>
                     <div class="flex space-x-3">
                         <div>账单详情</div>
                         <Icon
-                            v-bind:icon="iconMap[currentBill.type]"
                             class="h-5 w-5 my-auto"
                             v-bind:class="iconColorMap[currentBill.type]"
+                            v-bind:icon="iconMap[currentBill.type]"
                         />
                     </div>
                 </template>
 
                 <template #header-extra>
                     <!-- 手机：两行两列；电脑：一行 -->
-                    <div class="grid grid-cols-2 gap-2 xl:flex xl:gap-0 xl:space-x-3 xl:items-center">
+                    <div
+                        class="grid grid-cols-2 gap-2 xl:flex xl:gap-0 xl:space-x-3 xl:items-center lg:flex lg:gap-0 lg:space-x-3 lg:items-center">
                         <!-- 编辑 -->
                         <div
                             class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
                             v-bind:class="{'text-primary': mouseOnEdit}"
+                            v-on:click="editingChange"
                             v-on:mouseenter="mouseOnEditChange(true)"
                             v-on:mouseleave="mouseOnEditChange(false)"
-                            v-on:click="editingChange"
                         >
                             <Icon class="h-5 w-5" icon="fluent:edit-48-regular"/>
                             <div>{{ editing ? "完成" : "编辑" }}</div>
@@ -442,9 +448,9 @@
                             v-if="currentBill.type === '支出'"
                             class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
                             v-bind:class="{'text-primary': mouseOnRefund}"
+                            v-on:click="refundChange"
                             v-on:mouseenter="mouseOnRefundChange(true)"
                             v-on:mouseleave="mouseOnRefundChange(false)"
-                            v-on:click="refundChange"
                         >
                             <Icon class="h-5 w-5" icon="ph:arrows-down-up"/>
                             <div>退款</div>
@@ -472,9 +478,9 @@
                         <div
                             class="flex items-center justify-center gap-1 rounded-lg px-2 py-1 cursor-pointer select-none border border-gray-200 text-sm xl:text-base xl:border-0"
                             v-bind:class="{'text-primary': mouseOnDelete}"
+                            v-on:click="deleteChange"
                             v-on:mouseenter="mouseOnDeleteChange(true)"
                             v-on:mouseleave="mouseOnDeleteChange(false)"
-                            v-on:click="deleteChange"
                         >
                             <Icon class="h-5 w-5" icon="material-symbols:delete-forever"/>
                             <div>删除</div>
@@ -521,7 +527,7 @@
                                     金额
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-input-number v-model:value="currentBill.amount" v-if="editing">
+                                    <n-input-number v-if="editing" v-model:value="currentBill.amount">
                                         <template #prefix>
                                             ￥
                                         </template>
@@ -531,16 +537,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-2"
-                                 v-if="currentBill.type === '支出' || currentBill.type === '收入'">
+                            <div v-if="currentBill.type === '支出' || currentBill.type === '收入'"
+                                 class="space-y-2">
                                 <div class="text-lg my-auto">
                                     类别
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-select v-model:value="currentBill.billCategory as any" v-if="editing"
-                                              v-bind:options="billCategoryList"
-                                              v-bind:render-label="cateSelectorRender as any" size="large"
-                                              class="w-1/2">
+                                    <n-select v-if="editing" v-model:value="currentBill.billCategory as any"
+                                              class="w-1/2"
+                                              size="large" v-bind:options="billCategoryList"
+                                              v-bind:render-label="cateSelectorRender as any">
                                     </n-select>
                                     <div v-if="!editing" class="flex space-x-2 items-center">
                                         <Icon class="h-5 w-5 text-primary"
@@ -552,15 +558,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-2" v-if="currentBill.type==='支出'">
+                            <div v-if="currentBill.type==='支出'" class="space-y-2">
                                 <div class="text-lg my-auto">
                                     支出账户
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-select v-model:value="currentBill.payAsset as any" v-if="editing"
-                                              v-bind:options="assetList"
-                                              v-bind:render-label="assetSelectorRender as any" size="large"
-                                              class="w-1/2">
+                                    <n-select v-if="editing" v-model:value="currentBill.payAsset as any"
+                                              class="w-1/2"
+                                              size="large" v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any">
                                     </n-select>
                                     <div v-if="!editing" class="flex space-x-2 items-center">
                                         <Icon class="h-5 w-5 text-primary"
@@ -572,15 +578,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-2" v-if="currentBill.type==='收入'">
+                            <div v-if="currentBill.type==='收入'" class="space-y-2">
                                 <div class="text-lg my-auto">
                                     收入账户
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-select v-model:value="currentBill.incomeAsset as any" v-if="editing"
-                                              v-bind:options="assetList"
-                                              v-bind:render-label="assetSelectorRender as any" size="large"
-                                              class="w-1/2">
+                                    <n-select v-if="editing" v-model:value="currentBill.incomeAsset as any"
+                                              class="w-1/2"
+                                              size="large" v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any">
                                     </n-select>
                                     <div v-if="!editing" class="flex space-x-2 items-center">
                                         <Icon class="h-5 w-5 text-primary"
@@ -592,15 +598,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-x-2 flex" v-if="currentBill.type==='转账'">
+                            <div v-if="currentBill.type==='转账'" class="space-x-2 flex">
                                 <div class="w-1/2 space-y-2">
                                     <div class="text-lg my-auto">
                                         转出账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.outAsset as any" v-if="editing"
-                                                  v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender as any" size="large">
+                                        <n-select v-if="editing" v-model:value="currentBill.outAsset as any"
+                                                  size="large"
+                                                  v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -617,9 +623,9 @@
                                         转入账户
                                     </div>
                                     <div class="h-10 flex items-center">
-                                        <n-select v-model:value="currentBill.inAsset as any" v-if="editing"
-                                                  v-bind:options="assetList"
-                                                  v-bind:render-label="assetSelectorRender as any" size="large">
+                                        <n-select v-if="editing" v-model:value="currentBill.inAsset as any"
+                                                  size="large"
+                                                  v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -632,15 +638,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-2" v-if="currentBill.type==='退款'">
+                            <div v-if="currentBill.type==='退款'" class="space-y-2">
                                 <div class="text-lg my-auto">
                                     退款账户
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-select v-model:value="currentBill.refundAsset as any" v-if="editing"
-                                              v-bind:options="assetList"
-                                              v-bind:render-label="assetSelectorRender as any" size="large"
-                                              class="w-1/2">
+                                    <n-select v-if="editing" v-model:value="currentBill.refundAsset as any"
+                                              class="w-1/2"
+                                              size="large" v-bind:options="assetList"
+                                              v-bind:render-label="assetSelectorRender as any">
                                     </n-select>
                                     <div v-if="!editing" class="flex space-x-2 items-center">
                                         <Icon class="h-5 w-5 text-primary"
@@ -652,12 +658,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="space-y-2" v-if="currentBill.type==='转账'">
+                            <div v-if="currentBill.type==='转账'" class="space-y-2">
                                 <div class="text-lg my-auto">
                                     手续费
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-input-number v-model:value="currentBill.transferFee as any" v-if="editing">
+                                    <n-input-number v-if="editing" v-model:value="currentBill.transferFee as any">
                                         <template #prefix>
                                             ￥
                                         </template>
@@ -672,10 +678,10 @@
                                     时间
                                 </div>
                                 <div class="h-10 flex items-center">
-                                    <n-date-picker v-if="editing" v-model:value="editTime" class="w-1/2"
-                                                   type="datetime" :input-readonly="true"
-                                                   :time-picker-props="timePickerProps"
-                                                   :update-value-on-close="true">
+                                    <n-date-picker v-if="editing" v-model:value="editTime" :input-readonly="true"
+                                                   :time-picker-props="timePickerProps" :update-value-on-close="true"
+                                                   class="w-1/2"
+                                                   type="datetime">
                                     </n-date-picker>
                                     <div v-if="!editing" class="text-15px">
                                         {{ currentBill.billTime }}
@@ -700,11 +706,11 @@
                                     图片
                                 </div>
                                 <div>
-                                    <div class="flex space-x-2" v-if="editing">
+                                    <div v-if="editing" class="flex space-x-2">
                                         <img v-if="imageSrc !== 'data:image;base64,null'"
-                                             v-bind:src="imageSrc"
-                                             alt="图片" class="rounded-xl h-24"/>
-                                        <n-button class="my-auto" v-if="imageSrc !== 'data:image;base64,null'"
+                                             alt="图片"
+                                             class="rounded-xl h-24" v-bind:src="imageSrc"/>
+                                        <n-button v-if="imageSrc !== 'data:image;base64,null'" class="my-auto"
                                                   v-on:click="deleteImage">
                                             <template #default>
                                                 删除图片
@@ -724,8 +730,8 @@
                                         </div>
                                     </div>
                                     <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
-                                         v-bind:src="imageSrc"
-                                         alt="图片" class="rounded-xl"/>
+                                         alt="图片"
+                                         class="rounded-xl" v-bind:src="imageSrc"/>
                                     <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
                                         <template #default>
                                             什么也没有
@@ -741,7 +747,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ComputedRef, h, onMounted, onBeforeUnmount, Ref, ref, VNodeChild, watch} from "vue";
+import {computed, ComputedRef, h, onBeforeUnmount, onMounted, Ref, ref, VNodeChild, watch} from "vue";
 import {
     addBillApi,
     changeBillApi,
@@ -749,7 +755,8 @@ import {
     deleteBillImageApi,
     getAllAsset,
     getAllBillTimeApi,
-    getBalanceMonthApi, getBillCategoryApi,
+    getBalanceMonthApi,
+    getBillCategoryApi,
     getBillImageApi,
     getDayStatisticTimeApi,
     getIncomeMonthApi,
@@ -759,6 +766,7 @@ import {useStore} from "@/stores/store";
 import {dateToString, intToString, now, stringToInt} from "@/utils/dateComputer";
 import {
     Asset,
+    AssetGetAllAssetResponse,
     BillAllBillTimeResponse,
     BillBillResponse,
     BillCategory,
@@ -770,10 +778,8 @@ import {
 import {DayBillList} from "./components";
 import {MonthStatistic} from "@/views/components";
 import {Icon} from "@iconify/vue";
-import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
-import {AssetGetAllAssetResponse} from "@/interface";
 // calendar-date-locale.ts
-import {dateZhCN, type NDateLocale} from 'naive-ui'
+import {dateZhCN, type NDateLocale, TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
 
 const dateZhCNSingleWeekday: NDateLocale = {
     ...dateZhCN,

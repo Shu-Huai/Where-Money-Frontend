@@ -1,10 +1,10 @@
-import type { RouteLocationNormalizedLoaded, Router } from "vue-router";
-import { defineStore } from "pinia";
-import { useRouterPush } from "@/composables";
-import { getTabRoutes } from "@/utils";
-import type { GlobalTabRoute } from "@/interface";
-import { useThemeStore } from "@/store";
-import { getIndexInTabRoutes, getTabRouteByVueRoute, isInTabRoutes } from "./helpers";
+import type {RouteLocationNormalizedLoaded, Router} from "vue-router";
+import {defineStore} from "pinia";
+import {useRouterPush} from "@/composables";
+import {getTabRoutes} from "@/utils";
+import type {GlobalTabRoute} from "@/interface";
+import {useThemeStore} from "@/store";
+import {getIndexInTabRoutes, getTabRouteByVueRoute, isInTabRoutes} from "./helpers";
 
 interface TabState {
     /** 多页签数据 */
@@ -34,7 +34,7 @@ export const useTabStore = defineStore("tab-store", {
     getters: {
         /** 当前激活状态的页签索引 */
         activeTabIndex(state) {
-            const { tabs, activeTab } = state;
+            const {tabs, activeTab} = state;
             return tabs.findIndex(tab => tab.path === activeTab);
         }
     },
@@ -72,7 +72,7 @@ export const useTabStore = defineStore("tab-store", {
          * @param path - 路由path
          */
         removeTab(path: string) {
-            const { routerPush } = useRouterPush(false);
+            const {routerPush} = useRouterPush(false);
 
             const isActive = this.activeTab === path;
             const updateTabs = this.tabs.filter(tab => tab.path !== path);
@@ -88,7 +88,7 @@ export const useTabStore = defineStore("tab-store", {
          * @param excludes - 保留的多页签path
          */
         clearTab(excludes: string[] = []) {
-            const { routerPush } = useRouterPush(false);
+            const {routerPush} = useRouterPush(false);
 
             const homePath = this.homeTab.path;
             const remain = [homePath, ...excludes];
@@ -128,7 +128,7 @@ export const useTabStore = defineStore("tab-store", {
          * @param path - 路由path
          */
         handleClickTab(path: string) {
-            const { routerPush } = useRouterPush(false);
+            const {routerPush} = useRouterPush(false);
 
             const isActive = this.activeTab === path;
             if (!isActive) {

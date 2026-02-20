@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import {AxiosRequestConfig} from "axios";
 import request from "./request";
 
 const http = {
@@ -18,7 +18,7 @@ const http = {
         if (params) config.data = params;
         return request(config);
     },
-    patch(url: string, params: any){
+    patch(url: string, params: any) {
         const config: AxiosRequestConfig = {
             method: "patch",
             url

@@ -5,7 +5,7 @@
                 {{ day }}
             </template>
             <template #default>
-                <BillItem v-for="item in billList" v-bind:type="item.type" v-bind:bill="item"></BillItem>
+                <BillItem v-for="item in billList" v-bind:bill="item" v-bind:type="item.type"></BillItem>
             </template>
         </n-card>
     </div>

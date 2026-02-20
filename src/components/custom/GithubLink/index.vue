@@ -1,5 +1,5 @@
 <template>
-    <web-site-link :link="link" label="github地址：" />
+    <web-site-link :link="link" label="github地址："/>
 </template>
 
 <script lang="ts" setup>

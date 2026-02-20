@@ -8,7 +8,7 @@
                 <Icon class="cursor-pointer h-4 w-4" icon="icon-park-outline:close"
                       v-bind:class="{'text-primary':mouseOnClose}" v-on:click="closeModal"
                       v-on:mouseenter="mouseOnClose=true"
-                      v-on:mouseleave="mouseOnClose=false" />
+                      v-on:mouseleave="mouseOnClose=false"/>
             </template>
             <template #default>
                 <div>
@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Income, Pay, Transfer } from "./components";
-import { Icon } from "@iconify/vue";
-import { Ref, ref } from "vue";
+import {Income, Pay, Transfer} from "./components";
+import {Icon} from "@iconify/vue";
+import {Ref, ref} from "vue";
 
 const emit = defineEmits(["close"]);
 

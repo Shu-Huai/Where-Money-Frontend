@@ -1,18 +1,18 @@
 <template>
-    <n-menu :options="menus" :value="activeKey" mode="horizontal" @update:value="handleUpdateMenu" />
+    <n-menu :options="menus" :value="activeKey" mode="horizontal" @update:value="handleUpdateMenu"/>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import type { MenuOption } from "naive-ui";
-import { useRouteStore } from "@/store";
-import { useRouterPush } from "@/composables";
-import type { GlobalMenuOption } from "@/interface";
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+import type {MenuOption} from "naive-ui";
+import {useRouteStore} from "@/store";
+import {useRouterPush} from "@/composables";
+import type {GlobalMenuOption} from "@/interface";
 
 const route = useRoute();
 const routeStore = useRouteStore();
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 
 const menus = computed(() => routeStore.menus as GlobalMenuOption[]);
 const activeKey = computed(() => route.name as string);

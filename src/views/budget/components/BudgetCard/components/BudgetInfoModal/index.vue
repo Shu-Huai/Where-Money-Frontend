@@ -71,7 +71,7 @@
 
 import {defineEmits, defineProps, PropType, ref} from "vue";
 import {BillCategory, Budget} from "@/interface";
-import {updateBudget, deleteBudget} from "@/apis";
+import {deleteBudget, updateBudget} from "@/apis";
 
 import {Icon} from "@iconify/vue";
 import {FormItemContainer} from "./components";
@@ -137,6 +137,7 @@ function applyChanges() {
         console.error(err);
     });
 }
+
 function handleDelete() {
     deleteBudget({budgetId: budgetInfoVar.value.id}).then(() => {
         emit("update:budget", budgetInfoVar.value);

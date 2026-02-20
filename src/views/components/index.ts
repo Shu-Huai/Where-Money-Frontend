@@ -1,3 +1,3 @@
 import MonthStatistic from "./MonthStatistic/index.vue";
 
-export { MonthStatistic };
+export {MonthStatistic};

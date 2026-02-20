@@ -1,4 +1,4 @@
-import { BillCategory } from "@/interface";
+import {BillCategory} from "@/interface";
 
 export interface BookAllBillCategoryResponse {
     billCategoryList: Array<BillCategory>;

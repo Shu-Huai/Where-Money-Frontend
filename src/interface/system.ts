@@ -1,6 +1,6 @@
-import type { VNodeChild } from "vue";
-import type { RouteLocationNormalizedLoaded } from "vue-router";
-import type { DropdownOption } from "naive-ui";
+import type {VNodeChild} from "vue";
+import type {RouteLocationNormalizedLoaded} from "vue-router";
+import type {DropdownOption} from "naive-ui";
 
 /** 菜单项配置 */
 export type GlobalMenuOption = {

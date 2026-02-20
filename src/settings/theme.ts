@@ -1,5 +1,5 @@
-import { EnumThemeAnimateMode, EnumThemeHorizontalMenuPosition, EnumThemeLayoutMode, EnumThemeTabMode } from "@/enum";
-import type { ThemeSetting } from "@/interface";
+import {EnumThemeAnimateMode, EnumThemeHorizontalMenuPosition, EnumThemeLayoutMode, EnumThemeTabMode} from "@/enum";
+import type {ThemeSetting} from "@/interface";
 import jsonSetting from "./theme.json";
 
 const themeColorList = [
@@ -35,10 +35,10 @@ const defaultThemeSetting: ThemeSetting = {
         minWidth: 0,
         mode: "vertical",
         modeList: [
-            { value: "vertical", label: EnumThemeLayoutMode.vertical },
-            { value: "vertical-mix", label: EnumThemeLayoutMode["vertical-mix"] },
-            { value: "horizontal", label: EnumThemeLayoutMode.horizontal },
-            { value: "horizontal-mix", label: EnumThemeLayoutMode["horizontal-mix"] }
+            {value: "vertical", label: EnumThemeLayoutMode.vertical},
+            {value: "vertical-mix", label: EnumThemeLayoutMode["vertical-mix"]},
+            {value: "horizontal", label: EnumThemeLayoutMode.horizontal},
+            {value: "horizontal-mix", label: EnumThemeLayoutMode["horizontal-mix"]}
         ]
     },
     themeColor: themeColorList[0],
@@ -64,8 +64,8 @@ const defaultThemeSetting: ThemeSetting = {
         height: 44,
         mode: "chrome",
         modeList: [
-            { value: "chrome", label: EnumThemeTabMode.chrome },
-            { value: "button", label: EnumThemeTabMode.button }
+            {value: "chrome", label: EnumThemeTabMode.chrome},
+            {value: "button", label: EnumThemeTabMode.button}
         ],
         isCache: true
     },
@@ -79,9 +79,9 @@ const defaultThemeSetting: ThemeSetting = {
     menu: {
         horizontalPosition: "flex-start",
         horizontalPositionList: [
-            { value: "flex-start", label: EnumThemeHorizontalMenuPosition["flex-start"] },
-            { value: "center", label: EnumThemeHorizontalMenuPosition.center },
-            { value: "flex-end", label: EnumThemeHorizontalMenuPosition["flex-end"] }
+            {value: "flex-start", label: EnumThemeHorizontalMenuPosition["flex-start"]},
+            {value: "center", label: EnumThemeHorizontalMenuPosition.center},
+            {value: "flex-end", label: EnumThemeHorizontalMenuPosition["flex-end"]}
         ]
     },
     footer: {
@@ -92,12 +92,12 @@ const defaultThemeSetting: ThemeSetting = {
         animate: true,
         animateMode: "fade-slide",
         animateModeList: [
-            { value: "fade-slide", label: EnumThemeAnimateMode["fade-slide"] },
-            { value: "fade", label: EnumThemeAnimateMode.fade },
-            { value: "fade-bottom", label: EnumThemeAnimateMode["fade-bottom"] },
-            { value: "fade-scale", label: EnumThemeAnimateMode["fade-scale"] },
-            { value: "zoom-fade", label: EnumThemeAnimateMode["zoom-fade"] },
-            { value: "zoom-out", label: EnumThemeAnimateMode["zoom-out"] }
+            {value: "fade-slide", label: EnumThemeAnimateMode["fade-slide"]},
+            {value: "fade", label: EnumThemeAnimateMode.fade},
+            {value: "fade-bottom", label: EnumThemeAnimateMode["fade-bottom"]},
+            {value: "fade-scale", label: EnumThemeAnimateMode["fade-scale"]},
+            {value: "zoom-fade", label: EnumThemeAnimateMode["zoom-fade"]},
+            {value: "zoom-out", label: EnumThemeAnimateMode["zoom-out"]}
         ]
     }
 };

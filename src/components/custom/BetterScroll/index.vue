@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
-import { useElementSize } from "@vueuse/core";
-import type { Options } from "@better-scroll/core";
+import {computed, onMounted, ref, watch} from "vue";
+import {useElementSize} from "@vueuse/core";
+import type {Options} from "@better-scroll/core";
 import BScroll from "@better-scroll/core";
 
 interface Props {
@@ -30,8 +30,8 @@ function initBetterScroll() {
 }
 
 // 滚动元素发生变化，刷新BS
-const { width: wrapWidth } = useElementSize(bsWrap);
-const { width, height } = useElementSize(bsContent);
+const {width: wrapWidth} = useElementSize(bsWrap);
+const {width, height} = useElementSize(bsContent);
 watch([() => wrapWidth.value, () => width.value, () => height.value], () => {
     if (instance.value) {
         instance.value.refresh();
@@ -42,6 +42,6 @@ onMounted(() => {
     initBetterScroll();
 });
 
-defineExpose({ instance });
+defineExpose({instance});
 </script>
 <style scoped></style>

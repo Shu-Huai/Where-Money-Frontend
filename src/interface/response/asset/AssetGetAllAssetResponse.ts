@@ -1,4 +1,4 @@
-import { Asset } from "@/interface/schemas";
+import {Asset} from "@/interface/schemas";
 
 export interface AssetGetAllAssetResponse {
     assetList: Asset[];

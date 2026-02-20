@@ -1,6 +1,6 @@
-import { computed } from "vue";
-import { useAppStore, useThemeStore } from "@/store";
-import type { GlobalHeaderProps, ThemeLayoutMode } from "@/interface";
+import {computed} from "vue";
+import {useAppStore, useThemeStore} from "@/store";
+import type {GlobalHeaderProps, ThemeLayoutMode} from "@/interface";
 
 type LayoutHeaderProps = Record<ThemeLayoutMode, GlobalHeaderProps>;
 
@@ -42,7 +42,7 @@ export function useBasicLayout() {
 
     const siderVisible = computed(() => theme.layout.mode !== "horizontal");
     const siderWidth = computed(() => {
-        const { width, mixWidth, mixChildMenuWidth } = theme.sider;
+        const {width, mixWidth, mixChildMenuWidth} = theme.sider;
         const isVerticalMix = theme.layout.mode === "vertical-mix";
         let w = isVerticalMix ? mixWidth : width;
         if (isVerticalMix && app.mixSiderFixed) {
@@ -51,7 +51,7 @@ export function useBasicLayout() {
         return w;
     });
     const siderCollapsedWidth = computed(() => {
-        const { collapsedWidth, mixCollapsedWidth, mixChildMenuWidth } = theme.sider;
+        const {collapsedWidth, mixCollapsedWidth, mixChildMenuWidth} = theme.sider;
         const isVerticalMix = theme.layout.mode === "vertical-mix";
         let w = isVerticalMix ? mixCollapsedWidth : collapsedWidth;
         if (isVerticalMix && app.mixSiderFixed) {

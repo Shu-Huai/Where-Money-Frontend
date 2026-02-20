@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-import { traditionColors } from "@/settings";
-import { useThemeStore } from "@/store";
+import {traditionColors} from "@/settings";
+import {useThemeStore} from "@/store";
 import ColorCheckbox from "./ColorCheckbox.vue";
 
 interface Props {

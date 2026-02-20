@@ -1,10 +1,10 @@
 <template>
     <svg aria-hidden="true" class="svg-icon">
-        <use :fill="fill" :xlink:href="symbolId" />
+        <use :fill="fill" :xlink:href="symbolId"/>
     </svg>
 </template>
 <script lang="ts" setup>
-import { computed } from "vue";
+import {computed} from "vue";
 
 interface Props {
     /** icon前缀 */

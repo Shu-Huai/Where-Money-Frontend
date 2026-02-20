@@ -14,12 +14,12 @@
                 opacity="1"
             />
             <linearGradient id="linearGradient-3" x1="0.5" x2="0.5" y1="0" y2="1">
-                <stop :stop-color="startColor" offset="0" stop-opacity="1" />
-                <stop :stop-color="endColor" offset="1" stop-opacity="1" />
+                <stop :stop-color="startColor" offset="0" stop-opacity="1"/>
+                <stop :stop-color="endColor" offset="1" stop-opacity="1"/>
             </linearGradient>
         </defs>
         <g opacity="1">
-            <use fill="url(#linearGradient-3)" fill-opacity="1" xlink:href="#path-2" />
+            <use fill="url(#linearGradient-3)" fill-opacity="1" xlink:href="#path-2"/>
         </g>
     </svg>
 </template>

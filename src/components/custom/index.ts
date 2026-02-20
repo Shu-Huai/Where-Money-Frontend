@@ -5,4 +5,4 @@ import WebSiteLink from "./WebSiteLink/index.vue";
 import GithubLink from "./GithubLink/index.vue";
 import IconSelect from "./IconSelect/index.vue";
 
-export { BetterScroll, ButtonTab, ChromeTab, WebSiteLink, GithubLink, IconSelect };
+export {BetterScroll, ButtonTab, ChromeTab, WebSiteLink, GithubLink, IconSelect};

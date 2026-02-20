@@ -1,10 +1,10 @@
 <template>
     <div v-bind:class="height[type]">
-        <n-card v-bind:class="height[type]" class="rounded-xl">
+        <n-card class="rounded-xl" v-bind:class="height[type]">
             <template #default>
                 <div class="flex" v-bind:class="height[type]">
                     <div class="w-1/4 my-auto">
-                        <Icon v-bind:icon="icon[type]" class="text-3xl" v-bind:class="iconColor[type]" />
+                        <Icon class="text-3xl" v-bind:class="iconColor[type]" v-bind:icon="icon[type]"/>
                     </div>
                     <div class="w-3/4 my-auto">
                         <n-statistic>
@@ -21,8 +21,8 @@
         </n-card>
     </div>
 </template>
-<script setup lang="ts">
-import { Icon } from "@iconify/vue";
+<script lang="ts" setup>
+import {Icon} from "@iconify/vue";
 
 defineProps({
     amount: {

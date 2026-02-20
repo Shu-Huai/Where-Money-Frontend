@@ -8,12 +8,12 @@
                 opacity="1"
             />
             <linearGradient id="linearGradient-2" x1="0.79" x2="0.21" y1="0.62" y2="0.86">
-                <stop :stop-color="startColor" offset="0" stop-opacity="1" />
-                <stop :stop-color="endColor" offset="1" stop-opacity="1" />
+                <stop :stop-color="startColor" offset="0" stop-opacity="1"/>
+                <stop :stop-color="endColor" offset="1" stop-opacity="1"/>
             </linearGradient>
         </defs>
         <g opacity="1">
-            <use fill="url(#linearGradient-2)" fill-opacity="1" xlink:href="#path-1" />
+            <use fill="url(#linearGradient-2)" fill-opacity="1" xlink:href="#path-1"/>
         </g>
     </svg>
 </template>

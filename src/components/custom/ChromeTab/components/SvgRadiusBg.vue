@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { mixColor } from "@/utils";
+import {computed} from "vue";
+import {mixColor} from "@/utils";
 
 interface Props {
     /** 激活状态 */
