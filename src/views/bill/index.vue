@@ -135,6 +135,22 @@
                                 </div>
                                 <Icon class="my-auto h-5 w-5" icon="ph:arrows-down-up">
                                 </Icon>
+                                <n-modal v-model:show="showRefundModal" class="w-1/7 block xl:hidden">
+                                    <n-card>
+                                        <template #header>
+                                            <div class="s-title s-underline text-lg">提示</div>
+                                        </template>
+                                        <template #default>
+                                            <div class="text-center space-y-8">
+                                                <div class="mx-auto text-lg">确认退款？</div>
+                                                <div class="flex space-x-2 justify-end">
+                                                    <n-button v-on:click="refundBill">确定</n-button>
+                                                    <n-button v-on:click="showRefundModal=false">取消</n-button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </n-card>
+                                </n-modal>
                             </div>
                             <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnDelete}"
                                  v-on:click="deleteChange"
@@ -144,6 +160,22 @@
                                 </div>
                                 <Icon class="my-auto h-5 w-5" icon="material-symbols:delete-forever">
                                 </Icon>
+                                <n-modal v-model:show="showDeleteModal" class="hidden xl:block w-1/7">
+                                    <n-card>
+                                        <template #header>
+                                            <div class="s-title s-underline text-lg">提示</div>
+                                        </template>
+                                        <template #default>
+                                            <div class="text-center space-y-8">
+                                                <div class="mx-auto text-lg">确认删除？</div>
+                                                <div class="flex space-x-2 justify-end">
+                                                    <n-button v-on:click="deleteBill">确定</n-button>
+                                                    <n-button v-on:click="showDeleteModal=false">取消</n-button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </n-card>
+                                </n-modal>
                             </div>
                         </div>
                     </template>
@@ -1185,6 +1217,7 @@ function editingChange(): void {
                 }
                 if (currentBill.value.remark !== store.currentBill.remark) {
                     formData.append("remark", currentBill.value.remark as any);
+                    changed = true;
                 }
                 if (picture !== undefined) {
                     formData.append("file", picture as File);
