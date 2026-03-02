@@ -367,10 +367,11 @@
                                     </div>
                                     <div>
                                         <div v-if="editing" class="flex space-x-2">
-                                            <img v-if="imageSrc !== 'data:image;base64,null'"
+                                            <img v-if="imageSrc !== EMPTY_IMAGE_SRC"
                                                  alt="图片"
-                                                 class="rounded-xl h-24" v-bind:src="imageSrc"/>
-                                            <n-button v-if="imageSrc !== 'data:image;base64,null'" class="my-auto"
+                                                 class="rounded-xl h-24" v-bind:src="imageSrc"
+                                                 v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
+                                            <n-button v-if="imageSrc !== EMPTY_IMAGE_SRC" class="my-auto"
                                                       v-on:click="deleteImage">
                                                 <template #default>
                                                     删除图片
@@ -389,10 +390,15 @@
                                                 {{ fileName }}
                                             </div>
                                         </div>
-                                        <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
+                                        <img v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing"
                                              alt="图片"
-                                             class="rounded-xl" v-bind:src="imageSrc"/>
-                                        <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
+                                             class="rounded-xl" v-bind:src="imageSrc"
+                                             v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
+                                        <div v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
+                                             class="mt-2 text-xs text-orange-500">
+                                            {{ imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning }}
+                                        </div>
+                                        <n-empty v-if="imageSrc === EMPTY_IMAGE_SRC && !editing" class="w-1/2">
                                             <template #default>
                                                 什么也没有
                                             </template>
@@ -707,10 +713,11 @@
                                 </div>
                                 <div>
                                     <div v-if="editing" class="flex space-x-2">
-                                        <img v-if="imageSrc !== 'data:image;base64,null'"
+                                        <img v-if="imageSrc !== EMPTY_IMAGE_SRC"
                                              alt="图片"
-                                             class="rounded-xl h-24" v-bind:src="imageSrc"/>
-                                        <n-button v-if="imageSrc !== 'data:image;base64,null'" class="my-auto"
+                                             class="rounded-xl h-24" v-bind:src="imageSrc"
+                                             v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
+                                        <n-button v-if="imageSrc !== EMPTY_IMAGE_SRC" class="my-auto"
                                                   v-on:click="deleteImage">
                                             <template #default>
                                                 删除图片
@@ -729,10 +736,15 @@
                                             {{ fileName }}
                                         </div>
                                     </div>
-                                    <img v-if="imageSrc !== 'data:image;base64,null' && !editing"
+                                    <img v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing"
                                          alt="图片"
-                                         class="rounded-xl" v-bind:src="imageSrc"/>
-                                    <n-empty v-if="imageSrc === 'data:image;base64,null' && !editing" class="w-1/2">
+                                         class="rounded-xl" v-bind:src="imageSrc"
+                                         v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
+                                    <div v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
+                                         class="mt-2 text-xs text-orange-500">
+                                        {{ imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning }}
+                                    </div>
+                                    <n-empty v-if="imageSrc === EMPTY_IMAGE_SRC && !editing" class="w-1/2">
                                         <template #default>
                                             什么也没有
                                         </template>
@@ -875,7 +887,9 @@ function getData(refresh: boolean = true) {
     });
     if (refresh) {
         store.currentBill = Object();
-        imageSrc.value = "data:image;base64,null";
+        imageSrc.value = EMPTY_IMAGE_SRC;
+        imageLoadFailed.value = false;
+        imageCompatibilityWarning.value = "";
         editTime.value = 0;
     }
     editing.value = false;
@@ -1071,7 +1085,64 @@ let billDayList: ComputedRef<Map<string, Array<BillShow>>> = computed(() => {
     return dayMap;
 });
 let currentBill: Ref<BillShow> = ref({} as BillShow);
-let imageSrc: Ref<string> = ref("data:image;base64,null");
+const EMPTY_IMAGE_SRC = "data:image;base64,null";
+let imageSrc: Ref<string> = ref(EMPTY_IMAGE_SRC);
+let imageLoadFailed: Ref<boolean> = ref(false);
+let imageCompatibilityWarning: Ref<string> = ref("");
+
+interface BillImageResponse {
+    contentType?: string;
+    image?: string;
+}
+
+function isHeifLike(contentType: string): boolean {
+    const lower = contentType.toLowerCase();
+    return lower.includes("image/heic") || lower.includes("image/heif");
+}
+
+function isSafariBrowser(): boolean {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes("safari") && !ua.includes("chrome") && !ua.includes("android") && !ua.includes("edg");
+}
+
+function updateImageCompatibilityWarning(contentType: string): void {
+    imageCompatibilityWarning.value = "";
+    if (isHeifLike(contentType) && !isSafariBrowser()) {
+        imageCompatibilityWarning.value = "当前浏览器可能不支持 HEIC/HEIF 预览，可改用 Safari 或上传 JPEG/AVIF。";
+    }
+}
+
+function setImageFromResponse(response: any): void {
+    imageLoadFailed.value = false;
+    imageCompatibilityWarning.value = "";
+    if (!response) {
+        imageSrc.value = EMPTY_IMAGE_SRC;
+        return;
+    }
+    // backward compatibility: older API only returned base64 string
+    if (typeof response === "string") {
+        imageSrc.value = "data:image;base64," + response;
+        return;
+    }
+    const imageResponse: BillImageResponse = response as BillImageResponse;
+    if (!imageResponse.image) {
+        imageSrc.value = EMPTY_IMAGE_SRC;
+        return;
+    }
+    const contentType = imageResponse.contentType ?? "";
+    updateImageCompatibilityWarning(contentType);
+    const mime = contentType.startsWith("image/") ? contentType : "image";
+    imageSrc.value = `data:${mime};base64,${imageResponse.image}`;
+}
+
+function handleImageLoadSuccess(): void {
+    imageLoadFailed.value = false;
+}
+
+function handleImageLoadError(): void {
+    imageLoadFailed.value = true;
+}
+
 watch(() => store.currentBill, (newValue: BillShow) => {
     currentBill.value.amount = newValue.amount;
     currentBill.value.billTime = newValue.billTime;
@@ -1089,10 +1160,10 @@ watch(() => store.currentBill, (newValue: BillShow) => {
     currentBill.value.type = newValue.type;
     editing.value = false;
     editTime.value = stringToInt(newValue.billTime);
-    imageSrc.value = "data:image;base64,null";
+    imageSrc.value = EMPTY_IMAGE_SRC;
     if (!isNaN(currentBill.value.id)) {
         getBillImageApi({billId: currentBill.value.id, type: currentBill.value.type}).then((response: any) => {
-            imageSrc.value = "data:image;base64," + response;
+            setImageFromResponse(response);
         });
     }
     if (!isDesktop.value && newValue?.id != undefined && !isNaN(newValue.id as any)) {
@@ -1292,7 +1363,7 @@ function editingChange(): void {
                     billId: currentBill.value.id,
                     type: currentBill.value.type
                 }).then((response: any) => {
-                    imageSrc.value = "data:image;base64," + response;
+                    setImageFromResponse(response);
                 });
             }).catch(() => {
             });
@@ -1368,9 +1439,13 @@ function changePicture() {
 declare const window: Window & { $message: any; URL: any };
 
 function beforeUpload(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }) {
-    if (!data.file.file?.type.startsWith("image")) {
+    const fileType = (data.file.file?.type ?? "").toLowerCase();
+    if (!fileType.startsWith("image")) {
         window.$message.error("请上传图片");
         return false;
+    }
+    if (isHeifLike(fileType) && !isSafariBrowser()) {
+        window.$message.warning("当前浏览器可能无法预览 HEIC/HEIF，建议上传 JPEG/AVIF 或使用 Safari 查看。");
     }
     return true;
 }
