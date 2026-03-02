@@ -90,6 +90,14 @@
                         <template #header>
                             <div>分类统计</div>
                         </template>
+                        <template #header-extra>
+                            <div class="flex items-center space-x-2 text-sm">
+                                <span>月</span>
+                                <n-switch v-model:value="pieYearMode">
+                                </n-switch>
+                                <span>年</span>
+                            </div>
+                        </template>
                         <template #default>
                             <n-tabs v-model:value="pieSwitch" :animated="true" type="line" @update:value="refreshPie">
                                 <n-tab-pane name="支出" tab="支出">
@@ -226,6 +234,7 @@ let maxPay: Ref<number> = ref(0);
 let minPay: Ref<number> = ref(0);
 let maxIncome: Ref<number> = ref(0);
 let minIncome: Ref<number> = ref(0);
+let pieYearMode: Ref<boolean> = ref(false);
 
 function getData() {
     getBalanceMonth();
@@ -260,17 +269,7 @@ function getData() {
         });
     }).catch(() => {
     });
-    getCategoryStatisticTimeApi({
-        bookId: bookId.value,
-        startTime: startTime.value,
-        endTime: endTime.value
-    }).then((response: BillCategoryStatisticTimeResponse) => {
-        categoryStatisticTime.value = response;
-        nextTick(() => {
-            initPieChart(pieSwitch.value);
-        });
-    }).catch(() => {
-    });
+    getCategoryStatisticData();
 }
 
 let billCategory: Ref<Array<BillCategory>> = ref([]);
@@ -309,6 +308,18 @@ let startTime: ComputedRef<string> = computed(() => {
 });
 let endTime: ComputedRef<string> = computed(() => {
     return dateToString(new Date(activeYear.value, activeMonth.value, days.value[activeMonth.value], 23, 59, 59));
+});
+let categoryStartTime: ComputedRef<string> = computed(() => {
+    if (pieYearMode.value) {
+        return dateToString(new Date(activeYear.value, 0, 1, 0, 0, 0));
+    }
+    return startTime.value;
+});
+let categoryEndTime: ComputedRef<string> = computed(() => {
+    if (pieYearMode.value) {
+        return dateToString(new Date(activeYear.value, 11, 31, 23, 59, 59));
+    }
+    return endTime.value;
 });
 let balanceMonth: Ref<number> = ref(0);
 
@@ -459,6 +470,20 @@ function changeMonth(info: { year: number, month: number }): void {
 let payCateRef: Ref<HTMLElement | undefined> = ref();
 let incomeCateRef: Ref<HTMLElement | undefined> = ref();
 
+function getCategoryStatisticData(): void {
+    getCategoryStatisticTimeApi({
+        bookId: bookId.value,
+        startTime: categoryStartTime.value,
+        endTime: categoryEndTime.value
+    }).then((response: BillCategoryStatisticTimeResponse) => {
+        categoryStatisticTime.value = response;
+        nextTick(() => {
+            initPieChart(pieSwitch.value);
+        });
+    }).catch(() => {
+    });
+}
+
 function initPieChart(type: "支出" | "收入"): void {
     if ((type === "支出" ? payCateRef.value : incomeCateRef.value) === undefined) {
         return;
@@ -542,6 +567,11 @@ window.onresize = function () {
 
 watch(() => themeStore.darkMode, () => {
     initPieChart(pieSwitch.value);
+});
+watch(() => pieYearMode.value, () => {
+    if (bookId.value !== 0) {
+        getCategoryStatisticData();
+    }
 });
 
 function refreshPie(value: string): void {
