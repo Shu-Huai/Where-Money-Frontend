@@ -6,6 +6,14 @@
                 <span class="font-bold text-xl">资产历史</span>
             </n-space>
         </template>
+        <template #header-extra>
+            <div class="flex items-center space-x-2 text-sm">
+                <span>30天</span>
+                <n-switch v-model:value="longRangeMode">
+                </n-switch>
+                <span>365天</span>
+            </div>
+        </template>
 
         <template #default>
             <div ref="lineChartAreaRef" class="h-[100%] flex content-center items-center justify-center">
@@ -17,7 +25,7 @@
 
 <script lang="ts" setup>
 // vue
-import {defineProps, PropType, ref, watch} from "vue";
+import {computed, defineEmits, defineProps, PropType, ref, watch} from "vue";
 // components
 import {Icon} from "@iconify/vue";
 import {Line} from "@antv/g2plot";
@@ -32,7 +40,20 @@ const props = defineProps({
         type: Array as PropType<Array<AssetDayStatistic>>,
         required: true,
         default: [] as Array<AssetDayStatistic>
+    },
+    mode: {
+        type: String as PropType<"30d" | "365d">,
+        required: false,
+        default: "30d"
     }
+});
+const emit = defineEmits<{
+    (e: "update:mode", value: "30d" | "365d"): void
+}>();
+
+const longRangeMode = computed<boolean>({
+    get: () => props.mode === "365d",
+    set: (value: boolean) => emit("update:mode", value ? "365d" : "30d")
 });
 
 const lineChart = ref<Line>();

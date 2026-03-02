@@ -13,6 +13,7 @@
 
             <div class="min-w-0 xl:col-span-15 lg:col-span-15">
                 <asset-history-chart
+                    v-model:mode="historyMode"
                     :statistic-list="dayStatisticList"
                     class="h-[250px]"
                 />
@@ -36,6 +37,7 @@ import {getAllAsset, getDayStatistic} from "@/apis";
 import {Asset, AssetDayStatistic, AssetDayStatisticTimeResponse, AssetGetAllAssetResponse} from "@/interface";
 import {AssetDetailList, AssetHistoryChart, AssetSummarization} from "./components";
 import {useThemeStore} from "@/store";
+import {dateToString} from "@/utils/dateComputer";
 
 const theme = useThemeStore();
 const minHeight = computed(() => (theme.tab.height + theme.header.height + theme.footer.height + 32));
@@ -74,23 +76,33 @@ watch(assetList, (newValue: Asset[]) => {
 
 // 第二张卡片：资产变化曲线
 const dayStatisticList: Ref<AssetDayStatistic[]> = ref([]);
+const historyMode: Ref<"30d" | "365d"> = ref("30d");
 
 /**
  * @description 获取资产变化
  */
 function pullAssetDayStatistic() {
-    const today = new Date();
-    today.setHours(24, 0, 0, 0);
-    const past30Day = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const days = historyMode.value === "365d" ? 365 : 30;
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 0);
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - (days - 1));
+    startDate.setHours(0, 0, 0, 0);
+    const startTime = dateToString(startDate);
+    const endTime = dateToString(endDate);
     getDayStatistic({
-        startTime: past30Day.toLocaleString().replaceAll("/", "-"),
-        endTime: today.toLocaleString().replaceAll("/", "-")
+        startTime,
+        endTime
     }).then((res: AssetDayStatisticTimeResponse) => {
         dayStatisticList.value = res.dayStatistic;
     }).catch((error: any) => {
         console.log(error);
     });
 }
+
+watch(() => historyMode.value, () => {
+    pullAssetDayStatistic();
+});
 
 onMounted(() => {
     pullAllAsset();
