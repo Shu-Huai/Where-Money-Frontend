@@ -135,7 +135,7 @@
                                 </div>
                                 <Icon class="my-auto h-5 w-5" icon="ph:arrows-down-up">
                                 </Icon>
-                                <n-modal v-model:show="showRefundModal" class="w-1/7 block xl:hidden">
+                                <n-modal v-model:show="showRefundModal" class="w-1/7 xl:block hidden">
                                     <n-card>
                                         <template #header>
                                             <div class="s-title s-underline text-lg">提示</div>
@@ -143,9 +143,16 @@
                                         <template #default>
                                             <div class="text-center space-y-8">
                                                 <div class="mx-auto text-lg">确认退款？</div>
+                                                <div class="space-y-2 text-left">
+                                                    <div class="text-sm text-gray-500">退款金额</div>
+                                                    <n-input-number v-model:value="refundAmount" :min="0"
+                                                                    :precision="2" class="w-full">
+                                                        <template #prefix>￥</template>
+                                                    </n-input-number>
+                                                </div>
                                                 <div class="flex space-x-2 justify-end">
                                                     <n-button v-on:click="refundBill">确定</n-button>
-                                                    <n-button v-on:click="showRefundModal=false">取消</n-button>
+                                                    <n-button v-on:click="showRefundModal = false">取消</n-button>
                                                 </div>
                                             </div>
                                         </template>
@@ -462,7 +469,7 @@
                             <div>退款</div>
 
                             <!-- 建议：弹窗宽度手机大一点 -->
-                            <n-modal v-model:show="showRefundModal" class="w-5/6 xl:w-1/7">
+                            <n-modal v-model:show="showRefundModal" class="w-5/6 xl:w-1/7 block xl:hidden">
                                 <n-card>
                                     <template #header>
                                         <div class="s-title s-underline text-lg">提示</div>
@@ -470,9 +477,16 @@
                                     <template #default>
                                         <div class="text-center space-y-8">
                                             <div class="mx-auto text-lg">确认退款？</div>
+                                            <div class="space-y-2 text-left">
+                                                <div class="text-sm text-gray-500">退款金额</div>
+                                                <n-input-number v-model:value="refundAmount" :min="0"
+                                                                :precision="2" class="w-full">
+                                                    <template #prefix>￥</template>
+                                                </n-input-number>
+                                            </div>
                                             <div class="flex space-x-2 justify-end">
                                                 <n-button v-on:click="refundBill">确定</n-button>
-                                                <n-button v-on:click="showRefundModal=false">取消</n-button>
+                                                <n-button v-on:click="showRefundModal = false">取消</n-button>
                                             </div>
                                         </div>
                                     </template>
@@ -1185,13 +1199,21 @@ function mouseOnRefundChange(value: boolean): void {
 }
 
 let showRefundModal: Ref<boolean> = ref(false);
+let refundAmount: Ref<number | null> = ref(null);
 
 function refundChange() {
     showRefundModal.value = !showRefundModal.value;
+    if (showRefundModal.value) {
+        refundAmount.value = currentBill.value.amount;
+    }
 }
 
 function refundBill() {
     if (currentBill.value.type !== "支出") {
+        return;
+    }
+    if (refundAmount.value === null || refundAmount.value <= 0) {
+        window.$message.warning("请输入有效退款金额");
         return;
     }
     getAllAsset().then((response: AssetGetAllAssetResponse) => {
@@ -1213,7 +1235,7 @@ function refundBill() {
             formData.append("inAssetId", inAsset.toString());
             formData.append("payBillId", currentBill.value.id.toString());
             formData.append("type", "退款");
-            formData.append("amount", currentBill.value.amount.toString());
+            formData.append("amount", refundAmount.value.toString());
             formData.append("time", dateToString(now()));
             formData.append("remark", "退款");
             formData.append("billCategoryId", billCategoryId.toString());
