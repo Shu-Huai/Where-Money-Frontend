@@ -462,8 +462,13 @@ watch(bookSelector, (value: string) => {
     if (value) {
         let book: Book | undefined = bookList.value.find(item => item.title === value);
         if (book) {
+            const isBookChanged = bookId.value !== book.id;
             bookId.value = book.id;
             bookName.value = book.title;
+            if (isBookChanged) {
+                store.selectedBillCategoryId = 0;
+                refreshBillCategoryList();
+            }
         }
     }
 });
