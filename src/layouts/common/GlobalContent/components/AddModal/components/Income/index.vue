@@ -190,6 +190,25 @@
                 </n-card>
             </n-modal>
             <IconifyPicker v-model:show="showIconPicker" v-on:select="handleIconSelected"/>
+            <n-modal v-model:show="showAiModal" :close-on-esc="!aiParsing" :mask-closable="!aiParsing">
+                <n-card class="w-[92vw] max-w-[640px]" title="AI解析账单">
+                    <n-spin :show="aiParsing">
+                        <div class="space-y-3">
+                            <n-input
+                                v-model:value="aiText"
+                                :autosize="{ minRows: 4, maxRows: 8 }"
+                                :disabled="aiParsing"
+                                placeholder="请输入要解析的账单文本"
+                                type="textarea"
+                            />
+                            <div class="flex justify-end space-x-2">
+                                <n-button :disabled="aiParsing" v-on:click="closeAiModal">关闭</n-button>
+                                <n-button :loading="aiParsing" type="primary" v-on:click="parseAiBill">解析</n-button>
+                            </div>
+                        </div>
+                    </n-spin>
+                </n-card>
+            </n-modal>
             <div class="space-y-2">
                 <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
                     <div class="col-span-1 lg:col-span-2">
@@ -252,8 +271,13 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <n-button class="w-full addButton" type="primary" v-on:click="addBill">
+            <div class="flex space-x-2">
+                <n-button class="w-24" secondary type="primary" v-on:click="openAiModal">
+                    <template #default>
+                        AI
+                    </template>
+                </n-button>
+                <n-button class="flex-1 addButton" type="primary" v-on:click="addBill">
                     <template #default>
                         保存
                     </template>
@@ -330,6 +354,7 @@
 <script lang="ts" setup>
 import {
     addBillApi,
+    aiParseBillApi,
     addBillCategoryApi,
     deleteBillCategoryApi,
     getAllAsset,
@@ -343,6 +368,7 @@ import {
     Asset,
     AssetGetAllAssetResponse,
     AssetGetAssetResponse,
+    BillAiParseResponse,
     BillCategory,
     Book,
     BookAllBillCategoryResponse,
@@ -351,13 +377,14 @@ import {
 } from "@/interface";
 import {onMounted, ref, Ref, watch} from "vue";
 import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
-import {intToString} from "@/utils/dateComputer";
+import {intToString, stringToInt} from "@/utils/dateComputer";
 import {Icon} from "@iconify/vue";
 import {BillCategoryItem} from "./components";
 import {useStore} from "@/stores/store";
 import IconifyPicker from "@/components/custom/IconifyPicker/index.vue";
 
 let timePickerProps: TimePickerProps = {inputReadonly: true};
+const DEFAULT_ASSET_NAME = "收款账户";
 let remark: Ref<string> = ref("");
 let amount: Ref<number> = ref(0);
 let bookName: Ref<string> = ref("");
@@ -374,7 +401,7 @@ onMounted(() => {
     bookId.value = store.bookId;
     timestamp.value = Date.now();
     timestamp.value -= timestamp.value % (60 * 1000)
-    assetName.value = "收款账户";
+    assetName.value = DEFAULT_ASSET_NAME;
     store.selectedBillCategoryId = 0;
     getAllBillCategoryApi({bookId: bookId.value, type: "收入"}).then((res: BookAllBillCategoryResponse) => {
         billCategoryList.value = res.billCategoryList;
@@ -483,6 +510,78 @@ function addBill(): void {
         });
     }).catch(() => {
     });
+}
+
+let showAiModal: Ref<boolean> = ref(false);
+let aiText: Ref<string> = ref("");
+let aiParsing: Ref<boolean> = ref(false);
+
+function openAiModal(): void {
+    showAiModal.value = true;
+}
+
+function closeAiModal(): void {
+    showAiModal.value = false;
+    aiText.value = "";
+}
+
+function applyAiBillTime(billTime: string | null): void {
+    if (billTime === null) return;
+    const parsedTime = stringToInt(billTime);
+    if (!Number.isNaN(parsedTime)) {
+        timestamp.value = parsedTime;
+    }
+}
+
+async function applyAiInAsset(inAssetId: number | null, inAssetName: string | null): Promise<void> {
+    if (inAssetId === null) return;
+    assetId.value = inAssetId;
+    try {
+        const response: AssetGetAssetResponse = await getAssetApi({id: inAssetId});
+        assetName.value = response.asset.assetName;
+        assetBalance.value = response.asset.balance;
+        assetSvg.value = response.asset.svg;
+    } catch (_err) {
+        if (inAssetName !== null) {
+            assetName.value = inAssetName;
+        }
+    }
+}
+
+async function parseAiBill(): Promise<void> {
+    const text = aiText.value.trim();
+    if (!text) {
+        window.$message.error("请输入要解析的文本");
+        return;
+    }
+    if (!bookId.value) {
+        window.$message.error("请选择账本");
+        return;
+    }
+    aiParsing.value = true;
+    try {
+        const data: BillAiParseResponse = await aiParseBillApi({
+            bookId: bookId.value,
+            type: "收入",
+            text
+        });
+        if (data.billCategoryId !== null) {
+            store.selectedBillCategoryId = data.billCategoryId;
+        }
+        if (data.amount !== null) {
+            amount.value = data.amount;
+        }
+        if (data.remark !== null) {
+            remark.value = data.remark;
+        }
+        applyAiBillTime(data.billTime);
+        await applyAiInAsset(data.inAssetId, data.inAssetName);
+        closeAiModal();
+    } catch (error: any) {
+        window.$message.error(error?.message || "AI解析失败");
+    } finally {
+        aiParsing.value = false;
+    }
 }
 
 let mouseOnClose: Ref<boolean> = ref(false);
@@ -641,6 +740,12 @@ watch(showUpdateModal, (value: boolean) => {
         showIconPicker.value = false;
         cancelEditCategory();
         resetAddForm();
+    }
+});
+
+watch(showAiModal, (value: boolean) => {
+    if (!value && !aiParsing.value) {
+        aiText.value = "";
     }
 });
 </script>

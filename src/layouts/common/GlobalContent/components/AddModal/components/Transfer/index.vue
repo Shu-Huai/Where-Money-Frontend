@@ -102,8 +102,32 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <n-button class="w-full addButton" type="primary" v-on:click="addBill">
+            <n-modal v-model:show="showAiModal" :close-on-esc="!aiParsing" :mask-closable="!aiParsing">
+                <n-card class="w-[92vw] max-w-[640px]" title="AI解析账单">
+                    <n-spin :show="aiParsing">
+                        <div class="space-y-3">
+                            <n-input
+                                v-model:value="aiText"
+                                :autosize="{ minRows: 4, maxRows: 8 }"
+                                :disabled="aiParsing"
+                                placeholder="请输入要解析的账单文本"
+                                type="textarea"
+                            />
+                            <div class="flex justify-end space-x-2">
+                                <n-button :disabled="aiParsing" v-on:click="closeAiModal">关闭</n-button>
+                                <n-button :loading="aiParsing" type="primary" v-on:click="parseAiBill">解析</n-button>
+                            </div>
+                        </div>
+                    </n-spin>
+                </n-card>
+            </n-modal>
+            <div class="flex space-x-2">
+                <n-button class="w-24" secondary type="primary" v-on:click="openAiModal">
+                    <template #default>
+                        AI
+                    </template>
+                </n-button>
+                <n-button class="flex-1 addButton" type="primary" v-on:click="addBill">
                     <template #default>
                         保存
                     </template>
@@ -228,21 +252,24 @@
 </template>
 <script lang="ts" setup>
 import {onMounted, ref, Ref, watch} from "vue";
-import {addBillApi, getAllAsset, getAllBookApi, getAssetApi, getBookApi} from "@/apis";
+import {addBillApi, aiParseBillApi, getAllAsset, getAllBookApi, getAssetApi, getBookApi} from "@/apis";
 import {
     Asset,
     AssetGetAllAssetResponse,
     AssetGetAssetResponse,
+    BillAiParseResponse,
     Book,
     BookGetAllBookResponse,
     BookGetBookResponse
 } from "@/interface";
 import {TimePickerProps, UploadCustomRequestOptions, UploadFileInfo} from "naive-ui";
-import {intToString} from "@/utils/dateComputer";
+import {intToString, stringToInt} from "@/utils/dateComputer";
 import {Icon} from "@iconify/vue";
 import {useStore} from "@/stores/store";
 
 let timePickerProps: TimePickerProps = {inputReadonly: true};
+const DEFAULT_OUT_ASSET_NAME = "转出账户";
+const DEFAULT_IN_ASSET_NAME = "转入账户";
 let remark: Ref<string> = ref("");
 let amount: Ref<number> = ref(0);
 let bookName: Ref<string> = ref("");
@@ -261,8 +288,8 @@ onMounted(() => {
     bookId.value = store.bookId;
     timestamp.value = Date.now();
     timestamp.value -= timestamp.value % (60 * 1000)
-    outAssetName.value = "转出账户";
-    inAssetName.value = "转入账户";
+    outAssetName.value = DEFAULT_OUT_ASSET_NAME;
+    inAssetName.value = DEFAULT_IN_ASSET_NAME;
     getBookApi({id: bookId.value}).then((response: BookGetBookResponse) => {
         bookName.value = response.book.title;
         isLoading.value = false;
@@ -409,6 +436,102 @@ function addBill(): void {
     }).catch(() => {
     });
 }
+
+let showAiModal: Ref<boolean> = ref(false);
+let aiText: Ref<string> = ref("");
+let aiParsing: Ref<boolean> = ref(false);
+
+function openAiModal(): void {
+    showAiModal.value = true;
+}
+
+function closeAiModal(): void {
+    showAiModal.value = false;
+    aiText.value = "";
+}
+
+function applyAiBillTime(billTime: string | null): void {
+    if (billTime === null) return;
+    const parsedTime = stringToInt(billTime);
+    if (!Number.isNaN(parsedTime)) {
+        timestamp.value = parsedTime;
+    }
+}
+
+async function applyAiOutAsset(outAssetIdValue: number | null, outAssetNameValue: string | null): Promise<void> {
+    if (outAssetIdValue === null) return;
+    outAssetId.value = outAssetIdValue;
+    try {
+        const response: AssetGetAssetResponse = await getAssetApi({id: outAssetIdValue});
+        outAssetName.value = response.asset.assetName;
+        outAssetBalance.value = response.asset.balance;
+        outAssetSvg.value = response.asset.svg;
+    } catch (_err) {
+        if (outAssetNameValue !== null) {
+            outAssetName.value = outAssetNameValue;
+        }
+    }
+}
+
+async function applyAiInAsset(inAssetIdValue: number | null, inAssetNameValue: string | null): Promise<void> {
+    if (inAssetIdValue === null) return;
+    inAssetId.value = inAssetIdValue;
+    try {
+        const response: AssetGetAssetResponse = await getAssetApi({id: inAssetIdValue});
+        inAssetName.value = response.asset.assetName;
+        inAssetBalance.value = response.asset.balance;
+        inAssetSvg.value = response.asset.svg;
+    } catch (_err) {
+        if (inAssetNameValue !== null) {
+            inAssetName.value = inAssetNameValue;
+        }
+    }
+}
+
+async function parseAiBill(): Promise<void> {
+    const text = aiText.value.trim();
+    if (!text) {
+        window.$message.error("请输入要解析的文本");
+        return;
+    }
+    if (!bookId.value) {
+        window.$message.error("请选择账本");
+        return;
+    }
+    aiParsing.value = true;
+    try {
+        const data: BillAiParseResponse = await aiParseBillApi({
+            bookId: bookId.value,
+            type: "转账",
+            text
+        });
+        if (data.amount !== null) {
+            amount.value = data.amount;
+        }
+        if (data.transferFee !== null) {
+            fee.value = data.transferFee;
+        }
+        if (data.remark !== null) {
+            remark.value = data.remark;
+        }
+        applyAiBillTime(data.billTime);
+        await Promise.all([
+            applyAiOutAsset(data.outAssetId, data.outAssetName),
+            applyAiInAsset(data.inAssetId, data.inAssetName)
+        ]);
+        closeAiModal();
+    } catch (error: any) {
+        window.$message.error(error?.message || "AI解析失败");
+    } finally {
+        aiParsing.value = false;
+    }
+}
+
+watch(showAiModal, (value: boolean) => {
+    if (!value && !aiParsing.value) {
+        aiText.value = "";
+    }
+});
 </script>
 
 <style scoped>
