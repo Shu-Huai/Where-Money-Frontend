@@ -1,4 +1,6 @@
 import http from "@/utils/http";
+import request from "@/utils/request";
+import {BillAiParseResponse} from "@/interface";
 
 function addBillApi(params: any): any {
     return http.post("/bill/bill", params);
@@ -56,6 +58,15 @@ function getBillImageApi(params: { billId: number, type: string }): any {
     return http.get("/bill/image", params);
 }
 
+function aiParseBillApi(params: { bookId: number, type: "支出" | "收入" | "转账", text: string }): Promise<BillAiParseResponse> {
+    return request({
+        method: "post",
+        url: "/bill/ai/parse",
+        params,
+        skipErrorMessage: true
+    } as any);
+}
+
 export {
     addBillApi,
     getBillApi,
@@ -70,4 +81,5 @@ export {
     getMaxMinPayTimeApi,
     getMaxMinIncomeTimeApi,
     getBillImageApi,
+    aiParseBillApi,
 };

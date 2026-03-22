@@ -32,6 +32,7 @@ declare const window: Window & { $message: any; $loadingBar: LoadingBarApi };
 service.interceptors.response.use(
     (response: any) => {
         const res: any = response.data;
+        const skipErrorMessage = Boolean(response?.config?.skipErrorMessage);
         if (res.code === 200) {
             console.log(`请求${response.config.baseURL}${response.config.url}成功，返回：`);
             console.log(res.data);
@@ -44,17 +45,23 @@ service.interceptors.response.use(
                 console.log(res);
                 switch (res.code) {
                     case 400:
-                        window.$message.error(res.message);
+                        if (!skipErrorMessage) {
+                            window.$message.error(res.message);
+                        }
                         break;
                     case 401:
                         storage.remove(EnumStorageKey["token"]);
                         switch (res.message) {
                             case "账户或密码错误":
-                                window.$message.error("账户或密码错误");
+                                if (!skipErrorMessage) {
+                                    window.$message.error("账户或密码错误");
+                                }
                                 break;
                             case "token无效":
                             case "token过期":
-                                window.$message.error("未授权或授权失效，请重新登录");
+                                if (!skipErrorMessage) {
+                                    window.$message.error("未授权或授权失效，请重新登录");
+                                }
                                 router.push({name: "login"}).then(_r => {
                                 });
                                 break;
@@ -63,22 +70,30 @@ service.interceptors.response.use(
                     case 403:
                         break;
                     case 404:
-                        window.$message.error("请求错误");
+                        if (!skipErrorMessage) {
+                            window.$message.error("请求错误");
+                        }
                         break;
                     case 405:
                         break;
                     case 408:
                         break;
                     case 422:
-                        window.$message.error("请求参数错误");
+                        if (!skipErrorMessage) {
+                            window.$message.error("请求参数错误");
+                        }
                         break;
                     case 500:
-                        window.$message.error("服务器错误");
+                        if (!skipErrorMessage) {
+                            window.$message.error("服务器错误");
+                        }
                         break;
                     case 501:
                         break;
                     case 502:
-                        window.$message.error("网络错误");
+                        if (!skipErrorMessage) {
+                            window.$message.error("网络错误");
+                        }
                         break;
                     case 503:
                         break;
@@ -90,7 +105,9 @@ service.interceptors.response.use(
                         console.log(`连接错误${res.code}`);
                 }
             } else {
-                window.$message.error("连接服务器失败");
+                if (!skipErrorMessage) {
+                    window.$message.error("连接服务器失败");
+                }
             }
             window.$loadingBar.error();
             return Promise.reject(res);
