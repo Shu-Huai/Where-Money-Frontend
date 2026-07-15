@@ -28,7 +28,7 @@ export function getViewComponent(routeKey: AuthRoute.RouteKey) {
 
 /** 给页面组件设置名称 */
 async function setViewComponentName(asyncComponent: () => Promise<Component>, name: string) {
-    const component = (await asyncComponent()) as { default: Component };
-    Object.assign(component.default, {name});
+    const component = await asyncComponent();
+    Object.assign(component, {name});
     return component;
 }

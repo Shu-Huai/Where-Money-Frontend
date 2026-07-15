@@ -3,6 +3,8 @@ import {defineConfig} from "vite";
 import {define, setupVitePlugins} from "./build";
 
 export default defineConfig(configEnv => {
+    const isHarmony = configEnv.mode === "harmony";
+
     return {
         base: "./",
         resolve: {
@@ -31,6 +33,12 @@ export default defineConfig(configEnv => {
         },
         build: {
             brotliSize: false,
+            cssCodeSplit: !isHarmony,
+            rollupOptions: isHarmony ? {
+                output: {
+                    inlineDynamicImports: true
+                }
+            } : undefined,
             sourcemap: false,
             minify: 'terser',
             terserOptions: {
