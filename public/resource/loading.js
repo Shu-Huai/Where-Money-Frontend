@@ -35,6 +35,15 @@ function addThemeColorCssVars() {
     document.documentElement.style.cssText = `--primary-color: ${themeColor}`;
 }
 
+function applyInitialSystemTheme() {
+    const nativeTheme = window.__WHERE_MONEY_SYSTEM_DARK__;
+    const isDark = typeof nativeTheme === "boolean"
+        ? nativeTheme
+        : window.localStorage.getItem("__WHERE_MONEY_SYSTEM_DARK__") === "true";
+    document.documentElement.classList.toggle("dark", isDark);
+}
+
 initSvgLogo("#loadingLogo");
 
 addThemeColorCssVars();
+applyInitialSystemTheme();

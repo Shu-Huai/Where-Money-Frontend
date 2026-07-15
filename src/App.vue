@@ -1,5 +1,5 @@
 <template>
-    <div class="dark:text-gray-300 h-full">
+    <div class="app-root dark:text-gray-300 h-full">
         <n-config-provider
             :date-locale="dateZhCN"
             :locale="zhCN"

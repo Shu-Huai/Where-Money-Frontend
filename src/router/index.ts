@@ -5,7 +5,10 @@ import {constantRoutes} from "./routes";
 import {scrollBehavior} from "./helpers";
 import {createRouterGuard} from "./guard";
 
-const createHistoryFunc = import.meta.env.VITE_IS_VERCEL === "1" ? createWebHashHistory : createWebHistory;
+const isHarmony = import.meta.env.MODE === "harmony";
+const createHistoryFunc = isHarmony || import.meta.env.VITE_IS_VERCEL === "1"
+    ? createWebHashHistory
+    : createWebHistory;
 
 export const router = createRouter({
     history: createHistoryFunc(import.meta.env.VITE_APP_BASE_URL),
@@ -13,10 +16,9 @@ export const router = createRouter({
     scrollBehavior
 });
 
-export async function setupRouter(app: App) {
+export function setupRouter(app: App) {
     app.use(router);
     createRouterGuard(router);
-    await router.isReady();
 }
 
 export * from "./routes";

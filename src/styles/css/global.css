@@ -3,3 +3,28 @@
 html, body, #app {
     height: 100%;
 }
+
+html, body {
+    background-color: #ffffff;
+}
+
+html.dark, html.dark body {
+    background-color: #101014;
+}
+
+/* ArkWeb 的透明状态栏会叠在页面上，整个 Vue 应用内容需要避让顶部安全区。 */
+.app-root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* 当前 HarmonyOS 设备的 ArkWeb 未暴露 safe-area-inset-top，使用状态栏约 24vp 的安全区。 */
+.harmony .app-root {
+    padding-top: 36px;
+}
+
+/* Naive UI Drawer 使用 fixed 定位，不受 app-root 安全区影响。 */
+.harmony .n-drawer-container {
+    top: 36px;
+    height: calc(100% - 36px);
+}

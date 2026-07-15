@@ -25,3 +25,14 @@ dist-ssr
 *.sw?
 
 stats.html
+
+# HarmonyOS generated files
+/harmony-app/.hvigor/
+/harmony-app/hvigor/
+/harmony-app/oh_modules/
+/harmony-app/**/build/
+/harmony-app/**/*.hap
+/harmony-app/*.jpeg
+
+# Local verification artifacts
+/artifacts/

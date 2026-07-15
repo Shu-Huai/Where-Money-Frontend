@@ -9,6 +9,7 @@ export default function subscribeThemeStore() {
     const app = useAppStore();
     const theme = useThemeStore();
     const osTheme = useOsTheme();
+    const isHarmony = import.meta.env.MODE === "harmony";
     const {width} = useElementSize(document.documentElement);
     const {addDarkClass, removeDarkClass} = handleWindicssDarkMode();
     const isDesktop = typeof window === "undefined" || !window.matchMedia
@@ -42,18 +43,40 @@ export default function subscribeThemeStore() {
             } else {
                 removeDarkClass();
             }
+            if (import.meta.env.MODE === "harmony") {
+                (window as Window & {
+                    whereMoneySystemBar?: { setDarkMode: (isDark: boolean) => void };
+                }).whereMoneySystemBar?.setDarkMode(newValue);
+            }
         }
     );
 
+    const onHarmonySystemThemeChange = (event: Event) => {
+        const dark = (event as CustomEvent<{ dark: boolean }>).detail?.dark;
+        if (typeof dark === "boolean") {
+            theme.setDarkMode(dark);
+        }
+    };
+    window.addEventListener("where-money-system-theme-change", onHarmonySystemThemeChange);
+
+    const initialHarmonySystemTheme = (window as Window & {
+        __WHERE_MONEY_SYSTEM_DARK__?: boolean;
+    }).__WHERE_MONEY_SYSTEM_DARK__;
+    if (isHarmony && typeof initialHarmonySystemTheme === "boolean") {
+        theme.setDarkMode(initialHarmonySystemTheme);
+    }
+
     // 监听操作系统主题模式
-    const stopOsTheme = watch(
-        osTheme,
-        newValue => {
-            const isDark = newValue === 'dark';
-            theme.setDarkMode(isDark);
-        },
-        {immediate: true}
-    );
+    const stopOsTheme = isHarmony
+        ? () => undefined
+        : watch(
+            osTheme,
+            newValue => {
+                const isDark = newValue === 'dark';
+                theme.setDarkMode(isDark);
+            },
+            {immediate: true}
+        );
 
     // 禁用横向滚动(页面切换时,过渡动画会产生水平方向的滚动条, 小于最小宽度时，不禁止)
     const stopWidth = watch(width, newValue => {
@@ -68,6 +91,7 @@ export default function subscribeThemeStore() {
         stopThemeColor();
         stopLayout();
         stopDarkMode();
+        window.removeEventListener("where-money-system-theme-change", onHarmonySystemThemeChange);
         stopOsTheme();
         stopWidth();
     });

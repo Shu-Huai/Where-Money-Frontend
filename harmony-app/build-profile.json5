@@ -1,0 +1,50 @@
+{
+  "app": {
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "6.1.0(23)",
+        "compatibleSdkVersion": "6.1.0(23)",
+        "runtimeOS": "HarmonyOS"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B4B25940B88631806171F85EA5E144F8839CD69738E53EA79D594E8E153BB8ED4D26ADF51B16A9C",
+          "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p12",
+          "storePassword": "0000001B1E943C01E5F8BF8A38BB1AA8E9D75F79037F8429BDAFF489F981C9990B782EEA84B0E979B75B61"
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "app_name", "value": "Where Money" },
+    { "name": "module_desc", "value": "Where Money ArkWeb module" },
+    { "name": "EntryAbility_desc", "value": "Where Money" }
+  ]
+}

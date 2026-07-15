@@ -4,6 +4,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build --mode production",
+        "harmony:build": "vite build --mode harmony",
+        "harmony:sync": "npm run harmony:build && powershell -ExecutionPolicy Bypass -File scripts/sync-harmony.ps1",
         "serve": "vite --mode production",
         "typecheck": "vue-tsc",
         "build:test": "npm run typecheck && cross-env VITE_HTTP_ENV=test vite build",

@@ -2,7 +2,10 @@ import type {Component} from "vue";
 
 type ViewComponent = Record<string, () => Promise<Component>>;
 
-const importViews = import.meta.glob("./**/index.vue");
+const importViews = import.meta.glob("./**/index.vue", {
+    eager: true,
+    import: "default"
+});
 
 const COMPONENTS_KEY = "components";
 const PREFIX = "./";
@@ -23,7 +26,8 @@ function getViewComponent() {
             .replace(SUFFIX, "")
             .replaceAll(PATH_SPLIT_MARK, ROUTE_KEY_SPLIT_MARK)
             .replace(SYSTEM_VIEW, "");
-        components[routeKey] = importViews[key];
+        const component = importViews[key] as Component;
+        components[routeKey] = () => Promise.resolve(component);
     });
     return components;
 }
