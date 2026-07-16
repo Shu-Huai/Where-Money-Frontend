@@ -18,13 +18,24 @@ html.dark, html.dark body {
     padding-top: env(safe-area-inset-top, 0px);
 }
 
+.harmony {
+    --harmony-status-bar-inset: 36px;
+}
+
 /* 当前 HarmonyOS 设备的 ArkWeb 未暴露 safe-area-inset-top，使用状态栏约 24vp 的安全区。 */
 .harmony .app-root {
-    padding-top: 36px;
+    padding-top: var(--harmony-status-bar-inset);
 }
 
 /* Naive UI Drawer 使用 fixed 定位，不受 app-root 安全区影响。 */
 .harmony .n-drawer-container {
-    top: 36px;
-    height: calc(100% - 36px);
+    top: var(--harmony-status-bar-inset);
+    height: calc(100% - var(--harmony-status-bar-inset));
+}
+
+/* Naive UI Message 使用 fixed 定位，不受 app-root 安全区影响。 */
+.harmony .n-message-container.n-message-container--top,
+.harmony .n-message-container.n-message-container--top-left,
+.harmony .n-message-container.n-message-container--top-right {
+    top: calc(12px + var(--harmony-status-bar-inset));
 }
