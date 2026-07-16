@@ -4,6 +4,41 @@ import { updateSystemBarContentColor } from '../systembar/SystemBar';
 let currentController: webview.WebviewController | undefined;
 let pageLoaded: boolean = false;
 let currentSystemDark: boolean | undefined;
+const HARMONY_WEB_ORIGIN = 'http://lvshuhuai.cn:5050';
+
+function completeLocalResponse(response: WebResourceResponse, mimeType: string): WebResourceResponse {
+  response.setResponseEncoding('UTF-8');
+  response.setResponseMimeType(mimeType);
+  response.setResponseCode(200);
+  response.setReasonMessage('OK');
+  response.setResponseIsReady(true);
+  return response;
+}
+
+function interceptLocalPage(requestUrl: string): WebResourceResponse | null {
+  const path = requestUrl.substring(HARMONY_WEB_ORIGIN.length).split('?')[0].split('#')[0];
+  if (path === '' || path === '/' || path === '/index.html') {
+    const response = new WebResourceResponse();
+    response.setResponseData($rawfile('www/index.html'));
+    return completeLocalResponse(response, 'text/html');
+  }
+  if (path === '/logo.png') {
+    const response = new WebResourceResponse();
+    response.setResponseData($rawfile('www/logo.png'));
+    return completeLocalResponse(response, 'image/png');
+  }
+  if (path === '/resource/loading.css') {
+    const response = new WebResourceResponse();
+    response.setResponseData($rawfile('www/resource/loading.css'));
+    return completeLocalResponse(response, 'text/css');
+  }
+  if (path === '/resource/loading.js') {
+    const response = new WebResourceResponse();
+    response.setResponseData($rawfile('www/resource/loading.js'));
+    return completeLocalResponse(response, 'application/javascript');
+  }
+  return null;
+}
 
 class SystemBarBridge {
   setDarkMode(isDark: boolean): void {
@@ -53,7 +88,7 @@ struct Index {
   build() {
     Stack() {
       Web({
-        src: $rawfile('www/index.html'),
+        src: HARMONY_WEB_ORIGIN,
         controller: this.controller
       })
         .javaScriptOnDocumentStart([{
@@ -63,6 +98,7 @@ struct Index {
         .javaScriptAccess(true)
         .domStorageAccess(true)
         .fileAccess(true)
+        .enableAutoFill(true)
         .onControllerAttached(() => {
           this.controller.registerJavaScriptProxy(
             this.systemBarBridge,
@@ -70,11 +106,21 @@ struct Index {
             ['setDarkMode']
           );
         })
-        .onPageBegin(() => {
-          pageLoaded = false;
+        .onInterceptRequest((event: OnInterceptRequestEvent) => {
+          const requestUrl = event.request.getRequestUrl();
+          const response = interceptLocalPage(requestUrl);
+          if (response) {
+            console.info(`[WhereMoney][Web] local resource served: ${requestUrl}`);
+          }
+          return response;
         })
-        .onPageEnd(() => {
+        .onPageBegin((event) => {
+          pageLoaded = false;
+          console.info(`[WhereMoney][Web] page begin: ${event.url}`);
+        })
+        .onPageEnd((event) => {
           pageLoaded = true;
+          console.info(`[WhereMoney][Web] page end: ${event.url}`);
           if (currentSystemDark !== undefined) {
             setHarmonySystemTheme(currentSystemDark);
           }

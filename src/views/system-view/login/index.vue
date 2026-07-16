@@ -10,18 +10,33 @@
             <div class="text-6xl font-bold italic text-primary mb-13 mt-5 text-center">
                 <span class="underline decoration-teal-500 decoration-6">Where</span> Money
             </div>
-            <n-form id="form" ref="formRef" :model="formValue" :rules="rules" :show-label="false">
+            <n-form
+                id="form"
+                ref="formRef"
+                autocomplete="on"
+                :model="formValue"
+                :rules="rules"
+                :show-label="false"
+                @submit.prevent="PostLogin"
+            >
                 <n-form-item label="用户名" path="userName">
-                    <n-input v-model:value="formValue.userName" :round="true" class="p-2" placeholder="账号"/>
+                    <n-input
+                        v-model:value="formValue.userName"
+                        :input-props="{ autocomplete: 'username', id: 'username', name: 'username' }"
+                        :round="true"
+                        class="p-2"
+                        placeholder="账号"
+                        type="text"
+                    />
                 </n-form-item>
                 <n-form-item label="密码" path="password">
                     <n-input
                         v-model:value="formValue.password"
+                        :input-props="{ autocomplete: 'current-password', id: 'password', name: 'password' }"
                         :round="true"
                         class="p-2"
                         placeholder="密码"
                         type="password"
-                        @keyup.enter="PostLogin"
                     />
                 </n-form-item>
                 <n-form-item>
@@ -31,11 +46,10 @@
                     <n-button
                         :round="true"
                         :secondary="true"
-                        attr-type="button"
+                        attr-type="submit"
                         class="w-full py-5 text-lg font-bold"
                         size="large"
                         type="primary"
-                        @click="PostLogin"
                     >登录
                     </n-button>
                 </n-form-item>
