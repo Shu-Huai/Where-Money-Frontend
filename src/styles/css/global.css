@@ -39,3 +39,8 @@ html.dark, html.dark body {
 .harmony .n-message-container.n-message-container--top-right {
     top: calc(12px + var(--harmony-status-bar-inset));
 }
+
+/* Naive UI Loading Bar 使用 fixed 定位，不受 app-root 安全区影响。 */
+.harmony .n-loading-bar-container {
+    top: var(--harmony-status-bar-inset);
+}

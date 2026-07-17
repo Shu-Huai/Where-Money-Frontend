@@ -8,9 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+dist/
+dist-ssr/
 .DS_Store
-dist
-dist-ssr
 *.local
 
 /cypress/videos/
@@ -33,6 +33,7 @@ stats.html
 /harmony-app/**/build/
 /harmony-app/**/*.hap
 /harmony-app/*.jpeg
+/harmony-app/entry/src/main/resources/rawfile/www/
 
 # Local verification artifacts
 /artifacts/
