@@ -75,7 +75,7 @@ npm run dev
 │  ├─ settings/           # 主题与颜色配置
 │  ├─ store/              # Pinia 状态管理
 │  ├─ styles/             # 全局样式
-│  └─ views/              # 页面（home/bill/asset/budget/about 等）
+│  └─ views/              # 页面（home/bill/asset/budget 等）
 ├─ vite.config.mts
 └─ windi.config.ts
 ```
