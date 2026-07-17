@@ -23,3 +23,21 @@ export function setLayout(layout: ThemeLayoutMode): void {
 export function getLayout(): ThemeLayoutMode | null {
     return window.localStorage.getItem(EnumStorageKey["layout"]) as ThemeLayoutMode;
 }
+
+export function setThemeTabVisible(visible: boolean): void {
+    window.localStorage.setItem(EnumStorageKey["tabVisible"], JSON.stringify(visible));
+}
+
+export function getThemeTabVisible(): boolean | null {
+    const savedValue = window.localStorage.getItem(EnumStorageKey["tabVisible"]);
+    if (savedValue === null) {
+        return null;
+    }
+
+    try {
+        const parsedValue: unknown = JSON.parse(savedValue);
+        return typeof parsedValue === "boolean" ? parsedValue : null;
+    } catch {
+        return null;
+    }
+}

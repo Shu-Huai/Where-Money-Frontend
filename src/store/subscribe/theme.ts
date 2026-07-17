@@ -1,7 +1,7 @@
 import {onUnmounted, watch} from 'vue';
 import {useOsTheme} from 'naive-ui';
 import {useElementSize} from '@vueuse/core';
-import {setLayout, setThemeColor} from '@/utils';
+import {setLayout, setThemeColor, setThemeTabVisible} from '@/utils';
 import {useAppStore, useThemeStore} from "@/store";
 
 /** 订阅theme store */
@@ -30,6 +30,13 @@ export default function subscribeThemeStore() {
             if (!isDesktop && newValue === "vertical-mix") {
                 app.setSiderCollapse(true);
             }
+        },
+        {immediate: true}
+    );
+    const stopTabVisible = watch(
+        () => theme.tab.visible,
+        newValue => {
+            setThemeTabVisible(newValue);
         },
         {immediate: true}
     );
@@ -90,6 +97,7 @@ export default function subscribeThemeStore() {
     onUnmounted(() => {
         stopThemeColor();
         stopLayout();
+        stopTabVisible();
         stopDarkMode();
         window.removeEventListener("where-money-system-theme-change", onHarmonySystemThemeChange);
         stopOsTheme();
