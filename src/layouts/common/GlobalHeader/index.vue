@@ -1,9 +1,11 @@
 <template>
-    <dark-mode-container
-        class="global-header flex items-center flex-nowrap h-full px-2 overflow-hidden"
-    >
-        <!-- 左侧：菜单/面包屑（移动端可以隐藏面包屑避免挤） -->
-        <div class="flex items-center flex-1 min-w-0 gap-2">
+    <dark-mode-container class="global-header flex flex-col h-full px-2 overflow-hidden">
+        <div
+            class="flex items-center w-full shrink-0"
+            :style="{height: `${theme.header.height}px`}"
+        >
+            <!-- 左侧：菜单/面包屑（移动端可以隐藏面包屑避免挤） -->
+            <div class="flex items-center flex-1 min-w-0 gap-2">
             <global-logo
                 v-if="showLogo"
                 :show-title="true"
@@ -17,17 +19,17 @@
                 <global-breadcrumb v-if="theme.header.crumb.visible" class="xl:flex lg:flex min-w-0"/>
             </div>
 
-            <div
-                v-else
-                :style="{ justifyContent: theme.menu.horizontalPosition }"
-                class="flex items-center flex-1 min-w-0"
-            >
-                <header-menu class="min-w-0"/>
+                <div
+                    v-else-if="!mobileHorizontalHeader"
+                    :style="{ justifyContent: theme.menu.horizontalPosition }"
+                    class="flex items-center flex-1 min-w-0"
+                >
+                    <header-menu class="min-w-0"/>
+                </div>
             </div>
-        </div>
 
-        <!-- 右侧：账本 + 日期 + 退出（不换行） -->
-        <div class="flex items-center gap-2 shrink-0">
+            <!-- 右侧：账本 + 日期 + 退出（不换行） -->
+            <div class="flex items-center gap-2 shrink-0">
             <n-select
                 v-model:value="bookId"
                 :consistent-menu-width="false"
@@ -114,6 +116,15 @@
                     <Icon :icon="'ri:logout-box-r-line'" class="text-16px"/>
                 </hover-container>
             </div>
+            </div>
+        </div>
+
+        <div
+            v-if="mobileHorizontalHeader"
+            :style="{height: `${theme.header.height}px`, justifyContent: theme.menu.horizontalPosition}"
+            class="flex items-center w-full shrink-0"
+        >
+            <header-menu class="min-w-0"/>
         </div>
     </dark-mode-container>
 
@@ -133,7 +144,8 @@
 
 
 <script lang="ts" setup>
-import {defineComponent, onMounted, reactive, Ref, ref} from "vue";
+import {computed, defineComponent, onMounted, reactive, Ref, ref} from "vue";
+import {useWindowSize} from "@vueuse/core";
 import {Router} from "vue-router";
 import {ExitOutline} from "@vicons/ionicons5";
 import {DarkModeContainer, HoverContainer} from "@/components";
@@ -148,13 +160,16 @@ import {Icon} from "@iconify/vue";
 import {dateToString, now} from "@/utils/dateComputer";
 import {addBookApi, deleteBookApi, getAllBookApi} from "@/apis";
 import {EnumStorageKey} from "@/enum";
+import {isMobileHorizontalHeader} from "@/utils/layout/mobileHeader";
 
 const {routerPush, routerBack} = useRouterPush();
-defineProps<{
+const props = defineProps<{
     showLogo: GlobalHeaderProps["showLogo"];
     showHeaderMenu: GlobalHeaderProps["showHeaderMenu"];
     showMenuCollape: GlobalHeaderProps["showMenuCollape"];
 }>();
+const {width} = useWindowSize();
+const mobileHorizontalHeader = computed(() => isMobileHorizontalHeader(props.showHeaderMenu, width.value));
 const theme = useThemeStore();
 const store = useStore();
 const showExitModal: Ref<boolean> = ref(false);
