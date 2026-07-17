@@ -42,17 +42,6 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             requiresAuth: true,
             singleLayout: "basic"
         }
-    },
-    {
-        name: "about",
-        path: "/about",
-        component: "self",
-        meta: {
-            title: "关于",
-            icon: "ic:baseline-question-mark",
-            requiresAuth: true,
-            singleLayout: "basic"
-        }
     }
 ];
 
