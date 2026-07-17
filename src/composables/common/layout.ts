@@ -1,12 +1,19 @@
 import {computed} from "vue";
+import {useWindowSize} from "@vueuse/core";
 import {useAppStore, useThemeStore} from "@/store";
 import type {GlobalHeaderProps, ThemeLayoutMode} from "@/interface";
+import {getGlobalHeaderHeight} from "@/utils/layout/mobileHeader";
 
 type LayoutHeaderProps = Record<ThemeLayoutMode, GlobalHeaderProps>;
 
 export function useBasicLayout() {
     const app = useAppStore();
     const theme = useThemeStore();
+    const {width} = useWindowSize();
+
+    const headerHeight = computed(() =>
+        getGlobalHeaderHeight(theme.header.height, theme.layout.mode === "horizontal", width.value)
+    );
 
     type LayoutMode = "vertical" | "horizontal";
     const mode = computed(() => {
@@ -63,6 +70,7 @@ export function useBasicLayout() {
     return {
         mode,
         headerProps,
+        headerHeight,
         siderVisible,
         siderWidth,
         siderCollapsedWidth

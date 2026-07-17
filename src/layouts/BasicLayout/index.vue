@@ -2,7 +2,7 @@
     <AdminLayout
         :fixed-footer="theme.footer.fixed"
         :fixed-header-and-tab="theme.fixedHeaderAndTab"
-        :header-height="theme.header.height"
+        :header-height="headerHeight"
         :min-width="theme.layout.minWidth"
         :mode="mode"
         :sider-collapse="app.siderCollapse"
@@ -40,7 +40,7 @@ import {GlobalContent, GlobalHeader, GlobalSider, GlobalTab, SettingDrawer} from
 
 const app = useAppStore();
 const theme = useThemeStore();
-const {mode, headerProps, siderVisible, siderWidth, siderCollapsedWidth} = useBasicLayout();
+const {mode, headerProps, headerHeight, siderVisible, siderWidth, siderCollapsedWidth} = useBasicLayout();
 const store = useStore();
 onMounted(() => {
 });
