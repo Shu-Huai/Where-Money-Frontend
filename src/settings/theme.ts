@@ -53,7 +53,7 @@ const defaultThemeSetting: ThemeSetting = {
     fixedHeaderAndTab: true,
     showReload: true,
     header: {
-        height: 56,
+        height: 44,
         crumb: {
             visible: true,
             showIcon: true
