@@ -1,0 +1,1007 @@
+{
+  "communities": {
+    "0": [
+      "common_color",
+      "common_color_addcoloralpha",
+      "common_color_colorindex",
+      "common_color_getallcolorpalette",
+      "common_color_getcolorpalette",
+      "common_color_gethue",
+      "common_color_getsaturation",
+      "common_color_getvalue",
+      "common_color_iswhitecolor",
+      "common_color_mixcolor",
+      "common_theme_enumthemeanimatemode",
+      "common_theme_enumthemehorizontalmenuposition",
+      "common_theme_enumthemelayoutmode",
+      "common_theme_enumthemetabmode",
+      "common_theme_getlayout",
+      "common_theme_getthemecolor",
+      "common_theme_setlayout",
+      "common_theme_setthemecolor",
+      "enum_common_theme_ts_common_theme",
+      "enum_index",
+      "interface_enum",
+      "interface_enum_layoutcomponentname",
+      "interface_enum_themeanimatemode",
+      "interface_enum_themehorizontalmenuposition",
+      "interface_enum_themelayoutmode",
+      "interface_enum_themetabmode",
+      "interface_theme",
+      "interface_theme_themeanimatemodelist",
+      "interface_theme_themecrumb",
+      "interface_theme_themefooter",
+      "interface_theme_themeheader",
+      "interface_theme_themehorizontalmenupositionlist",
+      "interface_theme_themelayout",
+      "interface_theme_themelayoutmodelist",
+      "interface_theme_thememenu",
+      "interface_theme_themeothercolor",
+      "interface_theme_themepage",
+      "interface_theme_themesetting",
+      "interface_theme_themesider",
+      "interface_theme_themetab",
+      "interface_theme_themetabmodelist",
+      "settings_theme",
+      "settings_theme_defaultthemesetting",
+      "settings_theme_themecolorlist",
+      "theme_helpers",
+      "theme_helpers_addthemecssvarstohtml",
+      "theme_helpers_coloraction",
+      "theme_helpers_colorkey",
+      "theme_helpers_colorscene",
+      "theme_helpers_colortype",
+      "theme_helpers_getnaivethemeoverrides",
+      "theme_helpers_getthemecolors",
+      "theme_helpers_getthemesettings",
+      "theme_helpers_resolvelayoutmode",
+      "theme_helpers_themecolor",
+      "theme_helpers_themevars",
+      "theme_helpers_themevarskeys",
+      "theme_index",
+      "theme_index_themestate",
+      "utils_common_theme_ts_common_theme"
+    ],
+    "1": [
+      "asset_assetdaystatistictimeresponse",
+      "asset_assetdaystatistictimeresponse_assetdaystatistic",
+      "asset_assetdaystatistictimeresponse_assetdaystatistictimeresponse",
+      "asset_assetgetallassetresponse",
+      "asset_assetgetallassetresponse_assetgetallassetresponse",
+      "asset_assetgetassetresponse",
+      "asset_assetgetassetresponse_assetgetassetresponse",
+      "book_bookallbillcategoryresponse",
+      "book_bookallbillcategoryresponse_bookallbillcategoryresponse",
+      "book_bookbalancemonthresponse",
+      "book_bookbalancemonthresponse_bookbalancemonthresponse",
+      "book_bookgetallbookresponse",
+      "book_bookgetallbookresponse_bookgetallbookresponse",
+      "book_bookgetbookresponse",
+      "book_bookgetbookresponse_bookgetbookresponse",
+      "book_bookincomemonthresponse",
+      "book_bookincomemonthresponse_bookincomemonthresponse",
+      "book_bookpaymonthresponse",
+      "book_bookpaymonthresponse_bookpaymonthresponse",
+      "book_index",
+      "budget_budgetgetbudgetbybookresponse",
+      "budget_budgetgetbudgetbybookresponse_budgetgetbudgetbybookresponse",
+      "interface_expose",
+      "interface_expose_exposebetterscroll",
+      "interface_index",
+      "interface_layout",
+      "interface_layout_globalheaderprops",
+      "interface_response_asset_index_ts_asset_index",
+      "interface_response_budget_index_ts_budget_index",
+      "response_index",
+      "schemas_asset",
+      "schemas_asset_asset",
+      "schemas_basebill",
+      "schemas_basebill_basebill",
+      "schemas_billcategory",
+      "schemas_billcategory_billcategory",
+      "schemas_book",
+      "schemas_book_book",
+      "schemas_budget",
+      "schemas_budget_budget",
+      "schemas_index",
+      "schemas_paybill",
+      "schemas_paybill_paybill",
+      "schemas_user",
+      "schemas_user_user",
+      "user_index",
+      "user_userchangeusernameresponse",
+      "user_userchangeusernameresponse_userchangeusernameresponse",
+      "user_userloginresponse",
+      "user_userloginresponse_userloginresponse"
+    ],
+    "2": [
+      "app",
+      "app_index",
+      "app_index_appstate",
+      "app_index_useappstore",
+      "app_theme",
+      "common_layout",
+      "common_layout_layoutheaderprops",
+      "common_layout_usebasiclayout",
+      "common_router",
+      "common_router_userouterpush",
+      "composables_common_index_ts_common_index",
+      "guard_index",
+      "guard_index_createrouterguard",
+      "helpers_index",
+      "helpers_scroll",
+      "helpers_scroll_scrollbehavior",
+      "interface_system_globaltabroute",
+      "main",
+      "main_setupapp",
+      "modules_index",
+      "plugins_assets",
+      "plugins_assets_setupassets",
+      "plugins_index",
+      "plugins_naive",
+      "plugins_naive_setupnaiveui",
+      "router_helpers_transformauthroutestovueroutes",
+      "router_index_router",
+      "router_index_setuprouter",
+      "router_index_ts_router_index",
+      "store_index",
+      "store_index_setupstore",
+      "subscribe_app",
+      "subscribe_app_subscribeappstore",
+      "subscribe_index",
+      "subscribe_index_subscribestore",
+      "subscribe_theme",
+      "subscribe_theme_handlewindicssdarkmode",
+      "subscribe_theme_subscribethemestore",
+      "tab_helpers",
+      "tab_helpers_getindexintabroutes",
+      "tab_helpers_gettabroutebyvueroute",
+      "tab_helpers_isintabroutes",
+      "tab_index",
+      "tab_index_tabstate",
+      "tab_index_usetabstore",
+      "theme_index_usethemestore"
+    ],
+    "3": [
+      "common_design_pattern",
+      "common_design_pattern_exestrategyactions",
+      "common_icon",
+      "common_icon_iconifyrender",
+      "guard_permission",
+      "guard_permission_createdynamicrouteguard",
+      "guard_permission_createpermissionguard",
+      "interface_system",
+      "interface_system_globalbreadcrumb",
+      "interface_system_globalmenuoption",
+      "route_index",
+      "route_index_routestate",
+      "route_index_useroutestore",
+      "router_breadcrumb",
+      "router_breadcrumb_getbreadcrumbbyroutekey",
+      "router_breadcrumb_getbreadcrumbmenu",
+      "router_breadcrumb_getbreadcrumbmenuitem",
+      "router_breadcrumb_transformbreadcrumbmenutobreadcrumb",
+      "router_helpers_transformroutetolist",
+      "router_menu",
+      "router_menu_addpartialprops",
+      "router_menu_getactivekeypathsofmenu",
+      "router_menu_getactivekeypathsofmenus",
+      "router_menu_hideinmenu",
+      "router_menu_transformauthroutetomenu",
+      "routes_index",
+      "routes_index_constantroutes",
+      "routes_index_routename",
+      "routes_index_routepath",
+      "routes_index_sidebarroutes",
+      "utils_common_index_ts_common_index",
+      "utils_router_index_ts_router_index"
+    ],
+    "4": [
+      "betterscroll_index",
+      "buttontab_index",
+      "buttontab_index_bool_ishover_settrue_setfalse",
+      "buttontab_index_buttonstyle",
+      "buttontab_index_handleclose",
+      "buttontab_index_isiconactive",
+      "buttontab_index_props",
+      "chrometab_index",
+      "components_index_ts_components_index",
+      "components_mixmenucollapse",
+      "components_mixmenudetail",
+      "components_mixmenudetail_bool_ishover_settrue_setfalse",
+      "components_mixmenudetail_isactive",
+      "components_mixmenudetail_props",
+      "components_mixmenudrawer",
+      "custom_index",
+      "githublink_index",
+      "hooks_index",
+      "iconclose_index",
+      "iconclose_index_bool_ishover_settrue_setfalse",
+      "iconselect_index",
+      "layouts_common_globalsider_components_verticalmixsider_components_index_ts_components_index",
+      "svg_index",
+      "svg_svgbanner",
+      "svg_svgemptydata",
+      "svg_svgnetworkerror",
+      "svg_svgnopermission",
+      "svg_svgnotfound",
+      "svg_svgserviceerror",
+      "websitelink_index"
+    ],
+    "5": [
+      "components_fullscreen",
+      "components_githubsite",
+      "components_globalbreadcrumb",
+      "components_headermenu",
+      "components_headermenu_activekey",
+      "components_headermenu_handleupdatemenu",
+      "components_headermenu_menus",
+      "components_headermenu_route",
+      "components_headermenu_routerpush",
+      "components_headermenu_routestore",
+      "components_menucollapse",
+      "components_thememode",
+      "components_thememode_theme",
+      "composables_index",
+      "globalcontent_index",
+      "globalcontent_index_app",
+      "globalcontent_index_closeadd",
+      "globalcontent_index_routestore",
+      "globalcontent_index_theme",
+      "globalfooter_index",
+      "globalheader_index",
+      "globallogo_index",
+      "globallogo_index_routehomepath",
+      "globallogo_index_title",
+      "globalsider_index",
+      "globaltab_index",
+      "layouts_common_globalheader_components_index_ts_components_index",
+      "layouts_common_index_ts_common_index",
+      "settingdrawer_index",
+      "settingdrawer_index_app"
+    ],
+    "6": [
+      "basiclayout_index",
+      "blanklayout_index",
+      "common_system_enumlayoutcomponentname",
+      "enum_common_system_ts_common_system",
+      "layouts_index",
+      "layouts_index_basiclayout",
+      "layouts_index_blanklayout",
+      "router_component",
+      "router_component_getlayoutcomponent",
+      "router_component_getviewcomponent",
+      "router_component_layoutcomponent",
+      "router_component_setviewcomponentname",
+      "router_helpers",
+      "router_helpers_componentaction",
+      "router_helpers_haschildren",
+      "router_helpers_hascomponent",
+      "router_helpers_hasdynamicpath",
+      "router_helpers_hashref",
+      "router_helpers_issingleroute",
+      "router_helpers_transformauthroutetovueroute",
+      "views_index",
+      "views_index_getviewcomponent",
+      "views_index_importviews",
+      "views_index_viewcomponent",
+      "views_index_viewkeys",
+      "views_index_views"
+    ],
+    "7": [
+      "common_storage",
+      "common_storage_enumstoragekey",
+      "common_typeof",
+      "common_typeof_enumdatatype",
+      "crypto_index",
+      "crypto_index_decrypto",
+      "crypto_index_encrypto",
+      "enum_common_index_ts_common_index",
+      "router_tab",
+      "router_tab_gettabroutes",
+      "router_tab_settabroutes",
+      "storages_index",
+      "storages_local",
+      "storages_local_clearlocal",
+      "storages_local_getlocal",
+      "storages_local_removelocal",
+      "storages_local_setlocal",
+      "storages_local_storagedata",
+      "storages_session",
+      "storages_session_clearsession",
+      "storages_session_getsession",
+      "storages_session_removesession",
+      "storages_session_setsession"
+    ],
+    "8": [
+      "darkmode_index",
+      "drawerbutton_index",
+      "layoutmode_index",
+      "layoutmode_index_theme",
+      "layouts_common_settingdrawer_components_index_ts_components_index",
+      "pagefunc_index",
+      "pagefunc_index_theme",
+      "pageview_index",
+      "pageview_index_theme",
+      "settingmenu_index",
+      "settings_color",
+      "settings_color_isintraditioncolors",
+      "settings_color_traditioncolor",
+      "settings_color_traditioncolordetail",
+      "settings_color_traditioncolors",
+      "settings_index",
+      "themecolorselect_index",
+      "themecolorselect_index_bool_visible_settrue_openmodal_setfalse_closemodal",
+      "themecolorselect_index_isinother",
+      "themecolorselect_index_othercolorbtntype",
+      "themecolorselect_index_theme",
+      "themeconfig_index"
+    ],
+    "9": [
+      "components_verticalmenu",
+      "components_verticalmenu_activekey",
+      "components_verticalmenu_app",
+      "components_verticalmenu_handleupdateexpandedkeys",
+      "components_verticalmenu_handleupdatemenu",
+      "components_verticalmenu_route",
+      "components_verticalmenu_routerpush",
+      "components_verticalmenu_routestore",
+      "components_verticalmenu_store",
+      "components_verticalmenu_theme",
+      "layouts_common_globalcontent_components_addmodal_components_income_components_billcategoryitem_index_vue_billcategoryitem_index",
+      "layouts_common_globalcontent_components_addmodal_components_income_components_billcategoryitem_index_vue_billcategoryitem_index_props",
+      "layouts_common_globalcontent_components_addmodal_components_income_components_billcategoryitem_index_vue_billcategoryitem_index_setchosen",
+      "layouts_common_globalcontent_components_addmodal_components_income_components_billcategoryitem_index_vue_billcategoryitem_index_store",
+      "layouts_common_globalcontent_components_addmodal_components_pay_components_billcategoryitem_index_vue_billcategoryitem_index",
+      "layouts_common_globalcontent_components_addmodal_components_pay_components_billcategoryitem_index_vue_billcategoryitem_index_props",
+      "layouts_common_globalcontent_components_addmodal_components_pay_components_billcategoryitem_index_vue_billcategoryitem_index_setchosen",
+      "layouts_common_globalcontent_components_addmodal_components_pay_components_billcategoryitem_index_vue_billcategoryitem_index_store",
+      "layouts_common_globalsider_components_verticalsider_components_index_ts_components_index",
+      "stores_store",
+      "stores_store_usestore"
+    ],
+    "10": [
+      "layouts_common_globalsider_components_index_ts_components_index",
+      "verticalmixsider_index",
+      "verticalmixsider_index_activechildmenus",
+      "verticalmixsider_index_activeparentroutename",
+      "verticalmixsider_index_app",
+      "verticalmixsider_index_bool_drawervisible_settrue_opendrawer_setfalse_hidedrawer",
+      "verticalmixsider_index_firstdegreemenus",
+      "verticalmixsider_index_getactiveparentroutename",
+      "verticalmixsider_index_handlemixmenu",
+      "verticalmixsider_index_resetfirstdegreemenus",
+      "verticalmixsider_index_route",
+      "verticalmixsider_index_routerpush",
+      "verticalmixsider_index_routestore",
+      "verticalmixsider_index_setactiveparentroutename",
+      "verticalmixsider_index_theme",
+      "verticalsider_index",
+      "verticalsider_index_app",
+      "verticalsider_index_ishorizontalmix",
+      "verticalsider_index_showtitle",
+      "verticalsider_index_theme"
+    ],
+    "11": [
+      "budgetcard_index",
+      "budgetcard_index_bookbudgetedit",
+      "budgetcard_index_bookbudgettotalmin",
+      "budgetcard_index_bookbudgetusedmin",
+      "budgetcard_index_booktotalbudget",
+      "budgetcard_index_bookusedbudget",
+      "budgetcard_index_cancelbookbudgetinput",
+      "budgetcard_index_compactformatter",
+      "budgetcard_index_emit",
+      "budgetcard_index_formattedcurrencynosymbol",
+      "budgetcard_index_message",
+      "budgetcard_index_showaddmodal",
+      "budgetcard_index_showbookbudgetinput",
+      "budgetcard_index_showbudgetinfomodal",
+      "budgetcard_index_showinfomodal",
+      "budgetcard_index_submitbookbudgetchange",
+      "views_budget_components_index_ts_components_index"
+    ],
+    "12": [
+      "common_usebodyscroll",
+      "common_usebodyscroll_scrollbodystyle",
+      "common_usebodyscroll_usebodyscroll",
+      "common_useboolean",
+      "common_useboolean_useboolean",
+      "common_usecontext",
+      "common_usecontext_usecontext",
+      "common_useloading",
+      "common_useloading_useloading",
+      "common_useloadingempty",
+      "common_useloadingempty_useloadingempty",
+      "common_usemodalvisible",
+      "common_usemodalvisible_usemodalvisible",
+      "common_usereload",
+      "common_usereload_usereload",
+      "hooks_common_index_ts_common_index"
+    ],
+    "13": [
+      "apis_asset",
+      "apis_asset_addasset",
+      "apis_asset_getallasset",
+      "apis_asset_getassetapi",
+      "apis_asset_getdaystatistic",
+      "apis_asset_updateasset",
+      "apis_budget",
+      "apis_budget_addbudget",
+      "apis_budget_deletebudget",
+      "apis_budget_getbudgetsbybook",
+      "apis_budget_setbookbudget",
+      "apis_budget_updatebudget",
+      "apis_index",
+      "utils_http_http"
+    ],
+    "14": [
+      "apis_bill",
+      "apis_bill_addbillapi",
+      "apis_bill_changebillapi",
+      "apis_bill_deletebillapi",
+      "apis_bill_deletebillimageapi",
+      "apis_bill_getallbillinbookapi",
+      "apis_bill_getallbilltimeapi",
+      "apis_bill_getbillapi",
+      "apis_bill_getbillcategoryapi",
+      "apis_bill_getbillimageapi",
+      "apis_bill_getcategorystatistictimeapi",
+      "apis_bill_getdaystatistictimeapi",
+      "apis_bill_getmaxminincometimeapi",
+      "apis_bill_getmaxminpaytimeapi"
+    ],
+    "15": [
+      "bill_billaiparseresponse",
+      "bill_billaiparseresponse_billaiparseresponse",
+      "bill_billaiparseresponse_billaiparsetype",
+      "bill_billallbilltimeresponse",
+      "bill_billallbilltimeresponse_billallbilltimeresponse",
+      "bill_billbillresponse",
+      "bill_billbillresponse_billbillresponse",
+      "bill_billcategorystatistictimeresponse",
+      "bill_billcategorystatistictimeresponse_billcategorystatistictimeresponse",
+      "bill_billdaystatistictimeresponse",
+      "bill_billdaystatistictimeresponse_billdaystatistictimeresponse",
+      "bill_billmaxmintimeresponse",
+      "bill_billmaxmintimeresponse_billmaxmintimeresponse",
+      "interface_response_bill_index_ts_bill_index"
+    ],
+    "16": [
+      "common_route_d",
+      "common_route_d_getroutefirstparentkey",
+      "common_route_d_getsingleroutekey",
+      "common_route_d_keytopath",
+      "common_route_d_pathtodynamicpath",
+      "common_route_d_route",
+      "common_route_d_routecomponent",
+      "common_route_d_routekey",
+      "common_route_d_routemeta",
+      "common_route_d_routepath",
+      "common_route_d_routesplitmark",
+      "common_route_d_singleroutekey",
+      "common_route_d_singlerouteparentkey",
+      "common_route_d_singlerouteparentpath"
+    ],
+    "17": [
+      "apis_book",
+      "apis_book_addbillcategoryapi",
+      "apis_book_addbookapi",
+      "apis_book_deletebillcategoryapi",
+      "apis_book_deletebookapi",
+      "apis_book_getallbillcategoryapi",
+      "apis_book_getallbookapi",
+      "apis_book_getbalancemonthapi",
+      "apis_book_getbookapi",
+      "apis_book_getincomemonthapi",
+      "apis_book_getpaymonthapi",
+      "apis_book_updatebillcategoryapi"
+    ],
+    "18": [
+      "layouts_common_globaltab_components_index_ts_components_index",
+      "reloadbutton_index",
+      "tabdetail_index",
+      "tabdetail_index_activecomponent",
+      "tabdetail_index_dropdown",
+      "tabdetail_index_getactivetabclientx",
+      "tabdetail_index_handlecontextmenu",
+      "tabdetail_index_hidedropdown",
+      "tabdetail_index_setdropdown",
+      "tabdetail_index_showdropdown"
+    ],
+    "19": [
+      "income_index",
+      "income_index_if",
+      "layouts_common_globalcontent_components_addmodal_components_index_ts_components_index",
+      "pay_index",
+      "pay_index_deletebillcategoryapi",
+      "pay_index_if",
+      "pay_index_refreshbillcategorylist",
+      "transfer_index",
+      "transfer_index_if"
+    ],
+    "20": [
+      "components_common_index_ts_common_index",
+      "darkmodecontainer_index",
+      "darkmodeswitch_index",
+      "darkmodeswitch_index_darkmode",
+      "darkmodeswitch_index_handleswitch",
+      "darkmodeswitch_index_props",
+      "hovercontainer_index",
+      "naiveprovider_index"
+    ],
+    "21": [
+      "components_contextmenu",
+      "components_contextmenu_app",
+      "components_contextmenu_dropdownvisible",
+      "components_contextmenu_handledropdown",
+      "components_contextmenu_hide",
+      "components_contextmenu_props",
+      "components_contextmenu_tab",
+      "layouts_common_globaltab_components_tabdetail_components_index_ts_components_index"
+    ],
+    "22": [
+      "asset_index_assetlist",
+      "asset_index_debt",
+      "asset_index_net",
+      "asset_index_pullallasset",
+      "asset_index_pullassetdaystatistic",
+      "asset_index_total",
+      "views_asset_index_vue_asset_index"
+    ],
+    "23": [
+      "assetdetaillist_index",
+      "assethistorychart_index",
+      "assethistorychart_index_initandplotlinechart",
+      "assethistorychart_index_props",
+      "assethistorychart_index_theme",
+      "assetsummarization_index",
+      "views_asset_components_index_ts_components_index"
+    ],
+    "24": [
+      "about_model",
+      "about_model_package",
+      "about_model_pkgjson",
+      "about_model_pkgversioninfo",
+      "about_model_pkgwithtype",
+      "about_model_transformversiondata"
+    ],
+    "25": [
+      "apis_user",
+      "apis_user_changepasswordapi",
+      "apis_user_changeusernameapi",
+      "apis_user_getprotocolapi",
+      "apis_user_loginapi",
+      "apis_user_registerapi"
+    ],
+    "26": [
+      "common_regexp",
+      "common_service",
+      "common_service_error_status",
+      "common_service_no_error_msg_code",
+      "common_service_refresh_token_code",
+      "config_common_index_ts_common_index"
+    ],
+    "27": [
+      "components_custom_chrometab_components_index_ts_components_index",
+      "components_svgradiusbg",
+      "components_svgradiusbg_defaultcolor",
+      "components_svgradiusbg_fill",
+      "components_svgradiusbg_fillcolor",
+      "components_svgradiusbg_props"
+    ],
+    "28": [
+      "utils_colormap",
+      "utils_colormap_getdarkcolor",
+      "utils_colormap_getlightcolor",
+      "utils_colormap_percentcolorsforprogress",
+      "utils_colormap_percentcolorsfortext",
+      "utils_colormap_rgb2hex"
+    ],
+    "29": [
+      "utils_datecomputer",
+      "utils_datecomputer_datetostring",
+      "utils_datecomputer_inttostring",
+      "utils_datecomputer_now",
+      "utils_datecomputer_stringtodate",
+      "utils_datecomputer_stringtoint"
+    ],
+    "30": [
+      "apis_bill_aiparsebillapi",
+      "utils_http",
+      "utils_index",
+      "utils_request",
+      "utils_request_service"
+    ],
+    "31": [
+      "components_devdependency",
+      "components_prodependency",
+      "components_projectinfo",
+      "components_projectintroduction",
+      "views_about_components_index_ts_components_index"
+    ],
+    "32": [
+      "utils_currencyformatter",
+      "utils_currencyformatter_currencyformatter",
+      "utils_currencyformatter_decimalformatter",
+      "utils_currencyformatter_formattedcurrencynosymbol",
+      "utils_currencyformatter_formattedcurrencywithsymbol"
+    ],
+    "33": [
+      "utils_storage",
+      "utils_storage_get",
+      "utils_storage_prefix",
+      "utils_storage_remove",
+      "utils_storage_set"
+    ],
+    "34": [
+      "addmodal_index",
+      "addmodal_index_closemodal",
+      "addmodal_index_emit",
+      "layouts_common_globalcontent_components_index_ts_components_index"
+    ],
+    "35": [
+      "assetinfomodal_index",
+      "newassetmodal_index",
+      "newassetmodal_index_if",
+      "views_asset_components_assetdetaillist_components_index_ts_components_index"
+    ],
+    "36": [
+      "common_system_appinfo",
+      "common_system_useappinfo",
+      "common_system_usedeviceinfo",
+      "composables_common_system_ts_common_system"
+    ],
+    "37": [
+      "custom_svgicon",
+      "custom_svgicon_fill",
+      "custom_svgicon_props",
+      "custom_svgicon_symbolid"
+    ],
+    "38": [
+      "login_index",
+      "login_index_bgcolor",
+      "login_index_formref",
+      "login_index_object"
+    ],
+    "39": [
+      "loginbg_index",
+      "loginbg_index_darkcolor",
+      "loginbg_index_lightcolor",
+      "views_system_view_login_components_index_ts_components_index"
+    ],
+    "40": [
+      "register_index",
+      "register_index_bgcolor",
+      "register_index_formref",
+      "register_index_if"
+    ],
+    "41": [
+      "addbudgetmodal_index",
+      "budgetinfomodal_index",
+      "views_budget_components_budgetcard_components_index_ts_components_index"
+    ],
+    "42": [
+      "bill_index_getallbilltimeapi",
+      "bill_index_if",
+      "views_bill_index_vue_bill_index"
+    ],
+    "43": [
+      "common_env_d",
+      "common_env_d_importmeta",
+      "common_env_d_importmetaenv"
+    ],
+    "44": [
+      "components_colorcheckbox",
+      "components_colormodal",
+      "layouts_common_settingdrawer_components_themecolorselect_components_index_ts_components_index"
+    ],
+    "45": [
+      "components_common_naiveprovider_components_index_ts_components_index",
+      "components_naiveprovidercontent",
+      "components_naiveprovidercontent_registernaivetools"
+    ],
+    "46": [
+      "components_cornerbottom",
+      "components_cornertop",
+      "views_system_view_login_components_loginbg_components_index_ts_components_index"
+    ],
+    "47": [
+      "home_index",
+      "home_index_constructor",
+      "home_index_getcategorystatistictimeapi"
+    ],
+    "48": [
+      "billitem_index",
+      "views_bill_components_daybilllist_components_index_ts_components_index"
+    ],
+    "49": [
+      "budget_index_getbooks",
+      "views_budget_index_vue_budget_index"
+    ],
+    "50": [
+      "common_common_d",
+      "common_common_d_strategyaction"
+    ],
+    "51": [
+      "common_window_d",
+      "common_window_d_window"
+    ],
+    "52": [
+      "components_exceptionbase",
+      "views_system_view_components_index_ts_components_index"
+    ],
+    "53": [
+      "components_layoutcheckbox",
+      "layouts_common_settingdrawer_components_layoutmode_components_index_ts_components_index"
+    ],
+    "54": [
+      "components_searchmodal",
+      "layouts_common_globalsearch_components_index_ts_components_index"
+    ],
+    "55": [
+      "components_types",
+      "components_types_routelist"
+    ],
+    "56": [
+      "daybilllist_index",
+      "views_bill_components_index_ts_components_index"
+    ],
+    "57": [
+      "iconifypicker_index",
+      "iconifypicker_index_if"
+    ],
+    "58": [
+      "monthstatistic_index",
+      "views_components_index_ts_components_index"
+    ],
+    "59": [
+      "views_asset_components_assetdetaillist_components_formitemcontainer_index_vue_formitemcontainer_index",
+      "views_asset_components_assetdetaillist_components_formitemcontainer_index_vue_formitemcontainer_index_props"
+    ],
+    "60": [
+      "views_budget_components_budgetcard_components_budgetinfomodal_components_formitemcontainer_index_vue_formitemcontainer_index",
+      "views_budget_components_budgetcard_components_budgetinfomodal_components_formitemcontainer_index_vue_formitemcontainer_index_props"
+    ],
+    "61": [
+      "403_index"
+    ],
+    "62": [
+      "404_index"
+    ],
+    "63": [
+      "500_index"
+    ],
+    "64": [
+      "about_index"
+    ],
+    "65": [
+      "common_global_d"
+    ],
+    "66": [
+      "components_searchfooter"
+    ],
+    "67": [
+      "components_searchresult"
+    ],
+    "68": [
+      "config_index"
+    ],
+    "69": [
+      "globalsearch_index"
+    ],
+    "70": [
+      "layouts_common_globalcontent_components_addmodal_components_income_components_index_ts_components_index"
+    ],
+    "71": [
+      "layouts_common_globalcontent_components_addmodal_components_pay_components_index_ts_components_index"
+    ],
+    "72": [
+      "no_permission_index"
+    ],
+    "73": [
+      "not_found_index"
+    ],
+    "74": [
+      "not_found_page_index"
+    ],
+    "75": [
+      "service_error_index"
+    ],
+    "76": [
+      "views_budget_components_budgetcard_components_budgetinfomodal_components_index_ts_components_index"
+    ]
+  },
+  "cohesion": {
+    "0": 0.06384180790960452,
+    "1": 0.05551020408163265,
+    "2": 0.08405797101449275,
+    "3": 0.08870967741935484,
+    "4": 0.06666666666666667,
+    "5": 0.06666666666666667,
+    "6": 0.11384615384615385,
+    "7": 0.1422924901185771,
+    "8": 0.09956709956709957,
+    "9": 0.10952380952380952,
+    "10": 0.11052631578947368,
+    "11": 0.11764705882352941,
+    "12": 0.30833333333333335,
+    "13": 0.15384615384615385,
+    "14": 0.14285714285714285,
+    "15": 0.18681318681318682,
+    "16": 0.14285714285714285,
+    "17": 0.16666666666666666,
+    "18": 0.26666666666666666,
+    "19": 0.2222222222222222,
+    "20": 0.25,
+    "21": 0.2857142857142857,
+    "22": 0.2857142857142857,
+    "23": 0.3333333333333333,
+    "24": 0.3333333333333333,
+    "25": 0.3333333333333333,
+    "26": 0.3333333333333333,
+    "27": 0.3333333333333333,
+    "28": 0.3333333333333333,
+    "29": 0.3333333333333333,
+    "30": 0.6,
+    "31": 0.4,
+    "32": 0.4,
+    "33": 0.4,
+    "34": 0.6666666666666666,
+    "35": 0.5,
+    "36": 0.5,
+    "37": 0.5,
+    "38": 0.5,
+    "39": 0.5,
+    "40": 0.5,
+    "41": 0.6666666666666666,
+    "42": 0.6666666666666666,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 0.6666666666666666,
+    "47": 0.6666666666666666,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0
+  },
+  "gods": [
+    {
+      "id": "common_useboolean_useboolean",
+      "label": "useBoolean()",
+      "degree": 10
+    },
+    {
+      "id": "interface_enum_themelayoutmode",
+      "label": "ThemeLayoutMode",
+      "degree": 8
+    },
+    {
+      "id": "common_color_getcolorpalette",
+      "label": "getColorPalette()",
+      "degree": 8
+    },
+    {
+      "id": "router_helpers_transformauthroutetovueroute",
+      "label": "transformAuthRouteToVueRoute()",
+      "degree": 8
+    },
+    {
+      "id": "app_index_useappstore",
+      "label": "useAppStore",
+      "degree": 7
+    },
+    {
+      "id": "common_usebodyscroll_usebodyscroll",
+      "label": "useBodyScroll()",
+      "degree": 6
+    },
+    {
+      "id": "theme_helpers_getthemesettings",
+      "label": "getThemeSettings()",
+      "degree": 6
+    },
+    {
+      "id": "theme_index_usethemestore",
+      "label": "useThemeStore",
+      "degree": 6
+    },
+    {
+      "id": "subscribe_theme_subscribethemestore",
+      "label": "subscribeThemeStore()",
+      "degree": 6
+    },
+    {
+      "id": "utils_http_http",
+      "label": "http",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "subscribeAppStore()",
+      "target": "useBodyScroll()",
+      "source_files": [
+        "store/subscribe/app.ts",
+        "hooks/common/useBodyScroll.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "RouteState",
+      "target": "GlobalMenuOption",
+      "source_files": [
+        "store/modules/route/index.ts",
+        "interface/system.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `RouteState` unexpectedly reaches hub `GlobalMenuOption`"
+    },
+    {
+      "source": "TabState",
+      "target": "GlobalTabRoute",
+      "source_files": [
+        "store/modules/tab/index.ts",
+        "interface/system.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `TabState` unexpectedly reaches hub `GlobalTabRoute`"
+    },
+    {
+      "source": "aiParseBillApi()",
+      "target": "service",
+      "source_files": [
+        "apis/bill.ts",
+        "utils/request.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "useBasicLayout()",
+      "target": "useAppStore",
+      "source_files": [
+        "composables/common/layout.ts",
+        "store/modules/app/index.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

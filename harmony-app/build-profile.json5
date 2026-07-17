@@ -22,13 +22,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_8OIZY9o3dU7AMMysPwFvDLQRJoPvfEgSuruPF0Z9Nrw=.cer",
+          "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001A8928221F3A8627D87748328827F47EC2F2947F39B790EBD8F80A2AA1E2FED4F0F084F434FBA1",
-          "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_8OIZY9o3dU7AMMysPwFvDLQRJoPvfEgSuruPF0Z9Nrw=.p7b",
+          "keyPassword": "0000001B1E0764B50624EB458BD309D05A7B3E816F9D54AD1FFA29A1E8F77F292E4D4E11A0DE3D8612046A",
+          "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_8OIZY9o3dU7AMMysPwFvDLQRJoPvfEgSuruPF0Z9Nrw=.p12",
-          "storePassword": "0000001ABAA3F24A97E930F4C748F6136D76E6A54602A6E945D9CFBD0518058C5FD39BB82CF285849864"
+          "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p12",
+          "storePassword": "0000001B6370AAC047D2D5C9A2A2BC30F969415C3D4DDA6BC1EE2419DF3E7AF1C3AA8E2F74A9E563824CE5"
         }
       }
     ]
