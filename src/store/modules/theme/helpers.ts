@@ -1,8 +1,9 @@
 import type {GlobalThemeOverrides} from "naive-ui";
 import {cloneDeep, kebabCase} from "lodash-es";
 import {themeSetting} from "@/settings";
-import {addColorAlpha, getColorPalette, getLayout, getThemeColor} from "@/utils";
+import {addColorAlpha, getColorPalette, getLayout, getThemeColor, getThemeTabVisible} from "@/utils";
 import {ThemeLayout, ThemeLayoutMode} from "@/interface";
+import {resolveThemeTabVisible} from "./persistence";
 
 /** 获取主题配置 */
 export function getThemeSettings() {
@@ -11,6 +12,10 @@ export function getThemeSettings() {
     const otherColor = {...themeSetting.otherColor, info};
     const cachedLayout = getLayout();
     const layoutMode = cachedLayout || resolveLayoutMode();
+    const tab = {
+        ...themeSetting.tab,
+        visible: resolveThemeTabVisible(getThemeTabVisible(), themeSetting.tab.visible)
+    };
     const layout: ThemeLayout = new class implements ThemeLayout {
         minWidth: any;
         mode: ThemeLayoutMode;
@@ -22,7 +27,7 @@ export function getThemeSettings() {
             this.modeList = modeList;
         }
     }(themeSetting.layout.minWidth, layoutMode, themeSetting.layout.modeList)
-    return cloneDeep({...themeSetting, themeColor, otherColor, layout});
+    return cloneDeep({...themeSetting, themeColor, otherColor, layout, tab});
 }
 
 function resolveLayoutMode(): ThemeLayoutMode {
