@@ -36,7 +36,7 @@ npm run dev
 
 ## 环境变量
 
-项目使用 Vite 环境变量，主要配置在 `.env.development`、`.env.production`。
+项目使用 Vite 环境变量。Git 中只保存 `.env.development.example` 和 `.env.harmony.example` 模板，实际运行时会自动复制为对应的 `.env.development`、`.env.harmony`，本地文件不会提交。
 
 | 变量名 | 说明 | 示例 |
 | --- | --- | --- |
@@ -50,6 +50,7 @@ npm run dev
 
 ## 可用脚本
 
+- `npm run env:ensure`：从 `.example` 模板创建缺失的本地环境文件
 - `npm run dev`：本地开发
 - `npm run build`：生产构建
 - `npm run build:test`：测试环境构建（先类型检查）

@@ -4,7 +4,7 @@ import { updateSystemBarContentColor } from '../systembar/SystemBar';
 let currentController: webview.WebviewController | undefined;
 let pageLoaded: boolean = false;
 let currentSystemDark: boolean | undefined;
-const HARMONY_WEB_ORIGIN = 'http://where-money.example.invalid:5050';
+const HARMONY_WEB_ORIGIN = 'https://localhost';
 
 function completeLocalResponse(response: WebResourceResponse, mimeType: string): WebResourceResponse {
   response.setResponseEncoding('UTF-8');

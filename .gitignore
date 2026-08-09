@@ -11,6 +11,7 @@ node_modules
 dist/
 dist-ssr/
 .env.development
+.env.harmony
 .DS_Store
 *.local
 graphify-out/cache/

@@ -2,9 +2,10 @@
     "name": "where-money-frontend",
     "version": "0.0.2",
     "scripts": {
-        "dev": "vite",
+        "env:ensure": "powershell -ExecutionPolicy Bypass -File scripts/ensure-env.ps1",
+        "dev": "npm run env:ensure && vite",
         "build": "vite build --mode production",
-        "harmony:build": "vite build --mode harmony",
+        "harmony:build": "npm run env:ensure && vite build --mode harmony",
         "harmony:sync": "npm run harmony:build && powershell -ExecutionPolicy Bypass -File scripts/sync-harmony.ps1",
         "serve": "vite --mode production",
         "typecheck": "vue-tsc",
