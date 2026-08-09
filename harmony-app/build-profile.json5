@@ -24,11 +24,11 @@
         "material": {
           "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B1E0764B50624EB458BD309D05A7B3E816F9D54AD1FFA29A1E8F77F292E4D4E11A0DE3D8612046A",
+          "keyPassword": "0000001B1CA528F85235837B202F34B9E5F062BAC3BAD89480FC18F5707A619F3F730678E671B6EFF5603C",
           "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p12",
-          "storePassword": "0000001B6370AAC047D2D5C9A2A2BC30F969415C3D4DDA6BC1EE2419DF3E7AF1C3AA8E2F74A9E563824CE5"
+          "storePassword": "0000001BDAF866D174D431C6E63E8E51E37347BAE056F488A63BDE8D9E71AB92550FA186C95F84B74C2F1E"
         }
       }
     ]
