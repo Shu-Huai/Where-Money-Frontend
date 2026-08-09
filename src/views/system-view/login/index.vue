@@ -13,10 +13,10 @@
             <n-form
                 id="form"
                 ref="formRef"
-                autocomplete="on"
                 :model="formValue"
                 :rules="rules"
                 :show-label="false"
+                autocomplete="on"
                 @submit.prevent="PostLogin"
             >
                 <n-form-item label="用户名" path="userName">

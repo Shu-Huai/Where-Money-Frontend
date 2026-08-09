@@ -36,17 +36,18 @@ npm run dev
 
 ## 环境变量
 
-项目使用 Vite 环境变量。Git 中只保存 `.env.development.example` 和 `.env.harmony.example` 模板，实际运行时会自动复制为对应的 `.env.development`、`.env.harmony`，本地文件不会提交。
+项目使用 Vite 环境变量。Git 中只保存 `.env.development.example` 和 `.env.harmony.example` 模板，实际运行时会自动复制为对应的
+`.env.development`、`.env.harmony`，本地文件不会提交。
 
-| 变量名 | 说明 | 示例 |
-| --- | --- | --- |
-| `VITE_APP_NAME` | 应用名称 | `Where Money` |
-| `VITE_APP_TITLE` | 浏览器标题 | `Where Money` |
-| `VITE_APP_INTERFACE_URL` | 后端接口基础地址 | `http://localhost:5050/api/` |
-| `VITE_APP_BASE_URL` | 路由基础路径 | `` |
-| `VITE_STORAGE_PREFIX` | 本地存储前缀 | `` |
-| `VITE_IS_VERCEL` | Vercel 部署标识（`1` 时使用 hash 路由） | `1` |
-| `VITE_HTTP_ENV` | 构建环境标识（脚本内注入） | `test` / `prod` |
+| 变量名                   | 说明                                    | 示例                         |
+|--------------------------|-----------------------------------------|------------------------------|
+| `VITE_APP_NAME`          | 应用名称                                | `Where Money`                |
+| `VITE_APP_TITLE`         | 浏览器标题                              | `Where Money`                |
+| `VITE_APP_INTERFACE_URL` | 后端接口基础地址                        | `http://localhost:5050/api/` |
+| `VITE_APP_BASE_URL`      | 路由基础路径                            | ``                           |
+| `VITE_STORAGE_PREFIX`    | 本地存储前缀                            | ``                           |
+| `VITE_IS_VERCEL`         | Vercel 部署标识（`1` 时使用 hash 路由） | `1`                          |
+| `VITE_HTTP_ENV`          | 构建环境标识（脚本内注入）              | `test` / `prod`              |
 
 ## 可用脚本
 

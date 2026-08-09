@@ -82,7 +82,8 @@
                         </n-popover>
                     </div>
                     <div class="col-span-2 lg:col-span-1">
-                        <n-date-picker v-model:value="timestamp" :input-readonly="true" :time-picker-props="timePickerProps"
+                        <n-date-picker v-model:value="timestamp" :input-readonly="true"
+                                       :time-picker-props="timePickerProps"
                                        :update-value-on-close="true" placement="top-start"
                                        type="datetime"/>
                     </div>

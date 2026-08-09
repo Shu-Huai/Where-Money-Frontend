@@ -129,7 +129,8 @@
                             <div v-if="currentBill.type==='支出'" class="flex space-x-2 cursor-pointer"
                                  v-bind:class="{'text-primary':mouseOnRefund}"
                                  v-on:click="refundChange"
-                                 v-on:mouseenter="mouseOnRefundChange(true)" v-on:mouseleave="mouseOnRefundChange(false)">
+                                 v-on:mouseenter="mouseOnRefundChange(true)"
+                                 v-on:mouseleave="mouseOnRefundChange(false)">
                                 <div class="text-base">
                                     退款
                                 </div>
@@ -161,7 +162,8 @@
                             </div>
                             <div class="flex space-x-2 cursor-pointer" v-bind:class="{'text-primary':mouseOnDelete}"
                                  v-on:click="deleteChange"
-                                 v-on:mouseenter="mouseOnDeleteChange(true)" v-on:mouseleave="mouseOnDeleteChange(false)">
+                                 v-on:mouseenter="mouseOnDeleteChange(true)"
+                                 v-on:mouseleave="mouseOnDeleteChange(false)">
                                 <div class="text-base">
                                     删除
                                 </div>
@@ -273,7 +275,8 @@
                                         <div class="h-10 flex items-center">
                                             <n-select v-if="editing" v-model:value="currentBill.outAsset as any"
                                                       size="large"
-                                                      v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
+                                                      v-bind:options="assetList"
+                                                      v-bind:render-label="assetSelectorRender as any">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -292,7 +295,8 @@
                                         <div class="h-10 flex items-center">
                                             <n-select v-if="editing" v-model:value="currentBill.inAsset as any"
                                                       size="large"
-                                                      v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
+                                                      v-bind:options="assetList"
+                                                      v-bind:render-label="assetSelectorRender as any">
                                             </n-select>
                                             <div v-if="!editing" class="flex space-x-2 items-center">
                                                 <Icon class="h-5 w-5 text-primary"
@@ -346,7 +350,8 @@
                                     </div>
                                     <div class="h-10 flex items-center">
                                         <n-date-picker v-if="editing" v-model:value="editTime" :input-readonly="true"
-                                                       :time-picker-props="timePickerProps" :update-value-on-close="true"
+                                                       :time-picker-props="timePickerProps"
+                                                       :update-value-on-close="true"
                                                        class="w-1/2"
                                                        type="datetime">
                                         </n-date-picker>
@@ -401,9 +406,12 @@
                                              alt="图片"
                                              class="rounded-xl" v-bind:src="imageSrc"
                                              v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
-                                        <div v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
-                                             class="mt-2 text-xs text-orange-500">
-                                            {{ imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning }}
+                                        <div
+                                            v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
+                                            class="mt-2 text-xs text-orange-500">
+                                            {{
+                                                imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning
+                                            }}
                                         </div>
                                         <n-empty v-if="imageSrc === EMPTY_IMAGE_SRC && !editing" class="w-1/2">
                                             <template #default>
@@ -626,7 +634,8 @@
                                     <div class="h-10 flex items-center">
                                         <n-select v-if="editing" v-model:value="currentBill.outAsset as any"
                                                   size="large"
-                                                  v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -645,7 +654,8 @@
                                     <div class="h-10 flex items-center">
                                         <n-select v-if="editing" v-model:value="currentBill.inAsset as any"
                                                   size="large"
-                                                  v-bind:options="assetList" v-bind:render-label="assetSelectorRender as any">
+                                                  v-bind:options="assetList"
+                                                  v-bind:render-label="assetSelectorRender as any">
                                         </n-select>
                                         <div v-if="!editing" class="flex space-x-2 items-center">
                                             <Icon class="h-5 w-5 text-primary"
@@ -754,9 +764,12 @@
                                          alt="图片"
                                          class="rounded-xl" v-bind:src="imageSrc"
                                          v-on:error="handleImageLoadError" v-on:load="handleImageLoadSuccess"/>
-                                    <div v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
-                                         class="mt-2 text-xs text-orange-500">
-                                        {{ imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning }}
+                                    <div
+                                        v-if="imageSrc !== EMPTY_IMAGE_SRC && !editing && (imageCompatibilityWarning || imageLoadFailed)"
+                                        class="mt-2 text-xs text-orange-500">
+                                        {{
+                                            imageLoadFailed ? "当前浏览器无法预览此图片格式（可能是 HEIC/HEIF），可改用 Safari 打开。" : imageCompatibilityWarning
+                                        }}
                                     </div>
                                     <n-empty v-if="imageSrc === EMPTY_IMAGE_SRC && !editing" class="w-1/2">
                                         <template #default>

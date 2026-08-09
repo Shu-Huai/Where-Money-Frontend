@@ -1,50 +1,50 @@
 {
-  "app": {
-    "products": [
-      {
-        "name": "default",
-        "signingConfig": "default",
-        "targetSdkVersion": "6.1.0(23)",
-        "compatibleSdkVersion": "6.1.0(23)",
-        "runtimeOS": "HarmonyOS"
-      }
-    ],
-    "buildModeSet": [
-      {
-        "name": "debug"
-      },
-      {
-        "name": "release"
-      }
-    ],
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B1CA528F85235837B202F34B9E5F062BAC3BAD89480FC18F5707A619F3F730678E671B6EFF5603C",
-          "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p12",
-          "storePassword": "0000001BDAF866D174D431C6E63E8E51E37347BAE056F488A63BDE8D9E71AB92550FA186C95F84B74C2F1E"
-        }
-      }
-    ]
-  },
-  "modules": [
-    {
-      "name": "entry",
-      "srcPath": "./entry",
-      "targets": [
+    "app": {
+        "products": [
+            {
+                "name": "default",
+                "signingConfig": "default",
+                "targetSdkVersion": "6.1.0(23)",
+                "compatibleSdkVersion": "6.1.0(23)",
+                "runtimeOS": "HarmonyOS"
+            }
+        ],
+        "buildModeSet": [
+            {
+                "name": "debug"
+            },
+            {
+                "name": "release"
+            }
+        ],
+        "signingConfigs": [
+            {
+                "name": "default",
+                "type": "HarmonyOS",
+                "material": {
+                    "certpath": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.cer",
+                    "keyAlias": "debugKey",
+                    "keyPassword": "0000001B1CA528F85235837B202F34B9E5F062BAC3BAD89480FC18F5707A619F3F730678E671B6EFF5603C",
+                    "profile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p7b",
+                    "signAlg": "SHA256withECDSA",
+                    "storeFile": "C:\\Users\\lvzhi\\.ohos\\config\\default_harmony-app_VPO5rnLTGJiX6VpnPHOmKnWkLJdXMJCpy_M1nAKcifA=.p12",
+                    "storePassword": "0000001BDAF866D174D431C6E63E8E51E37347BAE056F488A63BDE8D9E71AB92550FA186C95F84B74C2F1E"
+                }
+            }
+        ]
+    },
+    "modules": [
         {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
+            "name": "entry",
+            "srcPath": "./entry",
+            "targets": [
+                {
+                    "name": "default",
+                    "applyToProducts": [
+                        "default"
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

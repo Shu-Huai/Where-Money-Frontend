@@ -1,10 +1,12 @@
 # 删除关于页面 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:
+> executing-plans. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 删除关于页面及其路由、类型和 README 引用。
 
-**Architecture:** 不新增替代页面或导航逻辑，仅移除 `src/views/about/`、路由配置中的 about 条目、路由类型成员和 README 页面列表项。用 Node 内置测试先验证删除目标当前确实存在，再在删除后验证所有直接引用消失。
+**Architecture:** 不新增替代页面或导航逻辑，仅移除 `src/views/about/`、路由配置中的 about 条目、路由类型成员和 README
+页面列表项。用 Node 内置测试先验证删除目标当前确实存在，再在删除后验证所有直接引用消失。
 
 **Tech Stack:** Vue 3、TypeScript、Node 24 内置测试运行器、Vite。
 
@@ -13,6 +15,7 @@
 ### Task 1: Add a failing removal regression test
 
 **Files:**
+
 - Create: `tests/pages/about-page-removal.test.mts`
 
 - [ ] **Step 1: Write the failing test**
@@ -49,6 +52,7 @@ Expected: FAIL because `src/views/about/` and the about route references still e
 ### Task 2: Remove the page and direct references
 
 **Files:**
+
 - Delete: `src/views/about/index.vue`
 - Delete: `src/views/about/model.ts`
 - Delete: `src/views/about/components/DevDependency.vue`
@@ -90,7 +94,9 @@ git commit -m "refactor: remove about page"
 ### Task 3: Verify the application and scope
 
 **Files:**
-- Verify: `README.md`, `src/router/routes/index.ts`, `src/typings/common/route.d.ts`, `src/views/about/`, `tests/pages/about-page-removal.test.mts`
+
+- Verify: `README.md`, `src/router/routes/index.ts`, `src/typings/common/route.d.ts`, `src/views/about/`,
+  `tests/pages/about-page-removal.test.mts`
 
 - [ ] **Step 1: Search for remaining direct references**
 
@@ -116,4 +122,5 @@ git diff --check HEAD~1..HEAD
 git status --short
 ```
 
-Confirm `.env.development` remains unstaged and unrelated existing/generated files are not included in the removal commit.
+Confirm `.env.development` remains unstaged and unrelated existing/generated files are not included in the removal
+commit.

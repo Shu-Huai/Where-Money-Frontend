@@ -38,7 +38,7 @@
         "src/typings/*.d.ts",
         "src/**/*",
         "src/**/*.vue",
-        "build/**/*.ts",
+        "build/**/*.ts"
     ],
     "exclude": [
         "/dist/**",

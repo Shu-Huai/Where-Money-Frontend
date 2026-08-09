@@ -58,7 +58,11 @@ function getBillImageApi(params: { billId: number, type: string }): any {
     return http.get("/bill/image", params);
 }
 
-function aiParseBillApi(params: { bookId: number, type: "支出" | "收入" | "转账", text: string }): Promise<BillAiParseResponse> {
+function aiParseBillApi(params: {
+    bookId: number,
+    type: "支出" | "收入" | "转账",
+    text: string
+}): Promise<BillAiParseResponse> {
     return request({
         method: "post",
         url: "/bill/ai/parse",

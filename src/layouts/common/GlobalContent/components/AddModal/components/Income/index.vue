@@ -119,7 +119,8 @@
                                                               v-on:click="startEditCategory(item)">
                                                         编辑
                                                     </n-button>
-                                                    <n-button :loading="deletingCategoryId === item.id" ghost size="small"
+                                                    <n-button :loading="deletingCategoryId === item.id" ghost
+                                                              size="small"
                                                               type="error"
                                                               v-on:click="deleteCategory(item)">
                                                         删除
@@ -251,7 +252,8 @@
                         </n-button>
                     </div>
                     <div class="col-span-2 lg:col-span-1">
-                        <n-date-picker v-model:value="timestamp" :input-readonly="true" :time-picker-props="timePickerProps"
+                        <n-date-picker v-model:value="timestamp" :input-readonly="true"
+                                       :time-picker-props="timePickerProps"
                                        :update-value-on-close="true" placement="top-start"
                                        type="datetime"/>
                     </div>
@@ -354,8 +356,8 @@
 <script lang="ts" setup>
 import {
     addBillApi,
-    aiParseBillApi,
     addBillCategoryApi,
+    aiParseBillApi,
     deleteBillCategoryApi,
     getAllAsset,
     getAllBillCategoryApi,

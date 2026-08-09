@@ -1,4 +1,5 @@
-import { defineConfig } from "windicss/helpers";
+import {defineConfig} from "windicss/helpers";
+
 declare var require: any
 export default defineConfig({
     extract: {
